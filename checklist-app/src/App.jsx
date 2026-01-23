@@ -301,7 +301,7 @@ export default function App() {
         {/* Main Content */}
         <div className="flex-1 lg:ml-0">
           <Routes>
-            <Route path="/" element={<HomePage calculateLanguageProgress={calculateLanguageProgress} />} />
+            <Route path="/" element={<HomePage calculateLanguageProgress={calculateLanguageProgress} checkedItems={checkedItems} />} />
 
             {Object.keys(languagesData).map(lang => (
               <Route

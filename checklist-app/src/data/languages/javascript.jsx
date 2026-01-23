@@ -3,7 +3,7 @@ import { BookOpen, Code, Zap, Database, Settings, Box, RefreshCw } from 'lucide-
 
 export const javascriptData = {
     name: 'JavaScript',
-    icon: '🟨',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
     dsaMastery: [
         {
             category: 'Core Basics',
@@ -87,19 +87,6 @@ export const javascriptData = {
                 'IIFE (Immediately Invoked Function Expression)',
                 'Function Currying',
                 'Function Composition'
-            ]
-        },
-        {
-            category: 'Advanced Concepts for DSA',
-            icon: <Zap className="w-5 h-5" />,
-            items: [
-                'Time Complexity (Big O)',
-                'Space Complexity',
-                'Sorting Algorithms Implementation',
-                'Binary Search Implementation',
-                'Two Pointers Technique',
-                'Sliding Window Technique',
-                'Memoization and Dynamic Programming'
             ]
         }
     ],

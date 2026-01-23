@@ -214,8 +214,30 @@ export const dsaTopicsData = [
                     ]
                 }
             },
-            'Queue using Stacks',
-            'Circular Queue'
+            {
+                name: 'Queue using Stacks',
+                resources: {
+                    videos: [
+                        { title: 'Implement Queue using Stacks', url: 'https://www.youtube.com/watch?v=ma1S6vtkw1A' }
+                    ],
+                    practice: [
+                        { title: 'Implement Queue using Stacks', url: 'https://leetcode.com/problems/implement-queue-using-stacks/', platform: 'LeetCode' },
+                        { title: 'Implement Stack using Queues', url: 'https://leetcode.com/problems/implement-stack-using-queues/', platform: 'LeetCode' }
+                    ]
+                }
+            },
+            {
+                name: 'Circular Queue',
+                resources: {
+                    videos: [
+                        { title: 'Design Circular Queue', url: 'https://www.youtube.com/watch?v=aBr3W4XGTYE' }
+                    ],
+                    practice: [
+                        { title: 'Design Circular Queue', url: 'https://leetcode.com/problems/design-circular-queue/', platform: 'LeetCode' },
+                        { title: 'Design Circular Deque', url: 'https://leetcode.com/problems/design-circular-deque/', platform: 'LeetCode' }
+                    ]
+                }
+            }
         ]
     },
     {
@@ -260,9 +282,42 @@ export const dsaTopicsData = [
                     ]
                 }
             },
-            'Lowest Common Ancestor',
-            'Tree Height & Depth',
-            'Balanced Binary Tree'
+            {
+                name: 'Lowest Common Ancestor',
+                resources: {
+                    videos: [
+                        { title: 'Lowest Common Ancestor of BST', url: 'https://www.youtube.com/watch?v=gs2LMfuOR9k' }
+                    ],
+                    practice: [
+                        { title: 'Lowest Common Ancestor of a Binary Search Tree', url: 'https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/', platform: 'LeetCode' },
+                        { title: 'Lowest Common Ancestor of a Binary Tree', url: 'https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/', platform: 'LeetCode' }
+                    ]
+                }
+            },
+            {
+                name: 'Tree Height & Depth',
+                resources: {
+                    videos: [
+                        { title: 'Maximum Depth of Binary Tree', url: 'https://www.youtube.com/watch?v=hTM3phVI6YQ' }
+                    ],
+                    practice: [
+                        { title: 'Maximum Depth of Binary Tree', url: 'https://leetcode.com/problems/maximum-depth-of-binary-tree/', platform: 'LeetCode' },
+                        { title: 'Minimum Depth of Binary Tree', url: 'https://leetcode.com/problems/minimum-depth-of-binary-tree/', platform: 'LeetCode' }
+                    ]
+                }
+            },
+            {
+                name: 'Balanced Binary Tree',
+                resources: {
+                    videos: [
+                        { title: 'Balanced Binary Tree Explained', url: 'https://www.youtube.com/watch?v=LU4fGD-fgJQ' }
+                    ],
+                    practice: [
+                        { title: 'Balanced Binary Tree', url: 'https://leetcode.com/problems/balanced-binary-tree/', platform: 'LeetCode' },
+                        { title: 'Convert Sorted Array to Binary Search Tree', url: 'https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/', platform: 'LeetCode' }
+                    ]
+                }
+            }
         ]
     },
     {
@@ -297,10 +352,60 @@ export const dsaTopicsData = [
                     ]
                 }
             },
-            'Dijkstra\'s Algorithm',
-            'Topological Sort',
-            'Union Find',
-            'Minimum Spanning Tree'
+            {
+                name: 'Dijkstra\'s Algorithm',
+                resources: {
+                    videos: [
+                        { title: 'Dijkstra\'s Shortest Path Algorithm', url: 'https://www.youtube.com/watch?v=pVfj6mxhdMw' },
+                        { title: 'Dijkstra Algorithm Explained', url: 'https://www.youtube.com/watch?v=XB4MIexjvY0' }
+                    ],
+                    practice: [
+                        { title: 'Network Delay Time', url: 'https://leetcode.com/problems/network-delay-time/', platform: 'LeetCode' },
+                        { title: 'Path with Maximum Probability', url: 'https://leetcode.com/problems/path-with-maximum-probability/', platform: 'LeetCode' },
+                        { title: 'Cheapest Flights Within K Stops', url: 'https://leetcode.com/problems/cheapest-flights-within-k-stops/', platform: 'LeetCode' }
+                    ]
+                }
+            },
+            {
+                name: 'Topological Sort',
+                resources: {
+                    videos: [
+                        { title: 'Topological Sort Algorithm', url: 'https://www.youtube.com/watch?v=eL-KzMXSXXI' }
+                    ],
+                    practice: [
+                        { title: 'Course Schedule', url: 'https://leetcode.com/problems/course-schedule/', platform: 'LeetCode' },
+                        { title: 'Course Schedule II', url: 'https://leetcode.com/problems/course-schedule-ii/', platform: 'LeetCode' },
+                        { title: 'Alien Dictionary', url: 'https://leetcode.com/problems/alien-dictionary/', platform: 'LeetCode' }
+                    ]
+                }
+            },
+            {
+                name: 'Union Find',
+                resources: {
+                    videos: [
+                        { title: 'Union Find Data Structure', url: 'https://www.youtube.com/watch?v=ibjEGG7ylHk' },
+                        { title: 'Disjoint Set Union (DSU)', url: 'https://www.youtube.com/watch?v=wU6udHRIkcc' }
+                    ],
+                    practice: [
+                        { title: 'Number of Provinces', url: 'https://leetcode.com/problems/number-of-provinces/', platform: 'LeetCode' },
+                        { title: 'Redundant Connection', url: 'https://leetcode.com/problems/redundant-connection/', platform: 'LeetCode' },
+                        { title: 'Accounts Merge', url: 'https://leetcode.com/problems/accounts-merge/', platform: 'LeetCode' }
+                    ]
+                }
+            },
+            {
+                name: 'Minimum Spanning Tree',
+                resources: {
+                    videos: [
+                        { title: 'Kruskal\'s Algorithm', url: 'https://www.youtube.com/watch?v=JZBQLXgSGfs' },
+                        { title: 'Prim\'s Algorithm', url: 'https://www.youtube.com/watch?v=cplfcGZmX7I' }
+                    ],
+                    practice: [
+                        { title: 'Min Cost to Connect All Points', url: 'https://leetcode.com/problems/min-cost-to-connect-all-points/', platform: 'LeetCode' },
+                        { title: 'Connecting Cities With Minimum Cost', url: 'https://leetcode.com/problems/connecting-cities-with-minimum-cost/', platform: 'LeetCode' }
+                    ]
+                }
+            }
         ]
     },
     {
@@ -332,7 +437,19 @@ export const dsaTopicsData = [
                     ]
                 }
             },
-            'Unbounded Knapsack',
+            {
+                name: 'Unbounded Knapsack',
+                resources: {
+                    videos: [
+                        { title: 'Unbounded Knapsack Problem', url: 'https://www.youtube.com/watch?v=aycn9KO8_Ls' }
+                    ],
+                    practice: [
+                        { title: 'Coin Change', url: 'https://leetcode.com/problems/coin-change/', platform: 'LeetCode' },
+                        { title: 'Coin Change 2', url: 'https://leetcode.com/problems/coin-change-2/', platform: 'LeetCode' },
+                        { title: 'Perfect Squares', url: 'https://leetcode.com/problems/perfect-squares/', platform: 'LeetCode' }
+                    ]
+                }
+            },
             {
                 name: 'Longest Common Subsequence',
                 resources: {
@@ -356,7 +473,18 @@ export const dsaTopicsData = [
                     ]
                 }
             },
-            'Matrix Chain Multiplication'
+            {
+                name: 'Matrix Chain Multiplication',
+                resources: {
+                    videos: [
+                        { title: 'Matrix Chain Multiplication DP', url: 'https://www.youtube.com/watch?v=prx1psByp7U' }
+                    ],
+                    practice: [
+                        { title: 'Burst Balloons', url: 'https://leetcode.com/problems/burst-balloons/', platform: 'LeetCode' },
+                        { title: 'Minimum Cost Tree From Leaf Values', url: 'https://leetcode.com/problems/minimum-cost-tree-from-leaf-values/', platform: 'LeetCode' }
+                    ]
+                }
+            }
         ]
     },
     {
@@ -399,20 +527,106 @@ export const dsaTopicsData = [
                     ]
                 }
             },
-            'N-Queens',
-            'Sudoku Solver',
-            'Word Search'
+            {
+                name: 'N-Queens',
+                resources: {
+                    videos: [
+                        { title: 'N-Queens Problem - Backtracking', url: 'https://www.youtube.com/watch?v=Ph95IHmRp5M' }
+                    ],
+                    practice: [
+                        { title: 'N-Queens', url: 'https://leetcode.com/problems/n-queens/', platform: 'LeetCode' },
+                        { title: 'N-Queens II', url: 'https://leetcode.com/problems/n-queens-ii/', platform: 'LeetCode' }
+                    ]
+                }
+            },
+            {
+                name: 'Sudoku Solver',
+                resources: {
+                    videos: [
+                        { title: 'Sudoku Solver using Backtracking', url: 'https://www.youtube.com/watch?v=FWAIf_EVUKE' }
+                    ],
+                    practice: [
+                        { title: 'Sudoku Solver', url: 'https://leetcode.com/problems/sudoku-solver/', platform: 'LeetCode' },
+                        { title: 'Valid Sudoku', url: 'https://leetcode.com/problems/valid-sudoku/', platform: 'LeetCode' }
+                    ]
+                }
+            },
+            {
+                name: 'Word Search',
+                resources: {
+                    videos: [
+                        { title: 'Word Search - Backtracking', url: 'https://www.youtube.com/watch?v=pfiQ_PS1g8E' }
+                    ],
+                    practice: [
+                        { title: 'Word Search', url: 'https://leetcode.com/problems/word-search/', platform: 'LeetCode' },
+                        { title: 'Word Search II', url: 'https://leetcode.com/problems/word-search-ii/', platform: 'LeetCode' }
+                    ]
+                }
+            }
         ]
     },
     {
         category: 'Greedy Algorithms',
         icon: <Zap className="w-5 h-5" />,
         items: [
-            'Activity Selection',
-            'Huffman Coding',
-            'Job Sequencing',
-            'Fractional Knapsack',
-            'Minimum Platforms'
+            {
+                name: 'Activity Selection',
+                resources: {
+                    videos: [
+                        { title: 'Activity Selection Problem', url: 'https://www.youtube.com/watch?v=hVhOeaONg1Y' }
+                    ],
+                    practice: [
+                        { title: 'Non-overlapping Intervals', url: 'https://leetcode.com/problems/non-overlapping-intervals/', platform: 'LeetCode' },
+                        { title: 'Minimum Number of Arrows to Burst Balloons', url: 'https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/', platform: 'LeetCode' }
+                    ]
+                }
+            },
+            {
+                name: 'Huffman Coding',
+                resources: {
+                    videos: [
+                        { title: 'Huffman Coding Algorithm', url: 'https://www.youtube.com/watch?v=co4_ahEDCho' }
+                    ],
+                    practice: [
+                        { title: 'Minimum Cost to Connect Sticks', url: 'https://leetcode.com/problems/minimum-cost-to-connect-sticks/', platform: 'LeetCode' }
+                    ]
+                }
+            },
+            {
+                name: 'Job Sequencing',
+                resources: {
+                    videos: [
+                        { title: 'Job Sequencing Problem', url: 'https://www.youtube.com/watch?v=zPtI8q9gvX8' }
+                    ],
+                    practice: [
+                        { title: 'Maximum Profit in Job Scheduling', url: 'https://leetcode.com/problems/maximum-profit-in-job-scheduling/', platform: 'LeetCode' },
+                        { title: 'Course Schedule III', url: 'https://leetcode.com/problems/course-schedule-iii/', platform: 'LeetCode' }
+                    ]
+                }
+            },
+            {
+                name: 'Fractional Knapsack',
+                resources: {
+                    videos: [
+                        { title: 'Fractional Knapsack Problem', url: 'https://www.youtube.com/watch?v=oTTzNMHM05I' }
+                    ],
+                    practice: [
+                        { title: 'Maximum Units on a Truck', url: 'https://leetcode.com/problems/maximum-units-on-a-truck/', platform: 'LeetCode' }
+                    ]
+                }
+            },
+            {
+                name: 'Minimum Platforms',
+                resources: {
+                    videos: [
+                        { title: 'Minimum Platforms Problem', url: 'https://www.youtube.com/watch?v=dxVcMDI7vyI' }
+                    ],
+                    practice: [
+                        { title: 'Meeting Rooms II', url: 'https://leetcode.com/problems/meeting-rooms-ii/', platform: 'LeetCode' },
+                        { title: 'Car Pooling', url: 'https://leetcode.com/problems/car-pooling/', platform: 'LeetCode' }
+                    ]
+                }
+            }
         ]
     },
     {
@@ -443,9 +657,42 @@ export const dsaTopicsData = [
                     ]
                 }
             },
-            'Find Peak Element',
-            'Binary Search on Answer',
-            'Median of Two Sorted Arrays'
+            {
+                name: 'Find Peak Element',
+                resources: {
+                    videos: [
+                        { title: 'Find Peak Element', url: 'https://www.youtube.com/watch?v=kMzJy9es7Hc' }
+                    ],
+                    practice: [
+                        { title: 'Find Peak Element', url: 'https://leetcode.com/problems/find-peak-element/', platform: 'LeetCode' },
+                        { title: 'Peak Index in a Mountain Array', url: 'https://leetcode.com/problems/peak-index-in-a-mountain-array/', platform: 'LeetCode' }
+                    ]
+                }
+            },
+            {
+                name: 'Binary Search on Answer',
+                resources: {
+                    videos: [
+                        { title: 'Binary Search on Answer Space', url: 'https://www.youtube.com/watch?v=W9QJ8HaRvJQ' }
+                    ],
+                    practice: [
+                        { title: 'Koko Eating Bananas', url: 'https://leetcode.com/problems/koko-eating-bananas/', platform: 'LeetCode' },
+                        { title: 'Capacity To Ship Packages Within D Days', url: 'https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/', platform: 'LeetCode' },
+                        { title: 'Split Array Largest Sum', url: 'https://leetcode.com/problems/split-array-largest-sum/', platform: 'LeetCode' }
+                    ]
+                }
+            },
+            {
+                name: 'Median of Two Sorted Arrays',
+                resources: {
+                    videos: [
+                        { title: 'Median of Two Sorted Arrays', url: 'https://www.youtube.com/watch?v=q6IEA26hvXc' }
+                    ],
+                    practice: [
+                        { title: 'Median of Two Sorted Arrays', url: 'https://leetcode.com/problems/median-of-two-sorted-arrays/', platform: 'LeetCode' }
+                    ]
+                }
+            }
         ]
     },
     {
@@ -475,8 +722,30 @@ export const dsaTopicsData = [
                     ]
                 }
             },
-            'Top K Frequent Elements',
-            'Median from Data Stream'
+            {
+                name: 'Top K Frequent Elements',
+                resources: {
+                    videos: [
+                        { title: 'Top K Frequent Elements', url: 'https://www.youtube.com/watch?v=YPTqKIgVk-k' }
+                    ],
+                    practice: [
+                        { title: 'Top K Frequent Elements', url: 'https://leetcode.com/problems/top-k-frequent-elements/', platform: 'LeetCode' },
+                        { title: 'Top K Frequent Words', url: 'https://leetcode.com/problems/top-k-frequent-words/', platform: 'LeetCode' }
+                    ]
+                }
+            },
+            {
+                name: 'Median from Data Stream',
+                resources: {
+                    videos: [
+                        { title: 'Find Median from Data Stream', url: 'https://www.youtube.com/watch?v=itmhHWaHupI' }
+                    ],
+                    practice: [
+                        { title: 'Find Median from Data Stream', url: 'https://leetcode.com/problems/find-median-from-data-stream/', platform: 'LeetCode' },
+                        { title: 'Sliding Window Median', url: 'https://leetcode.com/problems/sliding-window-median/', platform: 'LeetCode' }
+                    ]
+                }
+            }
         ]
     }
 ];

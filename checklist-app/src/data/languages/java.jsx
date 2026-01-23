@@ -3,7 +3,7 @@ import { BookOpen, Code, Zap, Database, Settings, Box, RefreshCw } from 'lucide-
 
 export const javaData = {
     name: 'Java',
-    icon: '☕',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
     dsaMastery: [
         {
             category: 'Core Basics',
@@ -75,18 +75,6 @@ export const javaData = {
                 'String Pool and Immutability',
                 'StringTokenizer',
                 'Regular Expressions (Pattern, Matcher)'
-            ]
-        },
-        {
-            category: 'Advanced DSA Concepts',
-            icon: <Zap className="w-5 h-5" />,
-            items: [
-                'Comparators and Comparable',
-                'Streams for DSA',
-                'Lambda Expressions',
-                'Generics',
-                'Collections Utility Methods (sort, binarySearch)',
-                'Iterator and ListIterator'
             ]
         }
     ],

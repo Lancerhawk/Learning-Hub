@@ -3,7 +3,7 @@ import { BookOpen, Code, Zap, Database, Settings, Box, RefreshCw } from 'lucide-
 
 export const golangData = {
     name: 'Go',
-    icon: '🔷',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg',
     dsaMastery: [
         {
             category: 'Core Basics',
@@ -34,11 +34,6 @@ export const golangData = {
             category: 'Interfaces',
             icon: <Box className="w-5 h-5" />,
             items: ['Interface Definition', 'Implementing Interfaces', 'Empty Interface (interface{})', 'Type Assertions', 'Type Switches', 'Stringer Interface', 'Error Interface']
-        },
-        {
-            category: 'Advanced DSA',
-            icon: <Zap className="w-5 h-5" />,
-            items: ['Sorting with sort Package', 'sort.Slice', 'Custom Sorting', 'Binary Search', 'Custom Data Structures', 'Heap (container/heap)']
         }
     ],
     devMastery: [

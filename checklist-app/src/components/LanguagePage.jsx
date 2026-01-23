@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Check, ChevronDown, ChevronRight, Play, Code, ExternalLink, RefreshCw } from 'lucide-react';
+import TypingAnimation from './TypingAnimation';
 
 export default function LanguagePage({
     language,
@@ -86,8 +87,8 @@ export default function LanguagePage({
                     </div>
 
                     {/* Section Items */}
-                    {isSectionExpanded && (
-                        <div className="mt-4 space-y-2">
+                    <div className={`mt-4 dropdown-content ${!isSectionExpanded ? 'dropdown-content-hidden' : ''}`}>
+                        <div className="dropdown-inner space-y-2">
                             {section.items.map((item, itemIndex) => {
                                 const isSimpleItem = typeof item === 'string';
                                 const itemName = isSimpleItem ? item : item.name;
@@ -231,7 +232,7 @@ export default function LanguagePage({
                                 );
                             })}
                         </div>
-                    )}
+                    </div>
                 </div>
             );
         });
@@ -244,10 +245,10 @@ export default function LanguagePage({
                 <div className="bg-slate-900 border-2 border-green-500 rounded-lg p-8 shadow-2xl shadow-green-500/20">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-4">
-                            <span className="text-5xl">{icon}</span>
+                            <img src={icon} alt={name} className="w-16 h-16" />
                             <div>
-                                <h1 className="text-3xl font-bold text-green-500 font-mono terminal-glow">
-                                    {name}
+                                <h1 className="text-3xl font-bold text-green-500 font-mono">
+                                    <TypingAnimation text={name} speed={100} />
                                 </h1>
                                 <p className="text-green-400 font-mono text-sm mt-1">
                                     $ master {name.toLowerCase()}

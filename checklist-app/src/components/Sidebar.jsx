@@ -3,12 +3,12 @@ import { NavLink } from 'react-router-dom';
 import { Code, Terminal, BookOpen, Menu, X } from 'lucide-react';
 
 const languages = [
-    { id: 'cpp', name: 'C++', icon: '⚡', color: 'text-blue-400' },
-    { id: 'javascript', name: 'JavaScript', icon: '🟨', color: 'text-yellow-400' },
-    { id: 'java', name: 'Java', icon: '☕', color: 'text-orange-400' },
-    { id: 'python', name: 'Python', icon: '🐍', color: 'text-green-400' },
-    { id: 'ruby', name: 'Ruby', icon: '💎', color: 'text-red-400' },
-    { id: 'golang', name: 'Go', icon: '🔷', color: 'text-cyan-400' },
+    { id: 'cpp', name: 'C++', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg', color: 'text-blue-400' },
+    { id: 'javascript', name: 'JavaScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg', color: 'text-yellow-400' },
+    { id: 'java', name: 'Java', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg', color: 'text-orange-400' },
+    { id: 'python', name: 'Python', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg', color: 'text-green-400' },
+    { id: 'ruby', name: 'Ruby', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ruby/ruby-original.svg', color: 'text-red-400' },
+    { id: 'golang', name: 'Go', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg', color: 'text-cyan-400' },
 ];
 
 export default function Sidebar({ isOpen, toggleSidebar }) {
@@ -42,49 +42,58 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                 </div>
 
                 {/* Navigation */}
-                <nav className="flex-1 overflow-y-auto p-4 space-y-2">
-                    {/* Home */}
-                    <NavLink
-                        to="/"
-                        end
-                        className={({ isActive }) =>
-                            `flex items-center gap-3 px-4 py-3 rounded font-mono text-sm transition-all ${isActive
-                                ? 'bg-green-500 text-slate-900 font-bold'
-                                : 'text-green-400 hover:bg-slate-800 hover:text-green-300'
-                            }`
-                        }
-                    >
-                        <Terminal className="w-5 h-5" />
-                        <span>Dashboard</span>
-                    </NavLink>
-
-                    {/* Languages */}
-                    <div className="pt-4">
-                        <div className="text-xs font-mono text-slate-500 px-4 mb-2">[LANGUAGES]</div>
-                        {languages.map((lang) => (
-                            <NavLink
-                                key={lang.id}
-                                to={`/${lang.id}`}
-                                className={({ isActive }) =>
-                                    `flex items-center gap-3 px-4 py-3 rounded font-mono text-sm transition-all ${isActive
-                                        ? 'bg-green-500 text-slate-900 font-bold'
-                                        : `${lang.color} hover:bg-slate-800`
-                                    }`
-                                }
-                            >
-                                <span className="text-xl">{lang.icon}</span>
-                                <span>{lang.name}</span>
-                            </NavLink>
-                        ))}
+                <nav className="flex-1 overflow-y-auto p-4 space-y-4">
+                    {/* Dashboard Section */}
+                    <div className="border-2 border-green-700 rounded-lg p-2 bg-slate-800/30">
+                        <NavLink
+                            to="/"
+                            end
+                            className={({ isActive }) =>
+                                `flex items-center gap-3 px-4 py-3 rounded font-mono text-sm transition-all ${isActive
+                                    ? 'bg-green-500 text-slate-900 font-bold'
+                                    : 'text-green-400 hover:bg-slate-800 hover:text-green-300'
+                                }`
+                            }
+                        >
+                            <Terminal className="w-5 h-5" />
+                            <span>Dashboard</span>
+                        </NavLink>
                     </div>
 
-                    {/* DSA Topics */}
-                    <div className="pt-4">
-                        <div className="text-xs font-mono text-slate-500 px-4 mb-2">[ALGORITHMS]</div>
+                    {/* Languages Section */}
+                    <div className="border-2 border-green-700 rounded-lg p-3 bg-slate-800/30">
+                        <div className="text-xs font-mono text-green-500 px-2 mb-3 font-bold border-b border-green-700 pb-2">
+                            &gt; [LANGUAGES]
+                        </div>
+                        <div className="space-y-0">
+                            {languages.map((lang, index) => (
+                                <NavLink
+                                    key={lang.id}
+                                    to={`/${lang.id}`}
+                                    className={({ isActive }) =>
+                                        `flex items-center gap-3 px-4 py-2.5 font-mono text-sm transition-all ${index < languages.length - 1 ? 'border-b border-green-800/50' : ''
+                                        } ${isActive
+                                            ? 'bg-green-500 text-slate-900 font-bold'
+                                            : `${lang.color} hover:bg-slate-800`
+                                        }`
+                                    }
+                                >
+                                    <img src={lang.icon} alt={lang.name} className="w-5 h-5" />
+                                    <span>{lang.name}</span>
+                                </NavLink>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* DSA Topics Section */}
+                    <div className="border-2 border-green-700 rounded-lg p-3 bg-slate-800/30">
+                        <div className="text-xs font-mono text-green-500 px-2 mb-3 font-bold border-b border-green-700 pb-2">
+                            &gt; [ALGORITHMS]
+                        </div>
                         <NavLink
                             to="/dsa"
                             className={({ isActive }) =>
-                                `flex items-center gap-3 px-4 py-3 rounded font-mono text-sm transition-all ${isActive
+                                `flex items-center gap-3 px-4 py-2.5 rounded font-mono text-sm transition-all ${isActive
                                     ? 'bg-green-500 text-slate-900 font-bold'
                                     : 'text-green-400 hover:bg-slate-800 hover:text-green-300'
                                 }`

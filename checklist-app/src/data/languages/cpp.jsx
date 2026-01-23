@@ -3,7 +3,7 @@ import { BookOpen, ArrowRightLeft, Calculator, RefreshCw, Box, Database, Trophy,
 
 export const cppData = {
     name: 'C++',
-    icon: '⚡',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg',
     dsaMastery: [
         {
             category: 'Core Basics',

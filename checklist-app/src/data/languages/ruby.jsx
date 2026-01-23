@@ -3,7 +3,7 @@ import { BookOpen, Code, Zap, Database, Settings, Box, RefreshCw } from 'lucide-
 
 export const rubyData = {
     name: 'Ruby',
-    icon: '💎',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ruby/ruby-original.svg',
     dsaMastery: [
         {
             category: 'Core Basics',
@@ -34,11 +34,6 @@ export const rubyData = {
             category: 'Blocks, Procs & Lambdas',
             icon: <Code className="w-5 h-5" />,
             items: ['Blocks', 'yield Keyword', 'block_given?', 'Procs', 'Lambdas', 'Closures', 'Proc.new vs lambda']
-        },
-        {
-            category: 'Advanced DSA',
-            icon: <Zap className="w-5 h-5" />,
-            items: ['Recursion', 'Metaprogramming for DSA', 'Custom Iterators', 'Method Chaining', 'Sorting (sort, sort_by)']
         }
     ],
     devMastery: [
