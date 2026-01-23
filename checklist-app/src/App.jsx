@@ -5,6 +5,7 @@ import Sidebar from './components/Sidebar';
 import HomePage from './components/HomePage';
 import LanguagePage from './components/LanguagePage';
 import DSAPage from './components/DSAPage';
+import ScrollToTop from './components/ScrollToTop';
 import { languagesData, dsaTopicsData } from './data/checklistData';
 import { playClickSound } from './utils/sounds';
 
@@ -272,6 +273,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <div className="flex min-h-screen bg-slate-950">
         <style>{`
           @keyframes glow {
