@@ -31,7 +31,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                 {/* Header */}
                 <div className="p-4 border-b-2 border-green-500 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <Terminal className="w-6 h-6 text-green-500" />
+                        <img src="/logo.svg" alt="LEARN.HUB" className="w-6 h-6" />
                         <span className="font-mono text-green-500 font-bold">LEARN.HUB</span>
                     </div>
                     <button

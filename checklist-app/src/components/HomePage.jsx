@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Code, BookOpen, TrendingUp, Terminal, Award, Target, Zap, CheckCircle2 } from 'lucide-react';
 import TypingAnimation from './TypingAnimation';
+import { dsaTopicsData } from '../data/checklistData';
 
 const languages = [
     { id: 'cpp', name: 'C++', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg', color: 'border-blue-500', textColor: 'text-blue-400', bgColor: 'bg-blue-500' },
@@ -68,7 +69,7 @@ export default function HomePage({ calculateLanguageProgress, checkedItems }) {
             <div className="max-w-6xl mx-auto mb-8">
                 <div className="bg-slate-900 border-2 border-green-500 rounded-lg p-8 shadow-2xl shadow-green-500/20">
                     <div className="flex items-center gap-4 mb-6">
-                        <Terminal className="w-12 h-12 text-green-500" />
+                        <img src="/logo.svg" alt="LEARN.HUB" className="w-12 h-12" />
                         <div>
                             <h1 className="text-4xl font-bold text-green-500 font-mono">
                                 <TypingAnimation text="$ ./learn_hub" speed={80} />
@@ -158,7 +159,7 @@ export default function HomePage({ calculateLanguageProgress, checkedItems }) {
                                 <BookOpen className="w-5 h-5 text-green-500" />
                                 <span className="text-xs font-mono text-green-500">[DSA TOPICS]</span>
                             </div>
-                            <div className="text-2xl font-bold text-green-400 font-mono">10</div>
+                            <div className="text-2xl font-bold text-green-400 font-mono">{dsaTopicsData.length}</div>
                             <div className="text-xs font-mono text-slate-500 mt-1">Categories</div>
                         </div>
                     </div>
