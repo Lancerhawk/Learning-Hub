@@ -107,7 +107,6 @@ export const cppData = {
             icon: <Box className="w-5 h-5" />,
             items: [
                 'C++ Structures',
-                'C++ Class and Objects',
                 'C++ Classes & Objects',
                 'C++ Class Member Functions',
                 'C++ Class Access Modifiers',
