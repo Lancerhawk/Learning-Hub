@@ -747,5 +747,343 @@ export const dsaTopicsData = [
                 }
             }
         ]
+    },
+    {
+        category: 'Bit Manipulation',
+        icon: <Zap className="w-5 h-5" />,
+        items: [
+            {
+                name: 'Bit Manipulation Basics',
+                resources: {
+                    videos: [
+                        { title: 'Bit Manipulation Tutorial - NeetCode', url: 'https://www.youtube.com/watch?v=NLKQEOgBAnw' },
+                        { title: 'Bitwise Operators Explained', url: 'https://www.youtube.com/watch?v=mesu75PTDC8' }
+                    ],
+                    practice: [
+                        { title: 'Single Number [Easy]', url: 'https://leetcode.com/problems/single-number/', platform: 'LeetCode' },
+                        { title: 'Number of 1 Bits [Easy]', url: 'https://leetcode.com/problems/number-of-1-bits/', platform: 'LeetCode' },
+                        { title: 'Counting Bits [Easy]', url: 'https://leetcode.com/problems/counting-bits/', platform: 'LeetCode' },
+                        { title: 'Reverse Bits [Easy]', url: 'https://leetcode.com/problems/reverse-bits/', platform: 'LeetCode' }
+                    ]
+                }
+            },
+            {
+                name: 'XOR Properties & Tricks',
+                resources: {
+                    videos: [
+                        { title: 'XOR - The Magic Bit Operator', url: 'https://www.youtube.com/watch?v=_ORfXj5FqZI' },
+                        { title: 'XOR Properties and Applications', url: 'https://www.youtube.com/watch?v=gKBJFPEPzqo' }
+                    ],
+                    practice: [
+                        { title: 'Single Number II [Medium]', url: 'https://leetcode.com/problems/single-number-ii/', platform: 'LeetCode' },
+                        { title: 'Single Number III [Medium]', url: 'https://leetcode.com/problems/single-number-iii/', platform: 'LeetCode' },
+                        { title: 'Missing Number [Easy]', url: 'https://leetcode.com/problems/missing-number/', platform: 'LeetCode' },
+                        { title: 'Find the Duplicate Number [Medium]', url: 'https://leetcode.com/problems/find-the-duplicate-number/', platform: 'LeetCode' },
+                        { title: 'XOR Queries of a Subarray [Medium]', url: 'https://www.codechef.com/problems/XORQUER', platform: 'CodeChef' }
+                    ]
+                }
+            },
+            {
+                name: 'Bit Masks & Subsets',
+                resources: {
+                    videos: [
+                        { title: 'Bitmask DP Tutorial', url: 'https://www.youtube.com/watch?v=jqJ5s077OKo' },
+                        { title: 'Subset Generation using Bitmasks', url: 'https://www.youtube.com/watch?v=xCbYmUPvc2Q' }
+                    ],
+                    practice: [
+                        { title: 'Subsets [Medium]', url: 'https://leetcode.com/problems/subsets/', platform: 'LeetCode' },
+                        { title: 'Subsets II [Medium]', url: 'https://leetcode.com/problems/subsets-ii/', platform: 'LeetCode' },
+                        { title: 'Maximum Product of Word Lengths [Medium]', url: 'https://leetcode.com/problems/maximum-product-of-word-lengths/', platform: 'LeetCode' },
+                        { title: 'Partition Equal Subset Sum [Medium]', url: 'https://leetcode.com/problems/partition-equal-subset-sum/', platform: 'LeetCode' },
+                        { title: 'Counting Bits in Range [Hard]', url: 'https://www.hackerrank.com/challenges/counting-bits', platform: 'HackerRank' }
+                    ]
+                }
+            },
+            {
+                name: 'Advanced Bit Tricks',
+                resources: {
+                    videos: [
+                        { title: 'Advanced Bit Manipulation', url: 'https://www.youtube.com/watch?v=ZRNO-ewsNcQ' }
+                    ],
+                    practice: [
+                        { title: 'Power of Two [Easy]', url: 'https://leetcode.com/problems/power-of-two/', platform: 'LeetCode' },
+                        { title: 'Power of Four [Easy]', url: 'https://leetcode.com/problems/power-of-four/', platform: 'LeetCode' },
+                        { title: 'Bitwise AND of Numbers Range [Medium]', url: 'https://leetcode.com/problems/bitwise-and-of-numbers-range/', platform: 'LeetCode' },
+                        { title: 'Maximum XOR of Two Numbers [Medium]', url: 'https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/', platform: 'LeetCode' },
+                        { title: 'Minimum XOR Sum [Hard]', url: 'https://leetcode.com/problems/minimum-xor-sum-of-two-arrays/', platform: 'LeetCode' }
+                    ]
+                }
+            }
+        ]
+    },
+    {
+        category: 'Trie (Prefix Tree)',
+        icon: <GitBranch className="w-5 h-5" />,
+        items: [
+            {
+                name: 'Trie Implementation',
+                resources: {
+                    videos: [
+                        { title: 'Trie Data Structure - NeetCode', url: 'https://www.youtube.com/watch?v=oobqoCJlHA0' },
+                        { title: 'Implement Trie (Prefix Tree)', url: 'https://www.youtube.com/watch?v=giiaIofn31A' }
+                    ],
+                    practice: [
+                        { title: 'Implement Trie [Medium]', url: 'https://leetcode.com/problems/implement-trie-prefix-tree/', platform: 'LeetCode' },
+                        { title: 'Design Add and Search Words [Medium]', url: 'https://leetcode.com/problems/design-add-and-search-words-data-structure/', platform: 'LeetCode' },
+                        { title: 'Trie Implementation [Easy]', url: 'https://www.geeksforgeeks.org/trie-insert-and-search/', platform: 'GeeksforGeeks' }
+                    ]
+                }
+            },
+            {
+                name: 'Word Search Problems',
+                resources: {
+                    videos: [
+                        { title: 'Word Search II using Trie', url: 'https://www.youtube.com/watch?v=asbcE9mZz_U' },
+                        { title: 'Trie Word Search Explained', url: 'https://www.youtube.com/watch?v=7LmffaRPe8k' }
+                    ],
+                    practice: [
+                        { title: 'Word Search [Medium]', url: 'https://leetcode.com/problems/word-search/', platform: 'LeetCode' },
+                        { title: 'Word Search II [Hard]', url: 'https://leetcode.com/problems/word-search-ii/', platform: 'LeetCode' },
+                        { title: 'Word Break [Medium]', url: 'https://leetcode.com/problems/word-break/', platform: 'LeetCode' },
+                        { title: 'Boggle Game [Hard]', url: 'https://www.geeksforgeeks.org/boggle-find-possible-words-board-characters/', platform: 'GeeksforGeeks' }
+                    ]
+                }
+            },
+            {
+                name: 'Prefix Matching',
+                resources: {
+                    videos: [
+                        { title: 'Autocomplete using Trie', url: 'https://www.youtube.com/watch?v=vlYZb68kAY0' },
+                        { title: 'Prefix Search with Trie', url: 'https://www.youtube.com/watch?v=AXjmTQ8LEoI' }
+                    ],
+                    practice: [
+                        { title: 'Longest Common Prefix [Easy]', url: 'https://leetcode.com/problems/longest-common-prefix/', platform: 'LeetCode' },
+                        { title: 'Search Suggestions System [Medium]', url: 'https://leetcode.com/problems/search-suggestions-system/', platform: 'LeetCode' },
+                        { title: 'Replace Words [Medium]', url: 'https://leetcode.com/problems/replace-words/', platform: 'LeetCode' },
+                        { title: 'Prefix and Suffix Search [Hard]', url: 'https://leetcode.com/problems/prefix-and-suffix-search/', platform: 'LeetCode' }
+                    ]
+                }
+            },
+            {
+                name: 'Advanced Trie Problems',
+                resources: {
+                    videos: [
+                        { title: 'Maximum XOR using Trie', url: 'https://www.youtube.com/watch?v=jCuNJTE8_OM' }
+                    ],
+                    practice: [
+                        { title: 'Maximum XOR of Two Numbers [Medium]', url: 'https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/', platform: 'LeetCode' },
+                        { title: 'Concatenated Words [Hard]', url: 'https://leetcode.com/problems/concatenated-words/', platform: 'LeetCode' },
+                        { title: 'Palindrome Pairs [Hard]', url: 'https://leetcode.com/problems/palindrome-pairs/', platform: 'LeetCode' },
+                        { title: 'Stream of Characters [Hard]', url: 'https://leetcode.com/problems/stream-of-characters/', platform: 'LeetCode' }
+                    ]
+                }
+            }
+        ]
+    },
+    {
+        category: 'Binary Search on Answer Space',
+        icon: <Code2 className="w-5 h-5" />,
+        items: [
+            {
+                name: 'Concept & Pattern Recognition',
+                resources: {
+                    videos: [
+                        { title: 'Binary Search on Answer - Errichto', url: 'https://www.youtube.com/watch?v=GU7DpgHINWQ' },
+                        { title: 'Binary Search the Answer', url: 'https://www.youtube.com/watch?v=W9QJ8HaRvJQ' }
+                    ],
+                    practice: [
+                        { title: 'Koko Eating Bananas [Medium]', url: 'https://leetcode.com/problems/koko-eating-bananas/', platform: 'LeetCode' },
+                        { title: 'Minimum Number of Days to Make m Bouquets [Medium]', url: 'https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/', platform: 'LeetCode' },
+                        { title: 'Capacity To Ship Packages [Medium]', url: 'https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/', platform: 'LeetCode' }
+                    ]
+                }
+            },
+            {
+                name: 'Minimizing Maximum',
+                resources: {
+                    videos: [
+                        { title: 'Minimize Maximum - Binary Search Pattern', url: 'https://www.youtube.com/watch?v=yfQN_2WrT8Q' }
+                    ],
+                    practice: [
+                        { title: 'Split Array Largest Sum [Hard]', url: 'https://leetcode.com/problems/split-array-largest-sum/', platform: 'LeetCode' },
+                        { title: 'Minimize Max Distance to Gas Station [Hard]', url: 'https://leetcode.com/problems/minimize-max-distance-to-gas-station/', platform: 'LeetCode' },
+                        { title: 'Magnetic Force Between Two Balls [Medium]', url: 'https://leetcode.com/problems/magnetic-force-between-two-balls/', platform: 'LeetCode' },
+                        { title: 'Aggressive Cows [Hard]', url: 'https://www.spoj.com/problems/AGGRCOW/', platform: 'SPOJ' }
+                    ]
+                }
+            },
+            {
+                name: 'Maximizing Minimum',
+                resources: {
+                    videos: [
+                        { title: 'Maximize Minimum - Binary Search', url: 'https://www.youtube.com/watch?v=UXkVQNcRr0Q' }
+                    ],
+                    practice: [
+                        { title: 'Allocate Minimum Pages [Medium]', url: 'https://www.geeksforgeeks.org/allocate-minimum-number-pages/', platform: 'GeeksforGeeks' },
+                        { title: 'Painter\'s Partition Problem [Hard]', url: 'https://www.geeksforgeeks.org/painters-partition-problem/', platform: 'GeeksforGeeks' },
+                        { title: 'Cutting Ribbons [Medium]', url: 'https://leetcode.com/problems/cutting-ribbons/', platform: 'LeetCode' }
+                    ]
+                }
+            },
+            {
+                name: 'Advanced Answer Space Problems',
+                resources: {
+                    videos: [
+                        { title: 'Advanced Binary Search Techniques', url: 'https://www.youtube.com/watch?v=tgVSkMA8joQ' }
+                    ],
+                    practice: [
+                        { title: 'Median of Two Sorted Arrays [Hard]', url: 'https://leetcode.com/problems/median-of-two-sorted-arrays/', platform: 'LeetCode' },
+                        { title: 'Find K-th Smallest Pair Distance [Hard]', url: 'https://leetcode.com/problems/find-k-th-smallest-pair-distance/', platform: 'LeetCode' },
+                        { title: 'Kth Smallest Number in Multiplication Table [Hard]', url: 'https://leetcode.com/problems/kth-smallest-number-in-multiplication-table/', platform: 'LeetCode' },
+                        { title: 'Minimum Time to Complete Trips [Medium]', url: 'https://leetcode.com/problems/minimum-time-to-complete-trips/', platform: 'LeetCode' }
+                    ]
+                }
+            }
+        ]
+    },
+    {
+        category: '🎯 Practice Problems Hub',
+        icon: <BookOpen className="w-5 h-5" />,
+        items: [
+            {
+                name: '✅ Easy Problems (Beginner Friendly)',
+                resources: {
+                    videos: [
+                        { title: 'How to Approach Easy Problems', url: 'https://www.youtube.com/watch?v=GbyXxUDVeAo' }
+                    ],
+                    practice: [
+                        { title: 'Two Sum [Arrays] - LeetCode', url: 'https://leetcode.com/problems/two-sum/', platform: 'LeetCode' },
+                        { title: 'Valid Parentheses [Stack] - LeetCode', url: 'https://leetcode.com/problems/valid-parentheses/', platform: 'LeetCode' },
+                        { title: 'Reverse Linked List [LinkedList] - LeetCode', url: 'https://leetcode.com/problems/reverse-linked-list/', platform: 'LeetCode' },
+                        { title: 'Maximum Depth of Binary Tree [Trees] - LeetCode', url: 'https://leetcode.com/problems/maximum-depth-of-binary-tree/', platform: 'LeetCode' },
+                        { title: 'Best Time to Buy and Sell Stock [Arrays] - LeetCode', url: 'https://leetcode.com/problems/best-time-to-buy-and-sell-stock/', platform: 'LeetCode' },
+                        { title: 'Valid Palindrome [Two Pointers] - LeetCode', url: 'https://leetcode.com/problems/valid-palindrome/', platform: 'LeetCode' },
+                        { title: 'Merge Two Sorted Lists [LinkedList] - LeetCode', url: 'https://leetcode.com/problems/merge-two-sorted-lists/', platform: 'LeetCode' },
+                        { title: 'Binary Search [Binary Search] - LeetCode', url: 'https://leetcode.com/problems/binary-search/', platform: 'LeetCode' },
+                        { title: 'Climbing Stairs [DP] - LeetCode', url: 'https://leetcode.com/problems/climbing-stairs/', platform: 'LeetCode' },
+                        { title: 'Invert Binary Tree [Trees] - LeetCode', url: 'https://leetcode.com/problems/invert-binary-tree/', platform: 'LeetCode' },
+                        { title: 'Palindrome Number [Math] - LeetCode', url: 'https://leetcode.com/problems/palindrome-number/', platform: 'LeetCode' },
+                        { title: 'Fizz Buzz [Arrays] - LeetCode', url: 'https://leetcode.com/problems/fizz-buzz/', platform: 'LeetCode' },
+                        { title: 'Single Number [Bit Manipulation] - LeetCode', url: 'https://leetcode.com/problems/single-number/', platform: 'LeetCode' },
+                        { title: 'Move Zeroes [Arrays] - LeetCode', url: 'https://leetcode.com/problems/move-zeroes/', platform: 'LeetCode' },
+                        { title: 'Contains Duplicate [Hashing] - LeetCode', url: 'https://leetcode.com/problems/contains-duplicate/', platform: 'LeetCode' },
+                        { title: 'Missing Number [Arrays] - LeetCode', url: 'https://leetcode.com/problems/missing-number/', platform: 'LeetCode' },
+                        { title: 'Majority Element [Arrays] - LeetCode', url: 'https://leetcode.com/problems/majority-element/', platform: 'LeetCode' },
+                        { title: 'Reverse String [Two Pointers] - LeetCode', url: 'https://leetcode.com/problems/reverse-string/', platform: 'LeetCode' },
+                        { title: 'First Unique Character [Hashing] - LeetCode', url: 'https://leetcode.com/problems/first-unique-character-in-a-string/', platform: 'LeetCode' },
+                        { title: 'Valid Anagram [Hashing] - LeetCode', url: 'https://leetcode.com/problems/valid-anagram/', platform: 'LeetCode' }
+                    ]
+                }
+            },
+            {
+                name: '⚡ Medium Problems (Interview Level)',
+                resources: {
+                    videos: [
+                        { title: 'Medium Problem Solving Strategies', url: 'https://www.youtube.com/watch?v=8wysIxzqgPI' }
+                    ],
+                    practice: [
+                        { title: '3Sum [Two Pointers] - LeetCode', url: 'https://leetcode.com/problems/3sum/', platform: 'LeetCode' },
+                        { title: 'Longest Substring Without Repeating [Sliding Window] - LeetCode', url: 'https://leetcode.com/problems/longest-substring-without-repeating-characters/', platform: 'LeetCode' },
+                        { title: 'Container With Most Water [Two Pointers] - LeetCode', url: 'https://leetcode.com/problems/container-with-most-water/', platform: 'LeetCode' },
+                        { title: 'Group Anagrams [Hashing] - LeetCode', url: 'https://leetcode.com/problems/group-anagrams/', platform: 'LeetCode' },
+                        { title: 'Top K Frequent Elements [Heap] - LeetCode', url: 'https://leetcode.com/problems/top-k-frequent-elements/', platform: 'LeetCode' },
+                        { title: 'Product of Array Except Self [Arrays] - LeetCode', url: 'https://leetcode.com/problems/product-of-array-except-self/', platform: 'LeetCode' },
+                        { title: 'Valid Sudoku [Arrays] - LeetCode', url: 'https://leetcode.com/problems/valid-sudoku/', platform: 'LeetCode' },
+                        { title: 'Encode and Decode Strings [Strings] - LeetCode', url: 'https://leetcode.com/problems/encode-and-decode-strings/', platform: 'LeetCode' },
+                        { title: 'Longest Consecutive Sequence [Hashing] - LeetCode', url: 'https://leetcode.com/problems/longest-consecutive-sequence/', platform: 'LeetCode' },
+                        { title: 'LRU Cache [Design] - LeetCode', url: 'https://leetcode.com/problems/lru-cache/', platform: 'LeetCode' },
+                        { title: 'Add Two Numbers [LinkedList] - LeetCode', url: 'https://leetcode.com/problems/add-two-numbers/', platform: 'LeetCode' },
+                        { title: 'Reorder List [LinkedList] - LeetCode', url: 'https://leetcode.com/problems/reorder-list/', platform: 'LeetCode' },
+                        { title: 'Remove Nth Node From End [LinkedList] - LeetCode', url: 'https://leetcode.com/problems/remove-nth-node-from-end-of-list/', platform: 'LeetCode' },
+                        { title: 'Copy List with Random Pointer [LinkedList] - LeetCode', url: 'https://leetcode.com/problems/copy-list-with-random-pointer/', platform: 'LeetCode' },
+                        { title: 'Find Minimum in Rotated Sorted Array [Binary Search] - LeetCode', url: 'https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/', platform: 'LeetCode' },
+                        { title: 'Search in Rotated Sorted Array [Binary Search] - LeetCode', url: 'https://leetcode.com/problems/search-in-rotated-sorted-array/', platform: 'LeetCode' },
+                        { title: 'Koko Eating Bananas [Binary Search] - LeetCode', url: 'https://leetcode.com/problems/koko-eating-bananas/', platform: 'LeetCode' },
+                        { title: 'Daily Temperatures [Stack] - LeetCode', url: 'https://leetcode.com/problems/daily-temperatures/', platform: 'LeetCode' },
+                        { title: 'Evaluate Reverse Polish Notation [Stack] - LeetCode', url: 'https://leetcode.com/problems/evaluate-reverse-polish-notation/', platform: 'LeetCode' },
+                        { title: 'Generate Parentheses [Backtracking] - LeetCode', url: 'https://leetcode.com/problems/generate-parentheses/', platform: 'LeetCode' },
+                        { title: 'Subsets [Backtracking] - LeetCode', url: 'https://leetcode.com/problems/subsets/', platform: 'LeetCode' },
+                        { title: 'Permutations [Backtracking] - LeetCode', url: 'https://leetcode.com/problems/permutations/', platform: 'LeetCode' },
+                        { title: 'Combination Sum [Backtracking] - LeetCode', url: 'https://leetcode.com/problems/combination-sum/', platform: 'LeetCode' },
+                        { title: 'Word Search [Backtracking] - LeetCode', url: 'https://leetcode.com/problems/word-search/', platform: 'LeetCode' },
+                        { title: 'Number of Islands [Graph/DFS] - LeetCode', url: 'https://leetcode.com/problems/number-of-islands/', platform: 'LeetCode' },
+                        { title: 'Clone Graph [Graph] - LeetCode', url: 'https://leetcode.com/problems/clone-graph/', platform: 'LeetCode' },
+                        { title: 'Course Schedule [Graph] - LeetCode', url: 'https://leetcode.com/problems/course-schedule/', platform: 'LeetCode' },
+                        { title: 'Pacific Atlantic Water Flow [Graph] - LeetCode', url: 'https://leetcode.com/problems/pacific-atlantic-water-flow/', platform: 'LeetCode' },
+                        { title: 'Rotting Oranges [BFS] - LeetCode', url: 'https://leetcode.com/problems/rotting-oranges/', platform: 'LeetCode' },
+                        { title: 'Coin Change [DP] - LeetCode', url: 'https://leetcode.com/problems/coin-change/', platform: 'LeetCode' },
+                        { title: 'Longest Increasing Subsequence [DP] - LeetCode', url: 'https://leetcode.com/problems/longest-increasing-subsequence/', platform: 'LeetCode' },
+                        { title: 'House Robber [DP] - LeetCode', url: 'https://leetcode.com/problems/house-robber/', platform: 'LeetCode' },
+                        { title: 'House Robber II [DP] - LeetCode', url: 'https://leetcode.com/problems/house-robber-ii/', platform: 'LeetCode' },
+                        { title: 'Decode Ways [DP] - LeetCode', url: 'https://leetcode.com/problems/decode-ways/', platform: 'LeetCode' },
+                        { title: 'Unique Paths [DP] - LeetCode', url: 'https://leetcode.com/problems/unique-paths/', platform: 'LeetCode' },
+                        { title: 'Jump Game [DP] - LeetCode', url: 'https://leetcode.com/problems/jump-game/', platform: 'LeetCode' },
+                        { title: 'Validate Binary Search Tree [Trees] - LeetCode', url: 'https://leetcode.com/problems/validate-binary-search-tree/', platform: 'LeetCode' },
+                        { title: 'Kth Smallest Element in BST [Trees] - LeetCode', url: 'https://leetcode.com/problems/kth-smallest-element-in-a-bst/', platform: 'LeetCode' },
+                        { title: 'Construct Binary Tree from Preorder and Inorder [Trees] - LeetCode', url: 'https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/', platform: 'LeetCode' },
+                        { title: 'Binary Tree Level Order Traversal [Trees] - LeetCode', url: 'https://leetcode.com/problems/binary-tree-level-order-traversal/', platform: 'LeetCode' },
+                        { title: 'Binary Tree Right Side View [Trees] - LeetCode', url: 'https://leetcode.com/problems/binary-tree-right-side-view/', platform: 'LeetCode' }
+                    ]
+                }
+            },
+            {
+                name: '🔥 Hard Problems (Advanced/Competitive)',
+                resources: {
+                    videos: [
+                        { title: 'Approaching Hard Problems', url: 'https://www.youtube.com/watch?v=GBuHSRDGZBY' }
+                    ],
+                    practice: [
+                        { title: 'Median of Two Sorted Arrays [Binary Search] - LeetCode', url: 'https://leetcode.com/problems/median-of-two-sorted-arrays/', platform: 'LeetCode' },
+                        { title: 'Trapping Rain Water [Two Pointers] - LeetCode', url: 'https://leetcode.com/problems/trapping-rain-water/', platform: 'LeetCode' },
+                        { title: 'Minimum Window Substring [Sliding Window] - LeetCode', url: 'https://leetcode.com/problems/minimum-window-substring/', platform: 'LeetCode' },
+                        { title: 'Sliding Window Maximum [Deque] - LeetCode', url: 'https://leetcode.com/problems/sliding-window-maximum/', platform: 'LeetCode' },
+                        { title: 'Largest Rectangle in Histogram [Stack] - LeetCode', url: 'https://leetcode.com/problems/largest-rectangle-in-histogram/', platform: 'LeetCode' },
+                        { title: 'Merge k Sorted Lists [Heap] - LeetCode', url: 'https://leetcode.com/problems/merge-k-sorted-lists/', platform: 'LeetCode' },
+                        { title: 'Find Median from Data Stream [Heap] - LeetCode', url: 'https://leetcode.com/problems/find-median-from-data-stream/', platform: 'LeetCode' },
+                        { title: 'Reverse Nodes in k-Group [LinkedList] - LeetCode', url: 'https://leetcode.com/problems/reverse-nodes-in-k-group/', platform: 'LeetCode' },
+                        { title: 'Word Search II [Trie] - LeetCode', url: 'https://leetcode.com/problems/word-search-ii/', platform: 'LeetCode' },
+                        { title: 'Design Add and Search Words [Trie] - LeetCode', url: 'https://leetcode.com/problems/design-add-and-search-words-data-structure/', platform: 'LeetCode' },
+                        { title: 'Alien Dictionary [Graph/Topological Sort] - LeetCode', url: 'https://leetcode.com/problems/alien-dictionary/', platform: 'LeetCode' },
+                        { title: 'Word Ladder [BFS] - LeetCode', url: 'https://leetcode.com/problems/word-ladder/', platform: 'LeetCode' },
+                        { title: 'N-Queens [Backtracking] - LeetCode', url: 'https://leetcode.com/problems/n-queens/', platform: 'LeetCode' },
+                        { title: 'Sudoku Solver [Backtracking] - LeetCode', url: 'https://leetcode.com/problems/sudoku-solver/', platform: 'LeetCode' },
+                        { title: 'Regular Expression Matching [DP] - LeetCode', url: 'https://leetcode.com/problems/regular-expression-matching/', platform: 'LeetCode' },
+                        { title: 'Edit Distance [DP] - LeetCode', url: 'https://leetcode.com/problems/edit-distance/', platform: 'LeetCode' },
+                        { title: 'Longest Valid Parentheses [DP] - LeetCode', url: 'https://leetcode.com/problems/longest-valid-parentheses/', platform: 'LeetCode' },
+                        { title: 'Maximal Rectangle [DP/Stack] - LeetCode', url: 'https://leetcode.com/problems/maximal-rectangle/', platform: 'LeetCode' },
+                        { title: 'Best Time to Buy and Sell Stock III [DP] - LeetCode', url: 'https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/', platform: 'LeetCode' },
+                        { title: 'Distinct Subsequences [DP] - LeetCode', url: 'https://leetcode.com/problems/distinct-subsequences/', platform: 'LeetCode' },
+                        { title: 'Burst Balloons [DP] - LeetCode', url: 'https://leetcode.com/problems/burst-balloons/', platform: 'LeetCode' },
+                        { title: 'Binary Tree Maximum Path Sum [Trees] - LeetCode', url: 'https://leetcode.com/problems/binary-tree-maximum-path-sum/', platform: 'LeetCode' },
+                        { title: 'Serialize and Deserialize Binary Tree [Trees] - LeetCode', url: 'https://leetcode.com/problems/serialize-and-deserialize-binary-tree/', platform: 'LeetCode' },
+                        { title: 'Minimum XOR Sum [Bit Manipulation] - LeetCode', url: 'https://leetcode.com/problems/minimum-xor-sum-of-two-arrays/', platform: 'LeetCode' },
+                        { title: 'Split Array Largest Sum [Binary Search] - LeetCode', url: 'https://leetcode.com/problems/split-array-largest-sum/', platform: 'LeetCode' },
+                        { title: 'Aggressive Cows [Binary Search] - SPOJ', url: 'https://www.spoj.com/problems/AGGRCOW/', platform: 'SPOJ' },
+                        { title: 'Palindrome Pairs [Trie] - LeetCode', url: 'https://leetcode.com/problems/palindrome-pairs/', platform: 'LeetCode' },
+                        { title: 'Shortest Path Visiting All Nodes [Graph/BFS] - LeetCode', url: 'https://leetcode.com/problems/shortest-path-visiting-all-nodes/', platform: 'LeetCode' },
+                        { title: 'Critical Connections in Network [Graph] - LeetCode', url: 'https://leetcode.com/problems/critical-connections-in-a-network/', platform: 'LeetCode' },
+                        { title: 'Longest Increasing Path in Matrix [DP/DFS] - LeetCode', url: 'https://leetcode.com/problems/longest-increasing-path-in-a-matrix/', platform: 'LeetCode' }
+                    ]
+                }
+            },
+            {
+                name: '🌟 Platform-Specific Challenges',
+                resources: {
+                    videos: [
+                        { title: 'Competitive Programming Guide', url: 'https://www.youtube.com/watch?v=xAeiXy8-9Y8' }
+                    ],
+                    practice: [
+                        { title: 'CodeChef Long Challenge [Monthly Contest] - CodeChef', url: 'https://www.codechef.com/contests', platform: 'CodeChef' },
+                        { title: 'Codeforces Div 2 Contests [Weekly] - Codeforces', url: 'https://codeforces.com/contests', platform: 'Codeforces' },
+                        { title: 'HackerRank Interview Preparation Kit - HackerRank', url: 'https://www.hackerrank.com/interview/interview-preparation-kit', platform: 'HackerRank' },
+                        { title: 'GeeksforGeeks Must Do Coding Questions - GFG', url: 'https://www.geeksforgeeks.org/must-do-coding-questions-for-companies-like-amazon-microsoft-adobe/', platform: 'GeeksforGeeks' },
+                        { title: 'LeetCode Weekly Contest [Every Weekend] - LeetCode', url: 'https://leetcode.com/contest/', platform: 'LeetCode' },
+                        { title: 'AtCoder Beginner Contest [Weekly] - AtCoder', url: 'https://atcoder.jp/contests/', platform: 'AtCoder' },
+                        { title: 'Google Kick Start [Quarterly] - Google', url: 'https://codingcompetitions.withgoogle.com/kickstart', platform: 'Google' },
+                        { title: 'Facebook Hacker Cup [Annual] - Meta', url: 'https://www.facebook.com/codingcompetitions/hacker-cup', platform: 'Meta' }
+                    ]
+                }
+            }
+        ]
     }
 ];
