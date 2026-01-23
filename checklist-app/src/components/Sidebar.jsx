@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Code, Terminal, BookOpen, Menu, X } from 'lucide-react';
+import { playClickSound } from '../utils/sounds';
 
 const languages = [
     { id: 'cpp', name: 'C++', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg', color: 'text-blue-400' },
@@ -48,6 +49,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                         <NavLink
                             to="/"
                             end
+                            onClick={playClickSound}
                             className={({ isActive }) =>
                                 `flex items-center gap-3 px-4 py-3 rounded font-mono text-sm transition-all ${isActive
                                     ? 'bg-green-500 text-slate-900 font-bold'
@@ -70,6 +72,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                                 <NavLink
                                     key={lang.id}
                                     to={`/${lang.id}`}
+                                    onClick={playClickSound}
                                     className={({ isActive }) =>
                                         `flex items-center gap-3 px-4 py-2.5 font-mono text-sm transition-all ${index < languages.length - 1 ? 'border-b border-green-800/50' : ''
                                         } ${isActive
@@ -92,6 +95,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                         </div>
                         <NavLink
                             to="/dsa"
+                            onClick={playClickSound}
                             className={({ isActive }) =>
                                 `flex items-center gap-3 px-4 py-2.5 rounded font-mono text-sm transition-all ${isActive
                                     ? 'bg-green-500 text-slate-900 font-bold'

@@ -6,6 +6,7 @@ import HomePage from './components/HomePage';
 import LanguagePage from './components/LanguagePage';
 import DSAPage from './components/DSAPage';
 import { languagesData, dsaTopicsData } from './data/checklistData';
+import { playClickSound } from './utils/sounds';
 
 export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -13,6 +14,16 @@ export default function App() {
   const [expandedSections, setExpandedSections] = useState({});
   const [expandedTopics, setExpandedTopics] = useState({});
   const [confirmModal, setConfirmModal] = useState(null);
+
+  // Global click sound effect
+  useEffect(() => {
+    const handleGlobalClick = () => {
+      playClickSound();
+    };
+
+    document.addEventListener('click', handleGlobalClick);
+    return () => document.removeEventListener('click', handleGlobalClick);
+  }, []);
 
   // Load from localStorage on mount
   useEffect(() => {

@@ -26,3 +26,16 @@
     background: white !important;
   }
 }
+
+/* Custom Text Selection Colors - Terminal Theme */
+::selection {
+  background-color: #22c55e;
+  /* green-500 */
+  color: #0f172a;
+  /* slate-900 */
+}
+
+::-moz-selection {
+  background-color: #22c55e;
+  color: #0f172a;
+}
