@@ -203,7 +203,7 @@ export default function HomePage({ calculateLanguageProgress, checkedItems }) {
 
                                 <div className="space-y-2">
                                     <div className="flex justify-between text-xs font-mono">
-                                        <span className="text-green-500">DSA Mastery</span>
+                                        <span className="text-green-500">DSA & Language Mastery</span>
                                         <span className="text-green-400">{lang.progress.dsa}%</span>
                                     </div>
                                     <div className="w-full bg-slate-800 rounded-full h-2">

@@ -284,7 +284,7 @@ export default function LanguagePage({
                                         : 'bg-slate-800 text-green-500 border border-green-700 hover:bg-slate-700'
                                         }`}
                                 >
-                                    DSA MASTERY
+                                    DSA & Language MASTERY
                                 </button>
                                 <button
                                     onClick={() => setProgressView('dev')}
@@ -301,7 +301,7 @@ export default function LanguagePage({
                                 <div className="text-right">
                                     <div className="text-xs font-mono text-slate-500">
                                         {progressView === 'overall' ? 'Overall Progress' :
-                                            progressView === 'dsa' ? 'DSA Mastery' : 'Development Mastery'}
+                                            progressView === 'dsa' ? 'DSA & Language Mastery' : 'Development Mastery'}
                                     </div>
                                     <div className="text-3xl font-bold text-green-500 font-mono">
                                         {getCurrentProgress()}%
@@ -327,7 +327,7 @@ export default function LanguagePage({
                         {/* Individual Progress Stats */}
                         <div className="grid grid-cols-2 gap-4 mt-4">
                             <div className="bg-slate-800 rounded p-3 border border-slate-700">
-                                <div className="text-xs font-mono text-slate-500 mb-1">DSA Mastery</div>
+                                <div className="text-xs font-mono text-slate-500 mb-1">DSA & Language Mastery</div>
                                 <div className="flex items-center gap-2">
                                     <div className="flex-1 bg-slate-700 rounded-full h-2">
                                         <div className="bg-green-500 h-2 rounded-full" style={{ width: `${dsaProgress}%` }} />
@@ -363,7 +363,7 @@ export default function LanguagePage({
                         />
                         <Code className="w-6 h-6 text-green-500" />
                         <h2 className="text-2xl font-bold text-green-500 font-mono group-hover:text-green-400 transition-colors">
-                            [DSA MASTERY]
+                            [DSA & Language MASTERY]
                         </h2>
                     </div>
                     <div className={`dropdown-content ${expandedSections[`${language}-main-dsa`] === false ? 'dropdown-content-hidden' : ''}`}>

@@ -16,11 +16,6 @@ export const rubyData = {
             items: ['if-elsif-else', 'unless Statement', 'case-when', 'Ternary Operator', 'for Loop', 'while Loop', 'until Loop', 'loop do', 'break and next', 'redo and retry']
         },
         {
-            category: 'Data Structures',
-            icon: <Database className="w-5 h-5" />,
-            items: ['Arrays', 'Array Methods (push, pop, shift, unshift)', 'Array Slicing', 'Hashes', 'Hash Methods', 'Symbols', 'Ranges', 'Sets']
-        },
-        {
             category: 'Strings',
             icon: <Code className="w-5 h-5" />,
             items: ['String Methods', 'String Interpolation', 'String Concatenation', 'Regular Expressions', 'String Encoding']
