@@ -1,4 +1,4 @@
-# 📚 DSA Learning Checklist App
+# 📚 Learning Hub
 
 A comprehensive full-stack web application designed to help developers track their progress in learning Data Structures & Algorithms (DSA) and programming languages. Features include custom list creation, public list sharing, progress tracking, and a community-driven learning platform.
 
