@@ -243,21 +243,21 @@ export default function LanguagePage({
             {/* Hero */}
             <div className="max-w-5xl mx-auto mb-8">
                 <div className="bg-slate-900 border-2 border-green-500 rounded-lg p-8 shadow-2xl shadow-green-500/20">
-                    <div className="flex items-center justify-between mb-6">
-                        <div className="flex items-center gap-4">
-                            <img src={icon} alt={name} className="w-16 h-16" />
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                        <div className="flex items-center gap-3 md:gap-4">
+                            <img src={icon} alt={name} className="w-12 h-12 md:w-16 md:h-16" />
                             <div>
-                                <h1 className="text-3xl font-bold text-green-500 font-mono">
+                                <h1 className="text-xl md:text-3xl font-bold text-green-500 font-mono">
                                     <TypingAnimation text={name} speed={100} />
                                 </h1>
-                                <p className="text-green-400 font-mono text-sm mt-1">
+                                <p className="text-green-400 font-mono text-xs md:text-sm mt-1">
                                     $ master {name.toLowerCase()}
                                 </p>
                             </div>
                         </div>
                         <button
                             onClick={() => resetProgress(language)}
-                            className="flex items-center gap-2 px-4 py-2 bg-slate-800 border border-red-500 text-red-500 rounded font-mono text-sm hover:bg-red-500 hover:text-white transition-all"
+                            className="flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 border border-red-500 text-red-500 rounded font-mono text-sm hover:bg-red-500 hover:text-white transition-all w-full md:w-auto"
                         >
                             <RefreshCw className="w-4 h-4" />
                             RESET
@@ -266,11 +266,11 @@ export default function LanguagePage({
 
                     {/* Progress Meter */}
                     <div className="border-t-2 border-slate-700 pt-6">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="flex gap-2">
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+                            <div className="flex flex-wrap gap-2">
                                 <button
                                     onClick={() => setProgressView('overall')}
-                                    className={`px-4 py-2 rounded font-mono text-xs transition-all ${progressView === 'overall'
+                                    className={`px-3 md:px-4 py-2 rounded font-mono text-xs transition-all ${progressView === 'overall'
                                         ? 'bg-green-500 text-slate-900 font-bold'
                                         : 'bg-slate-800 text-green-500 border border-green-700 hover:bg-slate-700'
                                         }`}
@@ -279,16 +279,17 @@ export default function LanguagePage({
                                 </button>
                                 <button
                                     onClick={() => setProgressView('dsa')}
-                                    className={`px-4 py-2 rounded font-mono text-xs transition-all ${progressView === 'dsa'
+                                    className={`px-3 md:px-4 py-2 rounded font-mono text-xs transition-all whitespace-nowrap ${progressView === 'dsa'
                                         ? 'bg-green-500 text-slate-900 font-bold'
                                         : 'bg-slate-800 text-green-500 border border-green-700 hover:bg-slate-700'
                                         }`}
                                 >
-                                    DSA & Language MASTERY
+                                    <span className="hidden sm:inline">DSA & Language MASTERY</span>
+                                    <span className="sm:hidden">DSA MASTERY</span>
                                 </button>
                                 <button
                                     onClick={() => setProgressView('dev')}
-                                    className={`px-4 py-2 rounded font-mono text-xs transition-all ${progressView === 'dev'
+                                    className={`px-3 md:px-4 py-2 rounded font-mono text-xs transition-all whitespace-nowrap ${progressView === 'dev'
                                         ? 'bg-green-500 text-slate-900 font-bold'
                                         : 'bg-slate-800 text-green-500 border border-green-700 hover:bg-slate-700'
                                         }`}
@@ -303,7 +304,7 @@ export default function LanguagePage({
                                         {progressView === 'overall' ? 'Overall Progress' :
                                             progressView === 'dsa' ? 'DSA & Language Mastery' : 'Development Mastery'}
                                     </div>
-                                    <div className="text-3xl font-bold text-green-500 font-mono">
+                                    <div className="text-2xl md:text-3xl font-bold text-green-500 font-mono">
                                         {getCurrentProgress()}%
                                     </div>
                                 </div>

@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Menu } from 'lucide-react';
+import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 import Sidebar from './components/Sidebar';
 import HomePage from './components/HomePage';
 import LanguagePage from './components/LanguagePage';
 import DSAPage from './components/DSAPage';
+import CustomListsPage from './components/CustomListsPage';
+import CustomListViewer from './components/CustomListViewer';
+import ListBuilder from './components/ListBuilder';
+import PublicListsPage from './components/PublicListsPage';
+import ResetPasswordPage from './components/Auth/ResetPasswordPage';
 import ScrollToTop from './components/ScrollToTop';
 import { languagesData, dsaTopicsData } from './data/checklistData';
 import { playClickSound } from './utils/sounds';
@@ -272,62 +279,86 @@ export default function App() {
   };
 
   return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <div className="flex min-h-screen bg-slate-950">
-        <style>{`
-          @keyframes glow {
-            0%, 100% { text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41; }
-            50% { text-shadow: 0 0 20px #00ff41, 0 0 30px #00ff41, 0 0 40px #00ff41; }
-          }
-          .terminal-glow {
-            animation: glow 2s ease-in-out infinite;
-          }
-          .dropdown-content {
-            display: grid;
-            grid-template-rows: 1fr;
-            transition: grid-template-rows 0.3s ease-out, opacity 0.3s ease-out, margin 0.3s ease-out;
-            opacity: 1;
-          }
-          .dropdown-content-hidden {
-            grid-template-rows: 0fr;
-            opacity: 0;
-            margin-top: 0;
-            margin-bottom: 0;
-          }
-          .dropdown-inner {
-            overflow: hidden;
-          }
-        `}</style>
+    <AuthProvider>
+      <BrowserRouter>
+        <ScrollToTop />
+        <div className="flex min-h-screen bg-slate-950">
+          <style>{`
+            @keyframes glow {
+              0%, 100% { text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41; }
+              50% { text-shadow: 0 0 20px #00ff41, 0 0 30px #00ff41, 0 0 40px #00ff41; }
+            }
+            .terminal-glow {
+              animation: glow 2s ease-in-out infinite;
+            }
+            .dropdown-content {
+              display: grid;
+              grid-template-rows: 1fr;
+              transition: grid-template-rows 0.3s ease-out, opacity 0.3s ease-out, margin 0.3s ease-out;
+              opacity: 1;
+            }
+            .dropdown-content-hidden {
+              grid-template-rows: 0fr;
+              opacity: 0;
+              margin-top: 0;
+              margin-bottom: 0;
+            }
+            .dropdown-inner {
+              overflow: hidden;
+            }
+          `}</style>
 
-        {/* Sidebar */}
-        <Sidebar isOpen={sidebarOpen} toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+          {/* Sidebar */}
+          <Sidebar isOpen={sidebarOpen} toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
-        {/* Mobile Menu Button */}
-        <button
-          onClick={() => setSidebarOpen(true)}
-          className="fixed top-4 left-4 z-30 lg:hidden bg-slate-900 border-2 border-green-500 p-2 rounded text-green-500 hover:bg-slate-800"
-        >
-          <Menu className="w-6 h-6" />
-        </button>
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="fixed top-4 left-4 z-30 lg:hidden bg-slate-900 border-2 border-green-500 p-2 rounded text-green-500 hover:bg-slate-800"
+          >
+            <Menu className="w-6 h-6" />
+          </button>
 
-        {/* Main Content */}
-        <div className="flex-1 lg:ml-0">
-          <Routes>
-            <Route path="/" element={<HomePage calculateLanguageProgress={calculateLanguageProgress} checkedItems={checkedItems} />} />
+          {/* Main Content */}
+          <div className="flex-1 lg:ml-0">
+            <Routes>
+              <Route path="/" element={<HomePage calculateLanguageProgress={calculateLanguageProgress} checkedItems={checkedItems} />} />
 
-            {Object.keys(languagesData).map(lang => (
+              {Object.keys(languagesData).map(lang => (
+                <Route
+                  key={lang}
+                  path={`/${lang}`}
+                  element={
+                    <LanguagePage
+                      language={lang}
+                      data={languagesData[lang]}
+                      checkedItems={{
+                        ...checkedItems[`${lang}_dsa`],
+                        ...checkedItems[`${lang}_dev`]
+                      }}
+                      expandedSections={expandedSections}
+                      expandedTopics={expandedTopics}
+                      toggleSection={toggleSection}
+                      toggleTopic={toggleTopic}
+                      toggleItem={toggleItem}
+                      toggleResourceItem={toggleResourceItem}
+                      calculateSectionProgress={calculateSectionProgress}
+                      getTopicResourceProgress={getTopicResourceProgress}
+                      confirmModal={confirmModal}
+                      setConfirmModal={setConfirmModal}
+                      confirmTopicCompletion={confirmTopicCompletion}
+                      resetProgress={resetProgress}
+                    />
+                  }
+                />
+              ))}
+
               <Route
-                key={lang}
-                path={`/${lang}`}
+                path="/dsa"
                 element={
-                  <LanguagePage
-                    language={lang}
-                    data={languagesData[lang]}
-                    checkedItems={{
-                      ...checkedItems[`${lang}_dsa`],
-                      ...checkedItems[`${lang}_dev`]
-                    }}
+                  <DSAPage
+                    data={dsaTopicsData}
+                    checkedItems={checkedItems.dsa || {}}
                     expandedSections={expandedSections}
                     expandedTopics={expandedTopics}
                     toggleSection={toggleSection}
@@ -343,32 +374,20 @@ export default function App() {
                   />
                 }
               />
-            ))}
 
-            <Route
-              path="/dsa"
-              element={
-                <DSAPage
-                  data={dsaTopicsData}
-                  checkedItems={checkedItems.dsa || {}}
-                  expandedSections={expandedSections}
-                  expandedTopics={expandedTopics}
-                  toggleSection={toggleSection}
-                  toggleTopic={toggleTopic}
-                  toggleItem={toggleItem}
-                  toggleResourceItem={toggleResourceItem}
-                  calculateSectionProgress={calculateSectionProgress}
-                  getTopicResourceProgress={getTopicResourceProgress}
-                  confirmModal={confirmModal}
-                  setConfirmModal={setConfirmModal}
-                  confirmTopicCompletion={confirmTopicCompletion}
-                  resetProgress={resetProgress}
-                />
-              }
-            />
-          </Routes>
+              <Route path="/reset-password" element={<ResetPasswordPage />} />
+
+              <Route path="/explore" element={<ProtectedRoute><PublicListsPage /></ProtectedRoute>} />
+              <Route path="/explore/:id" element={<ProtectedRoute><CustomListViewer isPublicView={true} /></ProtectedRoute>} />
+
+              <Route path="/custom-lists" element={<ProtectedRoute><CustomListsPage /></ProtectedRoute>} />
+              <Route path="/custom-lists/new" element={<ProtectedRoute><ListBuilder /></ProtectedRoute>} />
+              <Route path="/custom-lists/:id/edit" element={<ProtectedRoute><ListBuilder /></ProtectedRoute>} />
+              <Route path="/custom-lists/:id" element={<ProtectedRoute><CustomListViewer /></ProtectedRoute>} />
+            </Routes>
+          </div>
         </div>
-      </div>
-    </BrowserRouter>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }

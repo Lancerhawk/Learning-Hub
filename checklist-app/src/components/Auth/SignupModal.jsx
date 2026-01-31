@@ -1,0 +1,301 @@
+import React, { useState } from 'react';
+import { X, UserPlus, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
+import TermsModal from './TermsModal';
+
+export default function SignupModal({ onClose, onSwitchToLogin }) {
+    const { signup } = useAuth();
+    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [agreedToTerms, setAgreedToTerms] = useState(false);
+    const [showTerms, setShowTerms] = useState(false);
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    // Password strength indicator
+    const getPasswordStrength = () => {
+        if (!password) return { strength: 0, label: '', color: '' };
+
+        let strength = 0;
+        if (password.length >= 8) strength++;
+        if (/[a-z]/.test(password)) strength++;
+        if (/[A-Z]/.test(password)) strength++;
+        if (/\d/.test(password)) strength++;
+        if (/[@$!%*?&]/.test(password)) strength++;
+
+        if (strength <= 2) return { strength, label: 'Weak', color: 'text-red-500' };
+        if (strength <= 3) return { strength, label: 'Medium', color: 'text-yellow-500' };
+        return { strength, label: 'Strong', color: 'text-green-500' };
+    };
+
+    const passwordStrength = getPasswordStrength();
+
+    const validateForm = () => {
+        if (!email.trim() || !username.trim() || !password.trim() || !confirmPassword.trim()) {
+            setError('Please fill in all fields');
+            return false;
+        }
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            setError('Please enter a valid email address');
+            return false;
+        }
+
+        if (username.length < 3 || username.length > 20) {
+            setError('Username must be 3-20 characters');
+            return false;
+        }
+
+        if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+            setError('Username can only contain letters, numbers, and underscores');
+            return false;
+        }
+
+        if (password.length < 8) {
+            setError('Password must be at least 8 characters');
+            return false;
+        }
+
+        if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/.test(password)) {
+            setError('Password must contain uppercase, lowercase, number, and special character');
+            return false;
+        }
+
+        if (password !== confirmPassword) {
+            setError('Passwords do not match');
+            return false;
+        }
+
+        if (!agreedToTerms) {
+            setError('You must agree to the Terms & Guidelines');
+            return false;
+        }
+
+        return true;
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+
+        if (!validateForm()) {
+            return;
+        }
+
+        setLoading(true);
+        const result = await signup(email, username, password);
+        setLoading(false);
+
+        if (result.success) {
+            onClose();
+        } else {
+            setError(result.error);
+        }
+    };
+
+    return (
+        <>
+            <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+                <div className="bg-slate-900 border-2 border-green-500 rounded-lg max-w-md w-full shadow-2xl shadow-green-500/30 max-h-[90vh] overflow-y-auto">
+                    {/* Header */}
+                    <div className="flex items-center justify-between p-4 sm:p-6 border-b-2 border-green-500 sticky top-0 bg-slate-900 z-10">
+                        <div className="flex items-center gap-3">
+                            <UserPlus className="w-6 h-6 sm:w-8 sm:h-8 text-green-500" />
+                            <h2 className="text-lg sm:text-2xl font-bold text-green-500 font-mono">
+                                [SIGN UP]
+                            </h2>
+                        </div>
+                        <button
+                            onClick={onClose}
+                            className="p-2 text-red-500 hover:bg-slate-800 rounded transition-all"
+                        >
+                            <X className="w-5 h-5" />
+                        </button>
+                    </div>
+
+                    {/* Form */}
+                    <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4">
+                        {error && (
+                            <div className="p-3 bg-red-500/10 border border-red-500 rounded flex items-center gap-2">
+                                <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
+                                <p className="text-red-500 font-mono text-sm">{error}</p>
+                            </div>
+                        )}
+
+                        {/* Email */}
+                        <div>
+                            <label className="block text-xs font-mono text-green-500 mb-2">
+                                EMAIL *
+                            </label>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="your.email@example.com"
+                                className="w-full px-3 sm:px-4 py-2 bg-slate-800 border-2 border-slate-700 rounded text-green-400 font-mono text-sm sm:text-base focus:border-green-500 focus:outline-none"
+                                disabled={loading}
+                            />
+                        </div>
+
+                        {/* Username */}
+                        <div>
+                            <label className="block text-xs font-mono text-green-500 mb-2">
+                                USERNAME * (3-20 characters)
+                            </label>
+                            <input
+                                type="text"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                placeholder="cool_username"
+                                className="w-full px-3 sm:px-4 py-2 bg-slate-800 border-2 border-slate-700 rounded text-green-400 font-mono text-sm sm:text-base focus:border-green-500 focus:outline-none"
+                                disabled={loading}
+                            />
+                            <p className="text-xs text-slate-400 font-mono mt-1">
+                                Letters, numbers, and underscores only
+                            </p>
+                        </div>
+
+                        {/* Password */}
+                        <div>
+                            <label className="block text-xs font-mono text-green-500 mb-2">
+                                PASSWORD *
+                            </label>
+                            <div className="relative">
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    placeholder="enter your password"
+                                    className="w-full px-3 sm:px-4 py-2 bg-slate-800 border-2 border-slate-700 rounded text-green-400 font-mono text-sm sm:text-base focus:border-green-500 focus:outline-none pr-12"
+                                    disabled={loading}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-green-500 hover:text-green-400"
+                                >
+                                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                </button>
+                            </div>
+                            {password && (
+                                <div className="mt-2">
+                                    <div className="flex gap-1 mb-1">
+                                        {[...Array(5)].map((_, i) => (
+                                            <div
+                                                key={i}
+                                                className={`h-1 flex-1 rounded ${i < passwordStrength.strength
+                                                    ? passwordStrength.strength <= 2
+                                                        ? 'bg-red-500'
+                                                        : passwordStrength.strength <= 3
+                                                            ? 'bg-yellow-500'
+                                                            : 'bg-green-500'
+                                                    : 'bg-slate-700'
+                                                    }`}
+                                            />
+                                        ))}
+                                    </div>
+                                    <p className={`text-xs font-mono ${passwordStrength.color}`}>
+                                        {passwordStrength.label}
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Confirm Password */}
+                        <div>
+                            <label className="block text-xs font-mono text-green-500 mb-2">
+                                CONFIRM PASSWORD *
+                            </label>
+                            <div className="relative">
+                                <input
+                                    type={showConfirmPassword ? 'text' : 'password'}
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    placeholder="Re-enter your password"
+                                    className="w-full px-3 sm:px-4 py-2 bg-slate-800 border-2 border-slate-700 rounded text-green-400 font-mono text-sm sm:text-base focus:border-green-500 focus:outline-none pr-12"
+                                    disabled={loading}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-green-500 hover:text-green-400"
+                                >
+                                    {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                </button>
+                            </div>
+                            {confirmPassword && password === confirmPassword && (
+                                <div className="flex items-center gap-1 mt-1">
+                                    <CheckCircle className="w-4 h-4 text-green-500" />
+                                    <p className="text-xs text-green-500 font-mono">Passwords match</p>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Terms & Conditions */}
+                        <div className="flex items-start gap-2 p-3 bg-slate-800 border border-slate-700 rounded">
+                            <input
+                                type="checkbox"
+                                id="terms"
+                                checked={agreedToTerms}
+                                onChange={(e) => setAgreedToTerms(e.target.checked)}
+                                className="mt-1 w-4 h-4 accent-green-500"
+                                disabled={loading}
+                            />
+                            <label htmlFor="terms" className="text-xs sm:text-sm text-green-400 font-mono">
+                                I agree to the{' '}
+                                <button
+                                    type="button"
+                                    onClick={() => setShowTerms(true)}
+                                    className="text-green-500 hover:text-green-400 font-bold underline"
+                                >
+                                    Terms & Guidelines
+                                </button>
+                            </label>
+                        </div>
+
+                        {/* Submit Button */}
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full py-2 sm:py-3 bg-green-500 text-slate-900 rounded font-mono text-sm sm:text-base font-bold hover:bg-green-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {loading ? 'CREATING ACCOUNT...' : 'CREATE ACCOUNT'}
+                        </button>
+
+                        {/* Switch to Login */}
+                        <div className="text-center pt-4 border-t border-slate-700">
+                            <p className="text-green-400 font-mono text-xs sm:text-sm">
+                                Already have an account?{' '}
+                                <button
+                                    type="button"
+                                    onClick={onSwitchToLogin}
+                                    className="text-green-500 hover:text-green-400 font-bold"
+                                >
+                                    Login
+                                </button>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            {/* Terms Modal */}
+            {showTerms && (
+                <TermsModal
+                    onAccept={() => {
+                        setAgreedToTerms(true);
+                        setShowTerms(false);
+                    }}
+                    onDecline={() => {
+                        setAgreedToTerms(false);
+                        setShowTerms(false);
+                    }}
+                />
+            )}
+        </>
+    );
+}

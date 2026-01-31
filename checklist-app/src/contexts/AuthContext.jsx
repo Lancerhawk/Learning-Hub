@@ -1,0 +1,120 @@
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { jwtDecode } from 'jwt-decode';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+
+const AuthContext = createContext(null);
+
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error('useAuth must be used within AuthProvider');
+    }
+    return context;
+};
+
+export const AuthProvider = ({ children }) => {
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [token, setToken] = useState(null);
+
+    // Load user from localStorage on mount
+    useEffect(() => {
+        const storedToken = localStorage.getItem('auth_token');
+        if (storedToken) {
+            try {
+                const decoded = jwtDecode(storedToken);
+
+                // Check if token is expired
+                if (decoded.exp * 1000 < Date.now()) {
+                    localStorage.removeItem('auth_token');
+                    setLoading(false);
+                    return;
+                }
+
+                setToken(storedToken);
+                setUser({
+                    id: decoded.userId,
+                    username: decoded.username,
+                    email: decoded.email
+                });
+            } catch (error) {
+                console.error('Invalid token:', error);
+                localStorage.removeItem('auth_token');
+            }
+        }
+        setLoading(false);
+    }, []);
+
+    const login = async (emailOrUsername, password) => {
+        try {
+            const response = await fetch(`${API_URL}/api/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ emailOrUsername, password }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Login failed');
+            }
+
+            // Store token
+            localStorage.setItem('auth_token', data.token);
+            setToken(data.token);
+            setUser(data.user);
+
+            return { success: true };
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    };
+
+    const signup = async (email, username, password) => {
+        try {
+            const response = await fetch(`${API_URL}/api/auth/signup`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, username, password }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || data.errors?.[0]?.msg || 'Signup failed');
+            }
+
+            // Store token
+            localStorage.setItem('auth_token', data.token);
+            setToken(data.token);
+            setUser(data.user);
+
+            return { success: true };
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    };
+
+    const logout = () => {
+        localStorage.removeItem('auth_token');
+        setToken(null);
+        setUser(null);
+    };
+
+    const value = {
+        user,
+        token,
+        loading,
+        isAuthenticated: !!user,
+        login,
+        signup,
+        logout,
+    };
+
+    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};

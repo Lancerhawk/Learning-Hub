@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Code, Terminal, BookOpen, Menu, X } from 'lucide-react';
+import { Code, Terminal, BookOpen, Menu, X, LogIn, UserPlus, LogOut, User } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
+import LoginModal from './Auth/LoginModal';
+import SignupModal from './Auth/SignupModal';
 import { playClickSound } from '../utils/sounds';
 
 const languages = [
@@ -13,6 +16,15 @@ const languages = [
 ];
 
 export default function Sidebar({ isOpen, toggleSidebar }) {
+    const { user, isAuthenticated, logout } = useAuth();
+    const [showLogin, setShowLogin] = useState(false);
+    const [showSignup, setShowSignup] = useState(false);
+
+    const handleLogout = () => {
+        logout();
+        playClickSound();
+    };
+
     return (
         <>
             {/* Mobile Overlay */}
@@ -41,6 +53,48 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                         <X className="w-5 h-5" />
                     </button>
                 </div>
+
+                {/* User Section */}
+                {isAuthenticated ? (
+                    <div className="p-4 border-b-2 border-green-700 bg-slate-800/50">
+                        <div className="flex items-center gap-2 mb-2">
+                            <User className="w-5 h-5 text-green-500" />
+                            <span className="font-mono text-green-400 text-sm font-bold">
+                                {user?.username}
+                            </span>
+                        </div>
+                        <button
+                            onClick={handleLogout}
+                            className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-red-500/10 border border-red-500 text-red-500 rounded font-mono text-xs hover:bg-red-500 hover:text-white transition-all"
+                        >
+                            <LogOut className="w-4 h-4" />
+                            <span>Logout</span>
+                        </button>
+                    </div>
+                ) : (
+                    <div className="p-4 border-b-2 border-green-700 bg-slate-800/50 space-y-2">
+                        <button
+                            onClick={() => {
+                                setShowLogin(true);
+                                playClickSound();
+                            }}
+                            className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-green-500 text-slate-900 rounded font-mono text-xs font-bold hover:bg-green-400 transition-all"
+                        >
+                            <LogIn className="w-4 h-4" />
+                            <span>Login</span>
+                        </button>
+                        <button
+                            onClick={() => {
+                                setShowSignup(true);
+                                playClickSound();
+                            }}
+                            className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-slate-800 border border-green-500 text-green-500 rounded font-mono text-xs hover:bg-slate-700 transition-all"
+                        >
+                            <UserPlus className="w-4 h-4" />
+                            <span>Sign Up</span>
+                        </button>
+                    </div>
+                )}
 
                 {/* Navigation */}
                 <nav className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -107,6 +161,50 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                             <span>DSA Topics</span>
                         </NavLink>
                     </div>
+
+                    {/* Explore Lists Section - Only show if authenticated */}
+                    {isAuthenticated && (
+                        <div className="border-2 border-green-700 rounded-lg p-3 bg-slate-800/30">
+                            <div className="text-xs font-mono text-green-500 px-2 mb-3 font-bold border-b border-green-700 pb-2">
+                                &gt; [COMMUNITY]
+                            </div>
+                            <NavLink
+                                to="/explore"
+                                onClick={playClickSound}
+                                className={({ isActive }) =>
+                                    `flex items-center gap-3 px-4 py-2.5 rounded font-mono text-sm transition-all ${isActive
+                                        ? 'bg-green-500 text-slate-900 font-bold'
+                                        : 'text-green-400 hover:bg-slate-800 hover:text-green-300'
+                                    }`
+                                }
+                            >
+                                <BookOpen className="w-5 h-5" />
+                                <span>Explore Lists</span>
+                            </NavLink>
+                        </div>
+                    )}
+
+                    {/* Custom Lists Section - Only show if authenticated */}
+                    {isAuthenticated && (
+                        <div className="border-2 border-green-700 rounded-lg p-3 bg-slate-800/30">
+                            <div className="text-xs font-mono text-green-500 px-2 mb-3 font-bold border-b border-green-700 pb-2">
+                                &gt; [CUSTOM LISTS]
+                            </div>
+                            <NavLink
+                                to="/custom-lists"
+                                onClick={playClickSound}
+                                className={({ isActive }) =>
+                                    `flex items-center gap-3 px-4 py-2.5 rounded font-mono text-sm transition-all ${isActive
+                                        ? 'bg-green-500 text-slate-900 font-bold'
+                                        : 'text-green-400 hover:bg-slate-800 hover:text-green-300'
+                                    }`
+                                }
+                            >
+                                <BookOpen className="w-5 h-5" />
+                                <span>My Lists</span>
+                            </NavLink>
+                        </div>
+                    )}
                 </nav>
 
                 {/* Footer */}
@@ -119,6 +217,27 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                     </div>
                 </div>
             </aside>
+
+            {/* Modals */}
+            {showLogin && (
+                <LoginModal
+                    onClose={() => setShowLogin(false)}
+                    onSwitchToSignup={() => {
+                        setShowLogin(false);
+                        setShowSignup(true);
+                    }}
+                />
+            )}
+
+            {showSignup && (
+                <SignupModal
+                    onClose={() => setShowSignup(false)}
+                    onSwitchToLogin={() => {
+                        setShowSignup(false);
+                        setShowLogin(true);
+                    }}
+                />
+            )}
         </>
     );
 }
