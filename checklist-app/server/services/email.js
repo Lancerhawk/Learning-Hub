@@ -138,3 +138,128 @@ This is an automated email from DSA Learning Checklist.
         throw new Error('Failed to send password reset email');
     }
 }
+
+/**
+ * Send email verification OTP
+ * @param {string} to - Recipient email address
+ * @param {string} otpCode - 6-digit OTP code
+ */
+export async function sendVerificationOTP(to, otpCode) {
+    const msg = {
+        to,
+        from: process.env.FROM_EMAIL,
+        subject: '🔐 Verify Your Email - Learn Hub',
+        html: `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body {
+                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                        background-color: #0f172a;
+                        color: #e2e8f0;
+                        margin: 0;
+                        padding: 0;
+                    }
+                    .container {
+                        max-width: 600px;
+                        margin: 40px auto;
+                        background-color: #1e293b;
+                        border: 2px solid #22c55e;
+                        border-radius: 8px;
+                        padding: 40px;
+                    }
+                    .header {
+                        text-align: center;
+                        margin-bottom: 30px;
+                    }
+                    .header h1 {
+                        color: #22c55e;
+                        font-size: 28px;
+                        margin: 0;
+                        font-family: 'Courier New', monospace;
+                    }
+                    .content {
+                        line-height: 1.6;
+                        color: #cbd5e1;
+                        text-align: center;
+                    }
+                    .otp-box {
+                        background-color: #0f172a;
+                        border: 2px solid #22c55e;
+                        border-radius: 8px;
+                        padding: 30px;
+                        margin: 30px 0;
+                        text-align: center;
+                    }
+                    .otp-code {
+                        font-size: 48px;
+                        font-weight: bold;
+                        color: #22c55e;
+                        letter-spacing: 12px;
+                        font-family: 'Courier New', monospace;
+                        margin: 0;
+                    }
+                    .footer {
+                        margin-top: 30px;
+                        padding-top: 20px;
+                        border-top: 1px solid #334155;
+                        font-size: 12px;
+                        color: #64748b;
+                        text-align: center;
+                    }
+                    .warning {
+                        color: #fbbf24;
+                        font-size: 14px;
+                        margin-top: 20px;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <h1>&gt; Email Verification</h1>
+                    </div>
+                    <div class="content">
+                        <p>Welcome to <strong>Learn Hub</strong>! 🎉</p>
+                        <p>Your verification code is:</p>
+                        <div class="otp-box">
+                            <p class="otp-code">${otpCode}</p>
+                        </div>
+                        <p class="warning">⏱️ This code expires in <strong>10 minutes</strong></p>
+                        <p class="warning">🔒 Never share this code with anyone</p>
+                    </div>
+                    <div class="footer">
+                        <p>If you didn't create an account, you can safely ignore this email.</p>
+                        <p>This is an automated email from Learn Hub. Please do not reply.</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+        `,
+        text: `
+Welcome to Learn Hub!
+
+Your verification code is: ${otpCode}
+
+This code expires in 10 minutes.
+Never share this code with anyone.
+
+If you didn't create an account, you can safely ignore this email.
+
+---
+This is an automated email from Learn Hub.
+        `
+    };
+
+    try {
+        await sgMail.send(msg);
+        return { success: true };
+    } catch (error) {
+        console.error('❌ Email sending failed:', error.message);
+        if (error.response) {
+            console.error('SendGrid error:', error.response.body);
+        }
+        throw new Error('Failed to send verification email');
+    }
+}

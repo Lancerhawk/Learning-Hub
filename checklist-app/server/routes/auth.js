@@ -4,7 +4,9 @@ import jwt from 'jsonwebtoken';
 import { body, validationResult } from 'express-validator';
 import pool from '../db.js';
 import { authMiddleware, JWT_SECRET } from '../middleware/auth.js';
-import { authLimiter } from '../middleware/rateLimiter.js';
+import { authLimiter, otpLimiter } from '../middleware/rateLimiter.js';
+import disposableDomains from 'disposable-email-domains' with { type: 'json' };
+import { sendVerificationOTP } from '../services/email.js';
 
 
 const router = express.Router();
@@ -14,7 +16,14 @@ const signupValidation = [
     body('email')
         .isEmail()
         .normalizeEmail()
-        .withMessage('Invalid email address'),
+        .withMessage('Invalid email address')
+        .custom((value) => {
+            const domain = value.split('@')[1];
+            if (disposableDomains.includes(domain)) {
+                throw new Error('Disposable email addresses are not allowed');
+            }
+            return true;
+        }),
     body('username')
         .isLength({ min: 3, max: 20 })
         .matches(/^[a-zA-Z0-9_]+$/)
@@ -43,7 +52,7 @@ router.post('/signup', authLimiter, signupValidation, async (req, res) => {
 
         // Check if user already exists
         const existingUser = await pool.query(
-            'SELECT id FROM users WHERE email = $1 OR username = $2',
+            'SELECT id, email_verified FROM users WHERE email = $1 OR username = $2',
             [email, username]
         );
 
@@ -55,13 +64,104 @@ router.post('/signup', authLimiter, signupValidation, async (req, res) => {
         const saltRounds = 10;
         const passwordHash = await bcrypt.hash(password, saltRounds);
 
-        // Create user
+        // Generate 6-digit OTP
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes from now
+
+        // Create user with email_verified = false
         const result = await pool.query(
-            'INSERT INTO users (email, username, password_hash) VALUES ($1, $2, $3) RETURNING id, email, username, created_at',
-            [email, username, passwordHash]
+            `INSERT INTO users (email, username, password_hash, email_verified, email_otp, email_otp_expires, email_otp_attempts) 
+             VALUES ($1, $2, $3, FALSE, $4, $5, 0) 
+             RETURNING id, email, username, created_at`,
+            [email, username, passwordHash, otp, otpExpires]
         );
 
         const user = result.rows[0];
+
+        // Send OTP email
+        try {
+            await sendVerificationOTP(email, otp);
+        } catch (emailError) {
+            console.error('Failed to send OTP email:', emailError);
+            // Don't fail signup if email fails, user can resend
+        }
+
+        res.status(201).json({
+            message: 'Account created. Please verify your email.',
+            userId: user.id,
+            email: user.email,
+            requiresVerification: true,
+            emailSent: true
+        });
+    } catch (error) {
+        console.error('Signup error:', error);
+        res.status(500).json({ error: 'Failed to create user' });
+    }
+});
+
+// POST /api/auth/verify-email
+router.post('/verify-email', otpLimiter, [
+    body('email').isEmail().normalizeEmail(),
+    body('otp').isLength({ min: 6, max: 6 }).isNumeric()
+], async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const { email, otp } = req.body;
+
+        // Find user by email
+        const result = await pool.query(
+            'SELECT id, email, username, email_verified, email_otp, email_otp_expires, email_otp_attempts FROM users WHERE email = $1',
+            [email]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const user = result.rows[0];
+
+        // Check if already verified
+        if (user.email_verified) {
+            return res.status(400).json({ error: 'Email already verified' });
+        }
+
+        // Check if OTP exists
+        if (!user.email_otp) {
+            return res.status(400).json({ error: 'No OTP found. Please request a new one.' });
+        }
+
+        // Check if OTP expired
+        if (new Date() > new Date(user.email_otp_expires)) {
+            return res.status(400).json({ error: 'OTP has expired. Please request a new one.' });
+        }
+
+        // Check attempts
+        if (user.email_otp_attempts >= 3) {
+            return res.status(429).json({ error: 'Too many failed attempts. Please request a new OTP.' });
+        }
+
+        // Verify OTP
+        if (user.email_otp !== otp) {
+            // Increment attempts
+            await pool.query(
+                'UPDATE users SET email_otp_attempts = email_otp_attempts + 1 WHERE id = $1',
+                [user.id]
+            );
+            return res.status(400).json({
+                error: 'Invalid OTP',
+                attemptsRemaining: 3 - (user.email_otp_attempts + 1)
+            });
+        }
+
+        // OTP is correct - verify email and clear OTP fields
+        await pool.query(
+            'UPDATE users SET email_verified = TRUE, email_otp = NULL, email_otp_expires = NULL, email_otp_attempts = 0 WHERE id = $1',
+            [user.id]
+        );
 
         // Generate JWT token
         const token = jwt.sign(
@@ -70,19 +170,76 @@ router.post('/signup', authLimiter, signupValidation, async (req, res) => {
             { expiresIn: '7d' }
         );
 
-        res.status(201).json({
-            message: 'User created successfully',
+        res.json({
+            message: 'Email verified successfully',
             token,
             user: {
                 id: user.id,
                 username: user.username,
                 email: user.email,
-                createdAt: user.created_at
+                emailVerified: true
             }
         });
     } catch (error) {
-        console.error('Signup error:', error);
-        res.status(500).json({ error: 'Failed to create user' });
+        console.error('Verify email error:', error);
+        res.status(500).json({ error: 'Failed to verify email' });
+    }
+});
+
+// POST /api/auth/resend-otp
+router.post('/resend-otp', otpLimiter, [
+    body('email').isEmail().normalizeEmail()
+], async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const { email } = req.body;
+
+        // Find user by email
+        const result = await pool.query(
+            'SELECT id, email, email_verified FROM users WHERE email = $1',
+            [email]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const user = result.rows[0];
+
+        // Check if already verified
+        if (user.email_verified) {
+            return res.status(400).json({ error: 'Email already verified' });
+        }
+
+        // Generate new OTP
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const otpExpires = new Date(Date.now() + 10 * 60 * 1000);
+
+        // Update user with new OTP and reset attempts
+        await pool.query(
+            'UPDATE users SET email_otp = $1, email_otp_expires = $2, email_otp_attempts = 0 WHERE id = $3',
+            [otp, otpExpires, user.id]
+        );
+
+        // Send OTP email
+        try {
+            await sendVerificationOTP(email, otp);
+        } catch (emailError) {
+            console.error('Failed to send OTP email:', emailError);
+            return res.status(500).json({ error: 'Failed to send OTP email' });
+        }
+
+        res.json({
+            message: 'OTP sent successfully',
+            emailSent: true
+        });
+    } catch (error) {
+        console.error('Resend OTP error:', error);
+        res.status(500).json({ error: 'Failed to resend OTP' });
     }
 });
 

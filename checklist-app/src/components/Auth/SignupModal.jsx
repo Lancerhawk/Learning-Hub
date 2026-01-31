@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, UserPlus, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import TermsModal from './TermsModal';
+import EmailVerificationModal from './EmailVerificationModal';
 
 export default function SignupModal({ onClose, onSwitchToLogin }) {
     const { signup } = useAuth();
@@ -15,6 +16,8 @@ export default function SignupModal({ onClose, onSwitchToLogin }) {
     const [showTerms, setShowTerms] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [showVerification, setShowVerification] = useState(false);
+    const [signupEmail, setSignupEmail] = useState('');
 
     // Password strength indicator
     const getPasswordStrength = () => {
@@ -106,10 +109,25 @@ export default function SignupModal({ onClose, onSwitchToLogin }) {
         setLoading(false);
 
         if (result.success) {
-            onClose();
+            // Check if email verification is required
+            if (result.requiresVerification) {
+                setSignupEmail(email);
+                setShowVerification(true);
+            } else {
+                // Old flow (shouldn't happen with new backend)
+                onClose();
+            }
         } else {
             setError(result.error);
         }
+    };
+
+    const handleVerified = (token, user) => {
+        // Store token in localStorage
+        localStorage.setItem('auth_token', token);
+        // The EmailVerificationModal will trigger a page reload or we manually set context
+        // For now, just reload to let the auth check happen
+        window.location.reload();
     };
 
     return (
@@ -308,6 +326,18 @@ export default function SignupModal({ onClose, onSwitchToLogin }) {
                     onDecline={() => {
                         setAgreedToTerms(false);
                         setShowTerms(false);
+                    }}
+                />
+            )}
+
+            {/* Email Verification Modal */}
+            {showVerification && (
+                <EmailVerificationModal
+                    email={signupEmail}
+                    onVerified={handleVerified}
+                    onClose={() => {
+                        setShowVerification(false);
+                        onClose();
                     }}
                 />
             )}

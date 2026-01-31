@@ -89,12 +89,22 @@ export const AuthProvider = ({ children }) => {
                 throw new Error(data.error || data.errors?.[0]?.msg || 'Signup failed');
             }
 
-            // Store token
+            // Check if email verification is required
+            if (data.requiresVerification) {
+                return {
+                    success: true,
+                    requiresVerification: true,
+                    userId: data.userId,
+                    email: data.email
+                };
+            }
+
+            // Old flow (if backend doesn't require verification)
             localStorage.setItem('auth_token', data.token);
             setToken(data.token);
             setUser(data.user);
 
-            return { success: true };
+            return { success: true, requiresVerification: false };
         } catch (error) {
             return { success: false, error: error.message };
         }
