@@ -21,7 +21,7 @@ const signupValidation = [
         .withMessage('Username must be 3-20 characters and contain only letters, numbers, and underscores'),
     body('password')
         .isLength({ min: 8 })
-        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
+        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).+$/)
         .withMessage('Password must be at least 8 characters with 1 uppercase, 1 lowercase, 1 number, and 1 special character'),
 ];
 

@@ -25,7 +25,7 @@ export default function SignupModal({ onClose, onSwitchToLogin }) {
         if (/[a-z]/.test(password)) strength++;
         if (/[A-Z]/.test(password)) strength++;
         if (/\d/.test(password)) strength++;
-        if (/[@$!%*?&]/.test(password)) strength++;
+        if (/[^a-zA-Z0-9]/.test(password)) strength++;
 
         if (strength <= 2) return { strength, label: 'Weak', color: 'text-red-500' };
         if (strength <= 3) return { strength, label: 'Medium', color: 'text-yellow-500' };
@@ -60,8 +60,23 @@ export default function SignupModal({ onClose, onSwitchToLogin }) {
             return false;
         }
 
-        if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/.test(password)) {
-            setError('Password must contain uppercase, lowercase, number, and special character');
+        if (!/[a-z]/.test(password)) {
+            setError('Password must contain at least one lowercase letter');
+            return false;
+        }
+
+        if (!/[A-Z]/.test(password)) {
+            setError('Password must contain at least one uppercase letter');
+            return false;
+        }
+
+        if (!/\d/.test(password)) {
+            setError('Password must contain at least one number');
+            return false;
+        }
+
+        if (!/[^a-zA-Z0-9]/.test(password)) {
+            setError('Password must contain at least one special character');
             return false;
         }
 
