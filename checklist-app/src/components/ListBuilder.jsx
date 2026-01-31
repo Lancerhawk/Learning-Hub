@@ -51,6 +51,7 @@ export default function ListBuilder() {
     // Sections
     const [sections, setSections] = useState([]);
     const [expandedSections, setExpandedSections] = useState({});
+    const [showSectionEmojiPicker, setShowSectionEmojiPicker] = useState(null); // stores sectionIndex or null
 
     // Validation errors
     const [errors, setErrors] = useState({});
@@ -497,24 +498,26 @@ export default function ListBuilder() {
         <div className="min-h-screen bg-slate-950 p-6">
             <div className="max-w-4xl mx-auto">
                 {/* Header */}
-                <div className="bg-slate-900 border-2 border-green-500 rounded-lg p-4 sm:p-6 mb-6 shadow-2xl shadow-green-500/20">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-                        <div className="flex items-center gap-2 sm:gap-3">
+                <div className="bg-slate-900 border-2 border-green-500 rounded-2xl p-4 sm:p-6 mb-8 shadow-[0_0_50px_rgba(34,197,94,0.1)]">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-6">
+                        <div className="flex items-center gap-3 sm:gap-4">
                             <button
                                 onClick={() => navigate('/custom-lists')}
-                                className="p-2 bg-slate-800 border border-green-500 text-green-500 rounded hover:bg-green-500 hover:text-slate-900 transition-all flex-shrink-0"
+                                className="w-10 h-10 flex items-center justify-center bg-slate-800 border-2 border-slate-700 text-green-500 rounded-xl hover:bg-green-500 hover:text-slate-900 transition-all flex-shrink-0"
                             >
-                                <ArrowLeft className="w-4 h-4" />
+                                <ArrowLeft className="w-5 h-5" />
                             </button>
-                            <BookOpen className="w-6 h-6 sm:w-8 sm:h-8 text-green-500 flex-shrink-0" />
-                            <h1 className="text-lg sm:text-2xl font-bold text-green-500 font-mono">
-                                {isEditMode ? '[EDIT LIST]' : '[CREATE NEW LIST]'}
-                            </h1>
+                            <div className="flex items-center gap-3">
+                                <BookOpen className="w-8 h-8 text-green-500 flex-shrink-0" />
+                                <h1 className="text-xl sm:text-2xl font-bold text-green-500 font-mono tracking-tight">
+                                    {isEditMode ? '[EDIT LIST]' : '[CREATE NEW]'}
+                                </h1>
+                            </div>
                         </div>
-                        <div className="flex gap-2 w-full sm:w-auto">
+                        <div className="flex gap-3 w-full sm:w-auto">
                             <button
                                 onClick={() => navigate('/custom-lists')}
-                                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-slate-800 border border-red-500 text-red-500 rounded font-mono text-xs sm:text-sm hover:bg-red-500 hover:text-white transition-all"
+                                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-slate-800 border-2 border-slate-700 text-slate-400 rounded-xl font-mono text-sm hover:border-red-500/50 hover:text-red-500 transition-all font-bold"
                             >
                                 <X className="w-4 h-4" />
                                 CANCEL
@@ -522,10 +525,14 @@ export default function ListBuilder() {
                             <button
                                 onClick={handleSave}
                                 disabled={saving}
-                                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-green-500 text-slate-900 rounded font-mono text-xs sm:text-sm font-bold hover:bg-green-400 transition-all disabled:opacity-50"
+                                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-8 py-3 bg-green-500 text-slate-900 rounded-xl font-mono text-sm font-bold hover:bg-green-400 transition-all disabled:opacity-50 shadow-[0_10px_20px_rgba(34,197,94,0.3)]"
                             >
-                                <Save className="w-4 h-4" />
-                                {saving ? 'SAVING...' : 'SAVE'}
+                                {saving ? (
+                                    <div className="w-4 h-4 border-2 border-slate-900 border-t-transparent animate-spin rounded-full" />
+                                ) : (
+                                    <Save className="w-4 h-4" />
+                                )}
+                                {saving ? 'SAVING...' : 'SAVE LIST'}
                             </button>
                         </div>
                     </div>
@@ -535,37 +542,63 @@ export default function ListBuilder() {
                         <div className="flex flex-col sm:flex-row gap-4">
                             {/* Icon Picker */}
                             <div className="relative">
-                                <label className="block text-xs font-mono text-green-500 mb-2">
-                                    ICON
+                                <label className="block text-[10px] font-mono text-green-500/70 mb-2 uppercase tracking-widest">
+                                    Icon
                                 </label>
                                 <button
+                                    type="button"
                                     onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                                    className="text-3xl sm:text-4xl p-2 bg-slate-800 border-2 border-slate-700 rounded hover:border-green-500 transition-all"
+                                    className="w-16 h-16 flex items-center justify-center bg-slate-800/50 border-2 border-slate-700 rounded-xl hover:border-green-500/50 hover:bg-slate-800 transition-all group relative overflow-hidden"
                                 >
-                                    {icon}
+                                    <span className="text-3xl group-hover:scale-125 transition-transform duration-300">
+                                        {icon}
+                                    </span>
+                                    <div className="absolute inset-0 bg-green-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </button>
+
                                 {showEmojiPicker && (
-                                    <div className="absolute top-full mt-2 bg-slate-800 border-2 border-green-500 rounded-lg p-3 grid grid-cols-6 sm:grid-cols-8 gap-2 z-10 shadow-xl max-w-xs sm:max-w-none">
-                                        {EMOJI_LIST.map((emoji) => (
-                                            <button
-                                                key={emoji}
-                                                onClick={() => {
-                                                    setIcon(emoji);
-                                                    setShowEmojiPicker(false);
-                                                }}
-                                                className="text-xl sm:text-2xl hover:bg-slate-700 p-1 rounded transition-all"
-                                            >
-                                                {emoji}
-                                            </button>
-                                        ))}
-                                    </div>
+                                    <>
+                                        {/* Backdrop for closing */}
+                                        <div
+                                            className="fixed inset-0 z-40"
+                                            onClick={() => setShowEmojiPicker(false)}
+                                        />
+
+                                        <div className="absolute top-full left-0 mt-3 p-4 bg-slate-900/95 backdrop-blur-xl border-2 border-green-500/30 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-50 w-[280px] sm:w-[320px] animate-in fade-in zoom-in duration-200">
+                                            <div className="grid grid-cols-6 gap-3">
+                                                {EMOJI_LIST.map((emoji, index) => (
+                                                    <button
+                                                        key={`${emoji}-${index}`}
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setIcon(emoji);
+                                                            setShowEmojiPicker(false);
+                                                        }}
+                                                        className="aspect-square flex items-center justify-center text-2xl hover:bg-green-500/20 rounded-xl transition-all hover:scale-110 active:scale-90"
+                                                    >
+                                                        {emoji}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                            <div className="mt-4 pt-3 border-t border-slate-700/50 flex justify-between items-center">
+                                                <span className="text-[10px] font-mono text-slate-500">SELECT ICON</span>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowEmojiPicker(false)}
+                                                    className="text-[10px] font-mono text-red-400 hover:text-red-300 uppercase underline"
+                                                >
+                                                    Close
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </>
                                 )}
                             </div>
 
                             {/* Title */}
                             <div className="flex-1">
-                                <label className="block text-xs font-mono text-green-500 mb-2">
-                                    TITLE *
+                                <label className="block text-[10px] font-mono text-green-500/70 mb-2 uppercase tracking-widest">
+                                    Title *
                                 </label>
                                 <input
                                     ref={titleRef}
@@ -578,11 +611,11 @@ export default function ListBuilder() {
                                         setErrors(newErrors);
                                     }}
                                     placeholder="e.g., Web Development Roadmap"
-                                    className={`w-full px-3 sm:px-4 py-2 bg-slate-800 border-2 rounded text-green-400 font-mono text-sm sm:text-base focus:outline-none ${errors.title ? 'border-red-500' : 'border-slate-700 focus:border-green-500'
+                                    className={`w-full px-4 py-3 bg-slate-800/50 border-2 rounded-xl text-green-400 font-mono text-sm sm:text-base focus:outline-none transition-all ${errors.title ? 'border-red-500' : 'border-slate-700 focus:border-green-500/50 hover:border-slate-600'
                                         }`}
                                 />
                                 {errors.title && (
-                                    <p className="text-red-500 text-xs font-mono mt-1 flex items-center gap-1">
+                                    <p className="text-red-500 text-xs font-mono mt-1.5 flex items-center gap-1">
                                         <AlertCircle className="w-3 h-3" />
                                         {errors.title}
                                     </p>
@@ -592,23 +625,23 @@ export default function ListBuilder() {
 
                         {/* Description */}
                         <div>
-                            <label className="block text-xs font-mono text-green-500 mb-2">
-                                DESCRIPTION
+                            <label className="block text-[10px] font-mono text-green-500/70 mb-2 uppercase tracking-widest">
+                                Description
                             </label>
                             <textarea
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                                 placeholder="Brief description of this learning list..."
                                 rows={2}
-                                className="w-full px-3 sm:px-4 py-2 bg-slate-800 border-2 border-slate-700 rounded text-green-400 font-mono text-sm sm:text-base focus:border-green-500 focus:outline-none resize-none"
+                                className="w-full px-4 py-3 bg-slate-800/50 border-2 border-slate-700 rounded-xl text-green-400 font-mono text-sm sm:text-base focus:border-green-500/50 focus:outline-none resize-none transition-all hover:border-slate-600"
                             />
                         </div>
 
                         {/* Public/Private Toggle */}
-                        <div className="flex items-center justify-between p-3 bg-slate-800 border-2 border-slate-700 rounded">
+                        <div className="flex items-center justify-between p-4 bg-slate-800/30 border-2 border-slate-700/50 rounded-xl">
                             <div className="flex-1">
-                                <label className="block text-xs font-mono text-green-500 mb-1">
-                                    VISIBILITY
+                                <label className="block text-[10px] font-mono text-green-500/70 mb-1 uppercase tracking-widest">
+                                    Visibility
                                 </label>
                                 <p className="text-xs text-slate-400 font-mono">
                                     {isPublic ? 'Public - Visible in community marketplace' : 'Private - Only visible to you'}
@@ -637,10 +670,11 @@ export default function ListBuilder() {
                             className="bg-slate-900 border-2 border-slate-700 rounded-lg p-4"
                         >
                             {/* Section Header */}
-                            <div className="flex items-center gap-3 mb-3">
+                            <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 mb-4">
                                 <button
+                                    type="button"
                                     onClick={() => toggleSection(sectionIndex)}
-                                    className="p-1 text-green-500 hover:bg-slate-800 rounded"
+                                    className={`p-2 rounded-lg transition-all ${expandedSections[sectionIndex] ? 'bg-green-500/10 text-green-500' : 'bg-slate-800 text-slate-400 hover:text-green-500'}`}
                                 >
                                     {expandedSections[sectionIndex] ? (
                                         <ChevronDown className="w-5 h-5" />
@@ -648,25 +682,60 @@ export default function ListBuilder() {
                                         <ChevronUp className="w-5 h-5" />
                                     )}
                                 </button>
-                                <input
-                                    type="text"
-                                    value={section.icon}
-                                    onChange={(e) => updateSection(sectionIndex, 'icon', e.target.value)}
-                                    className="w-12 text-center text-xl bg-slate-800 border border-slate-700 rounded focus:border-green-500 focus:outline-none"
-                                    maxLength={2}
-                                />
-                                <input
-                                    ref={(el) => (sectionRefs.current[sectionIndex] = el)}
-                                    type="text"
-                                    value={section.title}
-                                    onChange={(e) => updateSection(sectionIndex, 'title', e.target.value)}
-                                    placeholder="Section title..."
-                                    className={`flex-1 px-3 py-2 bg-slate-800 border rounded text-green-400 font-mono focus:outline-none ${errors[`section_${sectionIndex}`] ? 'border-red-500' : 'border-slate-700 focus:border-green-500'
-                                        }`}
-                                />
+
+                                {/* Section Icon Picker */}
+                                <div className="relative">
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowSectionEmojiPicker(sectionIndex)}
+                                        className="w-12 h-12 flex items-center justify-center bg-slate-800 border-2 border-slate-700 rounded-lg text-xl hover:border-green-500/50 transition-all"
+                                    >
+                                        {section.icon}
+                                    </button>
+                                    {showSectionEmojiPicker === sectionIndex && (
+                                        <>
+                                            <div className="fixed inset-0 z-40" onClick={() => setShowSectionEmojiPicker(null)} />
+                                            <div className="absolute top-full left-0 mt-2 p-3 bg-slate-900 border-2 border-green-500/30 rounded-xl shadow-2xl z-50 w-[240px] grid grid-cols-6 gap-2">
+                                                {EMOJI_LIST.map((emoji, idx) => (
+                                                    <button
+                                                        key={idx}
+                                                        type="button"
+                                                        onClick={() => {
+                                                            updateSection(sectionIndex, 'icon', emoji);
+                                                            setShowSectionEmojiPicker(null);
+                                                        }}
+                                                        className="aspect-square flex items-center justify-center text-xl hover:bg-slate-800 rounded-lg transition-all hover:scale-110"
+                                                    >
+                                                        {emoji}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+
+                                <div className="flex-1 relative">
+                                    <input
+                                        ref={(el) => (sectionRefs.current[sectionIndex] = el)}
+                                        type="text"
+                                        value={section.title}
+                                        onChange={(e) => updateSection(sectionIndex, 'title', e.target.value)}
+                                        placeholder="Section title (e.g., Basics, Advanced...)"
+                                        className={`w-full px-4 py-3 bg-slate-800/50 border-2 rounded-xl text-green-400 font-mono focus:outline-none transition-all ${errors[`section_${sectionIndex}`] ? 'border-red-500' : 'border-slate-700 focus:border-green-500/50'
+                                            }`}
+                                    />
+                                    {errors[`section_${sectionIndex}`] && (
+                                        <div className="absolute -top-6 left-0 text-[10px] text-red-500 font-mono animate-pulse">
+                                            {errors[`section_${sectionIndex}`]}
+                                        </div>
+                                    )}
+                                </div>
+
                                 <button
+                                    type="button"
                                     onClick={() => removeSection(sectionIndex)}
-                                    className="p-2 bg-slate-800 border border-red-500 text-red-500 rounded hover:bg-red-500 hover:text-white transition-all"
+                                    className="p-3 bg-red-500/10 border-2 border-red-500/20 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all transform hover:rotate-12"
+                                    title="Remove Section"
                                 >
                                     <Trash2 className="w-4 h-4" />
                                 </button>
@@ -806,10 +875,12 @@ export default function ListBuilder() {
 
                                     {/* Add Topic Button */}
                                     <button
+                                        type="button"
                                         onClick={() => addTopic(sectionIndex)}
-                                        className="w-full py-2 bg-slate-800 border border-dashed border-green-500 text-green-500 rounded font-mono text-sm hover:bg-slate-700 transition-all"
+                                        className="w-full py-4 mt-4 bg-slate-900/50 border-2 border-dashed border-slate-700 text-slate-400 rounded-xl font-mono text-sm hover:border-green-500/50 hover:text-green-500 hover:bg-green-500/5 transition-all flex items-center justify-center gap-2"
                                     >
-                                        + Add Topic
+                                        <Plus className="w-4 h-4" />
+                                        ADD NEW TOPIC
                                     </button>
                                 </div>
                             )}
@@ -819,11 +890,12 @@ export default function ListBuilder() {
 
                 {/* Add Section Button */}
                 <button
+                    type="button"
                     onClick={addSection}
-                    className="w-full py-3 bg-slate-900 border-2 border-dashed border-green-500 text-green-500 rounded-lg font-mono font-bold hover:bg-slate-800 transition-all"
+                    className="w-full py-5 bg-slate-900 border-2 border-dashed border-green-500/30 text-green-500 rounded-2xl font-mono font-bold hover:bg-green-500/10 hover:border-green-500 transition-all flex items-center justify-center gap-3 shadow-lg shadow-green-500/5"
                 >
-                    <Plus className="w-5 h-5 inline mr-2" />
-                    ADD SECTION
+                    <Plus className="w-6 h-6" />
+                    CREATE NEW SECTION
                 </button>
             </div>
 
