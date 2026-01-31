@@ -1,4 +1,9 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://localhost:3001/api';
+
+const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
+
+if (!import.meta.env.VITE_API_URL) {
+    throw new Error("VITE_API_URL is not defined");
+}
 
 // Helper function for fetch with error handling
 const fetchAPI = async (endpoint, options = {}) => {
