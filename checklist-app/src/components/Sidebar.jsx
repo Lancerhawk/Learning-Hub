@@ -19,6 +19,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     const { user, isAuthenticated, logout } = useAuth();
     const [showLogin, setShowLogin] = useState(false);
     const [showSignup, setShowSignup] = useState(false);
+    const [languagesExpanded, setLanguagesExpanded] = useState(true);
 
     const handleLogout = () => {
         logout();
@@ -98,51 +99,61 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
 
                 {/* Navigation */}
                 <nav className="flex-1 overflow-y-auto p-4 space-y-4">
-                    {/* Dashboard Section */}
-                    <div className="border-2 border-green-700 rounded-lg p-2 bg-slate-800/30">
-                        <NavLink
-                            to="/"
-                            end
-                            onClick={playClickSound}
-                            className={({ isActive }) =>
-                                `flex items-center gap-3 px-4 py-3 rounded font-mono text-sm transition-all ${isActive
-                                    ? 'bg-green-500 text-slate-900 font-bold'
-                                    : 'text-green-400 hover:bg-slate-800 hover:text-green-300'
-                                }`
-                            }
-                        >
-                            <Terminal className="w-5 h-5" />
-                            <span>Dashboard</span>
-                        </NavLink>
-                    </div>
-
-                    {/* Languages Section */}
+                    {/* General Section */}
                     <div className="border-2 border-green-700 rounded-lg p-3 bg-slate-800/30">
                         <div className="text-xs font-mono text-green-500 px-2 mb-3 font-bold border-b border-green-700 pb-2">
-                            &gt; [LANGUAGES]
+                            &gt; [GENERAL]
                         </div>
                         <div className="space-y-0">
-                            {languages.map((lang, index) => (
-                                <NavLink
-                                    key={lang.id}
-                                    to={`/${lang.id}`}
-                                    onClick={playClickSound}
-                                    className={({ isActive }) =>
-                                        `flex items-center gap-3 px-4 py-2.5 font-mono text-sm transition-all ${index < languages.length - 1 ? 'border-b border-green-800/50' : ''
-                                        } ${isActive
-                                            ? 'bg-green-500 text-slate-900 font-bold'
-                                            : `${lang.color} hover:bg-slate-800`
-                                        }`
-                                    }
-                                >
-                                    <img src={lang.icon} alt={lang.name} className="w-5 h-5" />
-                                    <span>{lang.name}</span>
-                                </NavLink>
-                            ))}
+                            <NavLink
+                                to="/"
+                                end
+                                onClick={playClickSound}
+                                className={({ isActive }) =>
+                                    `flex items-center gap-3 px-4 py-2.5 font-mono text-sm transition-all border-b border-green-800/50 ${isActive
+                                        ? 'bg-green-500 text-slate-900 font-bold'
+                                        : 'text-green-400 hover:bg-slate-800 hover:text-green-300'
+                                    }`
+                                }
+                            >
+                                <Terminal className="w-5 h-5" />
+                                <span>Dashboard</span>
+                            </NavLink>
+
+                            {isAuthenticated && (
+                                <>
+                                    <NavLink
+                                        to="/custom-lists"
+                                        onClick={playClickSound}
+                                        className={({ isActive }) =>
+                                            `flex items-center gap-3 px-4 py-2.5 font-mono text-sm transition-all border-b border-green-800/50 ${isActive
+                                                ? 'bg-green-500 text-slate-900 font-bold'
+                                                : 'text-green-400 hover:bg-slate-800 hover:text-green-300'
+                                            }`
+                                        }
+                                    >
+                                        <BookOpen className="w-5 h-5" />
+                                        <span>My Lists</span>
+                                    </NavLink>
+                                    <NavLink
+                                        to="/explore"
+                                        onClick={playClickSound}
+                                        className={({ isActive }) =>
+                                            `flex items-center gap-3 px-4 py-2.5 font-mono text-sm transition-all ${isActive
+                                                ? 'bg-green-500 text-slate-900 font-bold'
+                                                : 'text-green-400 hover:bg-slate-800 hover:text-green-300'
+                                            }`
+                                        }
+                                    >
+                                        <BookOpen className="w-5 h-5" />
+                                        <span>Explore Lists</span>
+                                    </NavLink>
+                                </>
+                            )}
                         </div>
                     </div>
 
-                    {/* DSA Topics Section */}
+                    {/* Algorithms Section */}
                     <div className="border-2 border-green-700 rounded-lg p-3 bg-slate-800/30">
                         <div className="text-xs font-mono text-green-500 px-2 mb-3 font-bold border-b border-green-700 pb-2">
                             &gt; [ALGORITHMS]
@@ -162,49 +173,46 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                         </NavLink>
                     </div>
 
-                    {/* Explore Lists Section - Only show if authenticated */}
-                    {isAuthenticated && (
-                        <div className="border-2 border-green-700 rounded-lg p-3 bg-slate-800/30">
-                            <div className="text-xs font-mono text-green-500 px-2 mb-3 font-bold border-b border-green-700 pb-2">
-                                &gt; [COMMUNITY]
-                            </div>
-                            <NavLink
-                                to="/explore"
-                                onClick={playClickSound}
-                                className={({ isActive }) =>
-                                    `flex items-center gap-3 px-4 py-2.5 rounded font-mono text-sm transition-all ${isActive
-                                        ? 'bg-green-500 text-slate-900 font-bold'
-                                        : 'text-green-400 hover:bg-slate-800 hover:text-green-300'
-                                    }`
-                                }
-                            >
-                                <BookOpen className="w-5 h-5" />
-                                <span>Explore Lists</span>
-                            </NavLink>
-                        </div>
-                    )}
+                    {/* Languages Section - Collapsible */}
+                    <div className="border-2 border-green-700 rounded-lg p-3 bg-slate-800/30">
+                        <button
+                            onClick={() => {
+                                setLanguagesExpanded(!languagesExpanded);
+                                playClickSound();
+                            }}
+                            className="w-full flex items-center justify-between text-xs font-mono text-green-500 px-2 mb-3 font-bold border-b border-green-700 pb-2 hover:text-green-400 transition-colors"
+                        >
+                            <span>&gt; [LANGUAGES]</span>
+                            <span className={`transition-transform duration-300 ease-in-out ${languagesExpanded ? 'rotate-90' : ''}`}>
+                                ▶
+                            </span>
+                        </button>
 
-                    {/* Custom Lists Section - Only show if authenticated */}
-                    {isAuthenticated && (
-                        <div className="border-2 border-green-700 rounded-lg p-3 bg-slate-800/30">
-                            <div className="text-xs font-mono text-green-500 px-2 mb-3 font-bold border-b border-green-700 pb-2">
-                                &gt; [CUSTOM LISTS]
+                        <div
+                            className={`overflow-hidden transition-all duration-300 ease-in-out ${languagesExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                                }`}
+                        >
+                            <div className="space-y-0">
+                                {languages.map((lang, index) => (
+                                    <NavLink
+                                        key={lang.id}
+                                        to={`/${lang.id}`}
+                                        onClick={playClickSound}
+                                        className={({ isActive }) =>
+                                            `flex items-center gap-3 px-4 py-2.5 font-mono text-sm transition-all ${index < languages.length - 1 ? 'border-b border-green-800/50' : ''
+                                            } ${isActive
+                                                ? 'bg-green-500 text-slate-900 font-bold'
+                                                : `${lang.color} hover:bg-slate-800`
+                                            }`
+                                        }
+                                    >
+                                        <img src={lang.icon} alt={lang.name} className="w-5 h-5" />
+                                        <span>{lang.name}</span>
+                                    </NavLink>
+                                ))}
                             </div>
-                            <NavLink
-                                to="/custom-lists"
-                                onClick={playClickSound}
-                                className={({ isActive }) =>
-                                    `flex items-center gap-3 px-4 py-2.5 rounded font-mono text-sm transition-all ${isActive
-                                        ? 'bg-green-500 text-slate-900 font-bold'
-                                        : 'text-green-400 hover:bg-slate-800 hover:text-green-300'
-                                    }`
-                                }
-                            >
-                                <BookOpen className="w-5 h-5" />
-                                <span>My Lists</span>
-                            </NavLink>
                         </div>
-                    )}
+                    </div>
                 </nav>
 
                 {/* Footer */}

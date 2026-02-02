@@ -37,16 +37,41 @@ export default function HomePage({ calculateLanguageProgress, checkedItems }) {
             let topicCompleted = 0;
 
             topic.items.forEach(item => {
-                // Count practice problems for each item
-                const practiceCount = item.resources?.practice?.length || 0;
-                topicTotal += practiceCount;
+                const itemName = typeof item === 'string' ? item : item.name;
 
-                // Check if items are completed in checkedItems
-                if (checkedItems && checkedItems.dsa && checkedItems.dsa[topic.category]) {
-                    const categoryItems = checkedItems.dsa[topic.category];
-                    if (categoryItems[item.name]) {
-                        topicCompleted += practiceCount;
-                    }
+                // Count the main topic item
+                topicTotal += 1;
+
+                // Check if the main item is completed
+                if (checkedItems && checkedItems.dsa && checkedItems.dsa[itemName]) {
+                    topicCompleted += 1;
+                }
+
+                // If item has resources, count them too
+                if (typeof item === 'object' && item.resources) {
+                    // Count videos
+                    const videoCount = item.resources.videos?.length || 0;
+                    topicTotal += videoCount;
+
+                    // Count practice problems
+                    const practiceCount = item.resources.practice?.length || 0;
+                    topicTotal += practiceCount;
+
+                    // Check completed videos
+                    item.resources.videos?.forEach(video => {
+                        const videoKey = `${itemName}__videos__${video.title}`;
+                        if (checkedItems && checkedItems.dsa && checkedItems.dsa[videoKey]) {
+                            topicCompleted += 1;
+                        }
+                    });
+
+                    // Check completed practice problems
+                    item.resources.practice?.forEach(practice => {
+                        const practiceKey = `${itemName}__practice__${practice.title}`;
+                        if (checkedItems && checkedItems.dsa && checkedItems.dsa[practiceKey]) {
+                            topicCompleted += 1;
+                        }
+                    });
                 }
             });
 
@@ -55,8 +80,11 @@ export default function HomePage({ calculateLanguageProgress, checkedItems }) {
 
             const topicProgress = topicTotal > 0 ? Math.round((topicCompleted / topicTotal) * 100) : 0;
 
-            if (topicProgress > 0) topicsStarted++;
-            if (topicProgress === 100) topicsCompleted++;
+            // A topic is "started" if at least one item is completed (progress > 0)
+            if (topicCompleted > 0) topicsStarted++;
+
+            // A topic is "completed" only if ALL items are completed (100% progress)
+            if (topicProgress === 100 && topicTotal > 0) topicsCompleted++;
 
             return {
                 category: topic.category,
@@ -224,7 +252,7 @@ export default function HomePage({ calculateLanguageProgress, checkedItems }) {
                                         <span className="text-green-500">DSA & Language Mastery</span>
                                         <span className="text-green-400">{lang.progress.dsa}%</span>
                                     </div>
-                                    <div className="w-full bg-slate-800 rounded-full h-2">
+                                    <div className="w-full bg-slate-950/50 rounded-full h-2 border border-slate-700/50">
                                         <div
                                             className="bg-green-500 h-2 rounded-full transition-all"
                                             style={{ width: `${lang.progress.dsa}%` }}
@@ -235,7 +263,7 @@ export default function HomePage({ calculateLanguageProgress, checkedItems }) {
                                         <span className="text-green-500">Dev Mastery</span>
                                         <span className="text-green-400">{lang.progress.dev}%</span>
                                     </div>
-                                    <div className="w-full bg-slate-800 rounded-full h-2">
+                                    <div className="w-full bg-slate-950/50 rounded-full h-2 border border-slate-700/50">
                                         <div
                                             className="bg-green-500 h-2 rounded-full transition-all"
                                             style={{ width: `${lang.progress.dev}%` }}
