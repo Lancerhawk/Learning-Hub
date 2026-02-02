@@ -16,17 +16,14 @@ const languages = [
 export default function HomePage({ calculateLanguageProgress, checkedItems }) {
     // Calculate overall statistics
     const stats = useMemo(() => {
-        let totalCompleted = 0;
-        let totalItems = 0;
-        let languagesStarted = 0;
-        let languagesCompleted = 0;
+        let totalDSAItems = 0;
+        let completedDSAItems = 0;
+        let topicsStarted = 0;
+        let topicsCompleted = 0;
 
         const languageStats = languages.map(lang => {
             const progress = calculateLanguageProgress ? calculateLanguageProgress(lang.id) : { dsa: 0, dev: 0, overall: 0 };
             const overall = Math.round((progress.dsa + progress.dev) / 2);
-
-            if (overall > 0) languagesStarted++;
-            if (overall === 100) languagesCompleted++;
 
             return {
                 ...lang,
@@ -34,32 +31,52 @@ export default function HomePage({ calculateLanguageProgress, checkedItems }) {
             };
         });
 
-        // Calculate total items from checkedItems
-        if (checkedItems) {
-            Object.keys(checkedItems).forEach(sectionKey => {
-                const section = checkedItems[sectionKey];
-                if (typeof section === 'object' && section !== null) {
-                    Object.keys(section).forEach(itemKey => {
-                        totalItems++;
-                        if (section[itemKey] === true) {
-                            totalCompleted++;
-                        }
-                    });
+        // Calculate DSA topic statistics
+        const topicStats = dsaTopicsData.map(topic => {
+            let topicTotal = 0;
+            let topicCompleted = 0;
+
+            topic.items.forEach(item => {
+                // Count practice problems for each item
+                const practiceCount = item.resources?.practice?.length || 0;
+                topicTotal += practiceCount;
+
+                // Check if items are completed in checkedItems
+                if (checkedItems && checkedItems.dsa && checkedItems.dsa[topic.category]) {
+                    const categoryItems = checkedItems.dsa[topic.category];
+                    if (categoryItems[item.name]) {
+                        topicCompleted += practiceCount;
+                    }
                 }
             });
-        }
 
-        const overallProgress = languageStats.reduce((acc, lang) => {
-            return acc + Math.round((lang.progress.dsa + lang.progress.dev) / 2);
-        }, 0) / languages.length;
+            totalDSAItems += topicTotal;
+            completedDSAItems += topicCompleted;
+
+            const topicProgress = topicTotal > 0 ? Math.round((topicCompleted / topicTotal) * 100) : 0;
+
+            if (topicProgress > 0) topicsStarted++;
+            if (topicProgress === 100) topicsCompleted++;
+
+            return {
+                category: topic.category,
+                progress: topicProgress,
+                completed: topicCompleted,
+                total: topicTotal
+            };
+        });
+
+        const dsaOverallProgress = totalDSAItems > 0 ? Math.round((completedDSAItems / totalDSAItems) * 100) : 0;
 
         return {
-            overallProgress: Math.round(overallProgress),
-            totalCompleted,
-            totalItems,
-            languagesStarted,
-            languagesCompleted,
-            languageStats
+            overallProgress: dsaOverallProgress,
+            totalDSAItems,
+            completedDSAItems,
+            topicsStarted,
+            topicsCompleted,
+            totalTopics: dsaTopicsData.length,
+            languageStats,
+            topicStats
         };
     }, [calculateLanguageProgress, checkedItems]);
 
@@ -75,7 +92,7 @@ export default function HomePage({ calculateLanguageProgress, checkedItems }) {
                                 <TypingAnimation text="$ ./learn_hub" speed={80} />
                             </h1>
                             <p className="text-green-400 font-mono text-xs md:text-sm mt-1 md:mt-2">
-                                Master programming languages & algorithms
+                                Master Data Structures & Algorithms
                             </p>
                         </div>
                     </div>
@@ -114,12 +131,12 @@ export default function HomePage({ calculateLanguageProgress, checkedItems }) {
                                 </div>
                             </div>
                             <div>
-                                <div className="text-xs font-mono text-slate-500 mb-1">OVERALL PROGRESS</div>
+                                <div className="text-xs font-mono text-slate-500 mb-1">DSA OVERALL PROGRESS</div>
                                 <div className="text-2xl font-bold text-green-400 font-mono">
                                     {stats.overallProgress}% Complete
                                 </div>
                                 <div className="text-xs font-mono text-slate-400 mt-1">
-                                    {stats.languagesStarted} of {languages.length} languages started
+                                    {stats.completedDSAItems} of {stats.totalDSAItems} problems solved
                                 </div>
                             </div>
                         </div>
@@ -129,11 +146,11 @@ export default function HomePage({ calculateLanguageProgress, checkedItems }) {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div className="bg-slate-800 border border-green-600 rounded p-4">
                             <div className="flex items-center gap-2 mb-2">
-                                <Code className="w-5 h-5 text-green-500" />
-                                <span className="text-xs font-mono text-green-500">[LANGUAGES]</span>
+                                <BookOpen className="w-5 h-5 text-green-500" />
+                                <span className="text-xs font-mono text-green-500">[TOPICS]</span>
                             </div>
-                            <div className="text-2xl font-bold text-green-400 font-mono">{languages.length}</div>
-                            <div className="text-xs font-mono text-slate-500 mt-1">Available</div>
+                            <div className="text-2xl font-bold text-green-400 font-mono">{stats.totalTopics}</div>
+                            <div className="text-xs font-mono text-slate-500 mt-1">Total Categories</div>
                         </div>
 
                         <div className="bg-slate-800 border border-green-600 rounded p-4">
@@ -141,7 +158,7 @@ export default function HomePage({ calculateLanguageProgress, checkedItems }) {
                                 <Zap className="w-5 h-5 text-yellow-500" />
                                 <span className="text-xs font-mono text-yellow-500">[STARTED]</span>
                             </div>
-                            <div className="text-2xl font-bold text-yellow-400 font-mono">{stats.languagesStarted}</div>
+                            <div className="text-2xl font-bold text-yellow-400 font-mono">{stats.topicsStarted}</div>
                             <div className="text-xs font-mono text-slate-500 mt-1">In Progress</div>
                         </div>
 
@@ -150,17 +167,17 @@ export default function HomePage({ calculateLanguageProgress, checkedItems }) {
                                 <Award className="w-5 h-5 text-green-500" />
                                 <span className="text-xs font-mono text-green-500">[COMPLETED]</span>
                             </div>
-                            <div className="text-2xl font-bold text-green-400 font-mono">{stats.languagesCompleted}</div>
-                            <div className="text-xs font-mono text-slate-500 mt-1">Languages</div>
+                            <div className="text-2xl font-bold text-green-400 font-mono">{stats.topicsCompleted}</div>
+                            <div className="text-xs font-mono text-slate-500 mt-1">Topics Done</div>
                         </div>
 
                         <div className="bg-slate-800 border border-green-600 rounded p-4">
                             <div className="flex items-center gap-2 mb-2">
-                                <BookOpen className="w-5 h-5 text-green-500" />
-                                <span className="text-xs font-mono text-green-500">[DSA TOPICS]</span>
+                                <Target className="w-5 h-5 text-green-500" />
+                                <span className="text-xs font-mono text-green-500">[PROBLEMS]</span>
                             </div>
-                            <div className="text-2xl font-bold text-green-400 font-mono">{dsaTopicsData.length}</div>
-                            <div className="text-xs font-mono text-slate-500 mt-1">Categories</div>
+                            <div className="text-2xl font-bold text-green-400 font-mono">{stats.totalDSAItems}</div>
+                            <div className="text-xs font-mono text-slate-500 mt-1">Practice Items</div>
                         </div>
                     </div>
                 </div>
