@@ -129,15 +129,18 @@ export default function PublicListsPage() {
                     </div>
 
                     {/* Sort */}
-                    <select
-                        value={sortBy}
-                        onChange={(e) => setSortBy(e.target.value)}
-                        className="px-4 py-3 bg-slate-900 border-2 border-green-700 rounded text-green-400 font-mono focus:outline-none focus:border-green-500"
-                    >
-                        <option value="recent">Most Recent</option>
-                        <option value="rating">Highest Rated</option>
-                        <option value="popular">Most Copied</option>
-                    </select>
+                    <div className="relative">
+                        <select
+                            value={sortBy}
+                            onChange={(e) => setSortBy(e.target.value)}
+                            className="appearance-none w-full px-4 py-3 pr-10 bg-slate-900 border-2 border-green-700 rounded text-green-400 font-mono focus:outline-none focus:border-green-500 cursor-pointer"
+                        >
+                            <option value="recent">Most Recent</option>
+                            <option value="rating">Highest Rated</option>
+                            <option value="popular">Most Copied</option>
+                        </select>
+                        <ChevronRight className="absolute right-3 top-1/2 transform -translate-y-1/2 rotate-90 w-5 h-5 text-green-500 pointer-events-none" />
+                    </div>
                 </div>
 
                 {/* Lists Grid */}
