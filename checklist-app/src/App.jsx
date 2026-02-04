@@ -13,6 +13,7 @@ import ListBuilder from './components/ListBuilder';
 import PublicListsPage from './components/PublicListsPage';
 import ResetPasswordPage from './components/Auth/ResetPasswordPage';
 import ScrollToTop from './components/ScrollToTop';
+import ChangelogButton from './components/ChangelogButton';
 import { languagesData, dsaTopicsData } from './data/checklistData';
 import { playClickSound } from './utils/sounds';
 
@@ -318,6 +319,9 @@ export default function App() {
           >
             <Menu className="w-6 h-6" />
           </button>
+
+          {/* Changelog Button */}
+          <ChangelogButton />
 
           {/* Main Content */}
           <div className="flex-1 lg:ml-0">

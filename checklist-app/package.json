@@ -1,7 +1,10 @@
 {
-  "name": "checklist-app",
+  "name": "learning-hub",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.2.0",
+  "description": "A comprehensive learning hub for DSA, programming languages, and custom learning paths with progress tracking, community lists, and authentication",
+  "author": "Lancerhawk",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite",
