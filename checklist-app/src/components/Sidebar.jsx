@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Code, Terminal, BookOpen, Menu, X, LogIn, UserPlus, LogOut, User } from 'lucide-react';
+import { Code, Terminal, BookOpen, Menu, X, LogIn, UserPlus, LogOut, User, Lock } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import LoginModal from './Auth/LoginModal';
 import SignupModal from './Auth/SignupModal';
@@ -124,29 +124,45 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                                 <>
                                     <NavLink
                                         to="/custom-lists"
-                                        onClick={playClickSound}
+                                        onClick={(e) => {
+                                            if (user && !user.emailVerified) {
+                                                e.preventDefault();
+                                            }
+                                            playClickSound();
+                                        }}
                                         className={({ isActive }) =>
-                                            `flex items-center gap-3 px-4 py-2.5 font-mono text-sm transition-all border-b border-green-800/50 ${isActive
+                                            `flex items-center gap-3 px-4 py-2.5 font-mono text-sm transition-all border-b border-green-800/50 group relative ${isActive
                                                 ? 'bg-green-500 text-slate-900 font-bold'
                                                 : 'text-green-400 hover:bg-slate-800 hover:text-green-300'
-                                            }`
+                                            } ${user && !user.emailVerified ? 'opacity-60' : ''}`
                                         }
                                     >
                                         <BookOpen className="w-5 h-5" />
                                         <span>My Lists</span>
+                                        {user && !user.emailVerified && (
+                                            <Lock className="w-4 h-4 ml-auto" title="Email verification required" />
+                                        )}
                                     </NavLink>
                                     <NavLink
                                         to="/explore"
-                                        onClick={playClickSound}
+                                        onClick={(e) => {
+                                            if (user && !user.emailVerified) {
+                                                e.preventDefault();
+                                            }
+                                            playClickSound();
+                                        }}
                                         className={({ isActive }) =>
-                                            `flex items-center gap-3 px-4 py-2.5 font-mono text-sm transition-all ${isActive
+                                            `flex items-center gap-3 px-4 py-2.5 font-mono text-sm transition-all group relative ${isActive
                                                 ? 'bg-green-500 text-slate-900 font-bold'
                                                 : 'text-green-400 hover:bg-slate-800 hover:text-green-300'
-                                            }`
+                                            } ${user && !user.emailVerified ? 'opacity-60' : ''}`
                                         }
                                     >
                                         <BookOpen className="w-5 h-5" />
                                         <span>Explore Lists</span>
+                                        {user && !user.emailVerified && (
+                                            <Lock className="w-4 h-4 ml-auto" title="Email verification required" />
+                                        )}
                                     </NavLink>
                                 </>
                             )}

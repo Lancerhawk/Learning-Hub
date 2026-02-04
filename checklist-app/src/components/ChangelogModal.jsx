@@ -3,6 +3,22 @@ import { X, Package, Plus, Edit, Bug, Shield, FileText, Sparkles } from 'lucide-
 
 const changelogData = [
     {
+        version: 'v2.3.0',
+        date: '2026-02-05',
+        changes: {
+            added: [
+                'Email Verification Enforcement: Users must verify their email to access custom lists and explore features',
+                'Verification Banner: Yellow warning banner for unverified users with "Resend OTP" functionality',
+                'OTP Entry Modal: Modal dialog for users to enter verification code after resending OTP',
+                'Lock Icons: Visual indicators in sidebar for features requiring verification',
+                'Real-time State Updates: User verification status updates immediately without logout/login'
+            ],
+            security: [
+                'Enhanced account security by enforcing email validation for user-generated content features'
+            ]
+        }
+    },
+    {
         version: 'v2.2.0',
         date: '2026-02-05',
         changes: {

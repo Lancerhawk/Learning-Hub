@@ -14,6 +14,7 @@ import PublicListsPage from './components/PublicListsPage';
 import ResetPasswordPage from './components/Auth/ResetPasswordPage';
 import ScrollToTop from './components/ScrollToTop';
 import ChangelogButton from './components/ChangelogButton';
+import EmailVerificationBanner from './components/EmailVerificationBanner';
 import { languagesData, dsaTopicsData } from './data/checklistData';
 import { playClickSound } from './utils/sounds';
 
@@ -320,6 +321,9 @@ export default function App() {
             <Menu className="w-6 h-6" />
           </button>
 
+          {/* Email Verification Banner */}
+          <EmailVerificationBanner />
+
           {/* Changelog Button */}
           <ChangelogButton />
 
@@ -381,13 +385,13 @@ export default function App() {
 
               <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-              <Route path="/explore" element={<ProtectedRoute><PublicListsPage /></ProtectedRoute>} />
-              <Route path="/explore/:id" element={<ProtectedRoute><CustomListViewer isPublicView={true} /></ProtectedRoute>} />
+              <Route path="/explore" element={<ProtectedRoute requireVerification={true}><PublicListsPage /></ProtectedRoute>} />
+              <Route path="/explore/:id" element={<ProtectedRoute requireVerification={true}><CustomListViewer isPublicView={true} /></ProtectedRoute>} />
 
-              <Route path="/custom-lists" element={<ProtectedRoute><CustomListsPage /></ProtectedRoute>} />
-              <Route path="/custom-lists/new" element={<ProtectedRoute><ListBuilder /></ProtectedRoute>} />
-              <Route path="/custom-lists/:id/edit" element={<ProtectedRoute><ListBuilder /></ProtectedRoute>} />
-              <Route path="/custom-lists/:id" element={<ProtectedRoute><CustomListViewer /></ProtectedRoute>} />
+              <Route path="/custom-lists" element={<ProtectedRoute requireVerification={true}><CustomListsPage /></ProtectedRoute>} />
+              <Route path="/custom-lists/new" element={<ProtectedRoute requireVerification={true}><ListBuilder /></ProtectedRoute>} />
+              <Route path="/custom-lists/:id/edit" element={<ProtectedRoute requireVerification={true}><ListBuilder /></ProtectedRoute>} />
+              <Route path="/custom-lists/:id" element={<ProtectedRoute requireVerification={true}><CustomListViewer /></ProtectedRoute>} />
             </Routes>
           </div>
         </div>

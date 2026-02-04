@@ -163,9 +163,14 @@ router.post('/verify-email', otpLimiter, [
             [user.id]
         );
 
-        // Generate JWT token
+        // Generate new token with verified status
         const token = jwt.sign(
-            { userId: user.id, username: user.username, email: user.email },
+            {
+                userId: user.id,
+                username: user.username,
+                email: user.email,
+                emailVerified: true
+            },
             JWT_SECRET,
             { expiresIn: '7d' }
         );
@@ -253,9 +258,9 @@ router.post('/login', authLimiter, loginValidation, async (req, res) => {
 
         const { emailOrUsername, password } = req.body;
 
-        // Find user by email or username
+        // Find user by email or username - include email_verified
         const result = await pool.query(
-            'SELECT id, email, username, password_hash, created_at FROM users WHERE email = $1 OR username = $1',
+            'SELECT id, email, username, password_hash, email_verified, created_at FROM users WHERE email = $1 OR username = $1',
             [emailOrUsername]
         );
 
@@ -273,7 +278,12 @@ router.post('/login', authLimiter, loginValidation, async (req, res) => {
 
         // Generate JWT token
         const token = jwt.sign(
-            { userId: user.id, username: user.username, email: user.email },
+            {
+                userId: user.id,
+                username: user.username,
+                email: user.email,
+                emailVerified: user.email_verified
+            },
             JWT_SECRET,
             { expiresIn: '7d' }
         );
@@ -285,6 +295,7 @@ router.post('/login', authLimiter, loginValidation, async (req, res) => {
                 id: user.id,
                 username: user.username,
                 email: user.email,
+                emailVerified: user.email_verified,
                 createdAt: user.created_at
             }
         });
@@ -298,7 +309,7 @@ router.post('/login', authLimiter, loginValidation, async (req, res) => {
 router.get('/me', authMiddleware, async (req, res) => {
     try {
         const result = await pool.query(
-            'SELECT id, email, username, created_at FROM users WHERE id = $1',
+            'SELECT id, email, username, email_verified, created_at FROM users WHERE id = $1',
             [req.user.id]
         );
 
@@ -306,7 +317,17 @@ router.get('/me', authMiddleware, async (req, res) => {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        res.json({ user: result.rows[0] });
+        const user = result.rows[0];
+
+        res.json({
+            user: {
+                id: user.id,
+                email: user.email,
+                username: user.username,
+                emailVerified: user.email_verified,
+                createdAt: user.created_at
+            }
+        });
     } catch (error) {
         console.error('Get user error:', error);
         res.status(500).json({ error: 'Failed to get user info' });

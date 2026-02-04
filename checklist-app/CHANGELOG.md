@@ -1,6 +1,30 @@
-# Changelog
+# Learning Hub - Changelog
 
-All notable changes to the Learning Hub will be documented in this file.
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [2.3.0] - 2026-02-05
+
+### Added
+- **Email Verification Enforcement**: Users must verify their email to access custom lists and explore features
+- **Verification Banner**: Yellow warning banner for unverified users with "Resend OTP" functionality
+- **OTP Entry Modal**: Modal dialog for users to enter verification code after resending OTP
+- **Protected Routes**: Custom lists and explore routes now require email verification
+- **Visual Indicators**: Lock icons in sidebar for features requiring verification
+- **Real-time State Updates**: User verification status updates immediately without logout/login
+
+### Changed
+- Updated login endpoint to return `emailVerified` status
+- Enhanced AuthContext to track email verification state
+- Improved ProtectedRoute component with `requireVerification` prop
+- Updated Sidebar with verification requirement indicators
+
+### Security
+- Enforced email verification for user-generated content features
+- Improved account security by validating email ownership
+
+---
 
 ## [v2.2.0] - 2026-02-05
 

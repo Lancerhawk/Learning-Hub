@@ -36,7 +36,8 @@ export const AuthProvider = ({ children }) => {
                 setUser({
                     id: decoded.userId,
                     username: decoded.username,
-                    email: decoded.email
+                    email: decoded.email,
+                    emailVerified: decoded.emailVerified // May be undefined for old tokens
                 });
             } catch (error) {
                 console.error('Invalid token:', error);
@@ -110,10 +111,41 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const resendVerificationOTP = async (email) => {
+        try {
+            const response = await fetch(`${API_URL}/api/auth/resend-otp`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to resend OTP');
+            }
+
+            return { success: true, message: data.message };
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    };
+
     const logout = () => {
         localStorage.removeItem('auth_token');
         setToken(null);
         setUser(null);
+    };
+
+    const updateUserVerificationStatus = (verified = true) => {
+        if (user) {
+            setUser({
+                ...user,
+                emailVerified: verified
+            });
+        }
     };
 
     const value = {
@@ -124,6 +156,8 @@ export const AuthProvider = ({ children }) => {
         login,
         signup,
         logout,
+        resendVerificationOTP,
+        updateUserVerificationStatus,
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
