@@ -3,6 +3,20 @@ import { X, Package, Plus, Edit, Bug, Shield, FileText, Sparkles } from 'lucide-
 
 const changelogData = [
     {
+        version: 'v2.3.1',
+        date: '2026-02-05',
+        changes: {
+            changed: [
+                'Email Template Improvements: Enhanced OTP verification email structure for better deliverability',
+                'Removed emoji from email subject line to reduce spam filtering',
+                'Added proper sender name, reply-to headers, and email categories'
+            ],
+            fixed: [
+                'Improved email deliverability to reduce spam folder placement'
+            ]
+        }
+    },
+    {
         version: 'v2.3.0',
         date: '2026-02-05',
         changes: {

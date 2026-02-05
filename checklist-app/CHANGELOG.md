@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.1] - 2026-02-05
+
+### Changed
+- **Email Template Improvements**: Enhanced OTP verification email structure for better deliverability
+- Removed emoji from email subject line to reduce spam filtering
+- Added proper sender name and reply-to headers
+- Improved HTML email structure with proper meta tags and language attributes
+- Enhanced plain text email version for better compatibility
+- Added email categories and custom headers for tracking
+
+### Fixed
+- Improved email deliverability to reduce spam folder placement
+
 ## [2.3.0] - 2026-02-05
 
 ### Added
