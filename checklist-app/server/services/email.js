@@ -147,12 +147,26 @@ This is an automated email from DSA Learning Checklist.
 export async function sendVerificationOTP(to, otpCode) {
     const msg = {
         to,
-        from: process.env.FROM_EMAIL,
-        subject: '🔐 Verify Your Email - Learn Hub',
+        from: {
+            email: process.env.FROM_EMAIL,
+            name: 'Learning Hub'
+        },
+        replyTo: process.env.FROM_EMAIL,
+        subject: 'Verify Your Email - Learning Hub',
+        // Important: Add category for tracking
+        categories: ['email-verification'],
+        // Custom headers for better deliverability
+        customArgs: {
+            type: 'verification',
+            environment: process.env.NODE_ENV || 'production'
+        },
         html: `
             <!DOCTYPE html>
-            <html>
+            <html lang="en">
             <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Email Verification</title>
                 <style>
                     body {
                         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -213,6 +227,11 @@ export async function sendVerificationOTP(to, otpCode) {
                         font-size: 14px;
                         margin-top: 20px;
                     }
+                    .info-text {
+                        font-size: 14px;
+                        color: #94a3b8;
+                        margin: 10px 0;
+                    }
                 </style>
             </head>
             <body>
@@ -221,35 +240,46 @@ export async function sendVerificationOTP(to, otpCode) {
                         <h1>&gt; Email Verification</h1>
                     </div>
                     <div class="content">
-                        <p>Welcome to <strong>Learn Hub</strong>! 🎉</p>
-                        <p>Your verification code is:</p>
+                        <p>Welcome to <strong>Learning Hub</strong>!</p>
+                        <p>To complete your registration, please enter this verification code:</p>
                         <div class="otp-box">
                             <p class="otp-code">${otpCode}</p>
                         </div>
-                        <p class="warning">⏱️ This code expires in <strong>10 minutes</strong></p>
-                        <p class="warning">🔒 Never share this code with anyone</p>
+                        <p class="warning">This code expires in <strong>10 minutes</strong></p>
+                        <p class="info-text">For security reasons, never share this code with anyone.</p>
+                        <p class="info-text">If you did not request this code, please ignore this email.</p>
                     </div>
                     <div class="footer">
-                        <p>If you didn't create an account, you can safely ignore this email.</p>
-                        <p>This is an automated email from Learn Hub. Please do not reply.</p>
+                        <p>This is an automated message from Learning Hub.</p>
+                        <p>You received this email because someone attempted to register with your email address.</p>
+                        <p style="margin-top: 15px; font-size: 11px;">
+                            Learning Hub &copy; ${new Date().getFullYear()} | 
+                            <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}" style="color: #22c55e; text-decoration: none;">Visit Website</a>
+                        </p>
                     </div>
                 </div>
             </body>
             </html>
         `,
         text: `
-Welcome to Learn Hub!
+Welcome to Learning Hub!
 
-Your verification code is: ${otpCode}
+To complete your registration, please enter this verification code:
+
+${otpCode}
 
 This code expires in 10 minutes.
-Never share this code with anyone.
 
-If you didn't create an account, you can safely ignore this email.
+For security reasons, never share this code with anyone.
+If you did not request this code, please ignore this email.
 
 ---
-This is an automated email from Learn Hub.
-        `
+This is an automated message from Learning Hub.
+You received this email because someone attempted to register with your email address.
+
+Learning Hub © ${new Date().getFullYear()}
+Visit: ${process.env.FRONTEND_URL || 'http://localhost:5173'}
+        `.trim()
     };
 
     try {
