@@ -1,0 +1,781 @@
+{
+  "id": "gate-cs",
+  "name": "GATE Computer Science",
+  "stream": "Computer Science & IT",
+  "year": 2027,
+  "icon": "GraduationCap",
+  "description": "Graduate Aptitude Test in Engineering - Computer Science and Information Technology",
+  "sections": [
+    {
+      "category": "Engineering Mathematics",
+      "icon": "Calculator",
+      "topics": [
+        {
+          "name": "Discrete Mathematics",
+          "subtopics": [
+            "Propositional and first order logic",
+            "Sets, relations, functions, partial orders and lattices",
+            "Monoids and Groups",
+            "Graphs: connectivity, matching, coloring",
+            "Combinatorics: counting, recurrence relations, generating functions"
+          ],
+          "resources": {
+            "videos": [
+              {
+                "title": "Discrete Mathematics Full Course - GATE",
+                "url": "https://www.youtube.com/watch?v=rdXw7Ps9vxc",
+                "channel": "Gate Smashers"
+              },
+              {
+                "title": "Propositional Logic - GATE",
+                "url": "https://www.youtube.com/watch?v=tyDKR4FG3Yw",
+                "channel": "Neso Academy"
+              },
+              {
+                "title": "Graph Theory Complete Playlist",
+                "url": "https://www.youtube.com/playlist?list=PLDN4rrl48XKpZkf03iYFl-O29szjTrs_O",
+                "channel": "Abdul Bari"
+              }
+            ],
+            "practice": [
+              {
+                "title": "GATE Previous Year Questions - Discrete Math",
+                "url": "https://www.geeksforgeeks.org/gate-cs-notes-gq/",
+                "platform": "GeeksforGeeks"
+              },
+              {
+                "title": "Discrete Mathematics Practice Problems",
+                "url": "https://www.sanfoundry.com/1000-discrete-mathematics-questions-answers/",
+                "platform": "Sanfoundry"
+              }
+            ],
+            "references": [
+              {
+                "title": "Discrete Mathematics and Its Applications - Kenneth Rosen",
+                "url": "https://www.mheducation.com/highered/product/discrete-mathematics-applications-rosen/M9780073383095.html"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Linear Algebra",
+          "subtopics": [
+            "Matrices, determinants",
+            "System of linear equations",
+            "Eigenvalues and eigenvectors",
+            "LU decomposition"
+          ],
+          "resources": {
+            "videos": [
+              {
+                "title": "Linear Algebra Complete Course - GATE",
+                "url": "https://www.youtube.com/watch?v=JnTa9XtvmfI",
+                "channel": "Gate Smashers"
+              },
+              {
+                "title": "Eigenvalues and Eigenvectors",
+                "url": "https://www.youtube.com/watch?v=PFDu9oVAE-g",
+                "channel": "3Blue1Brown"
+              }
+            ],
+            "practice": [
+              {
+                "title": "GATE Linear Algebra Previous Years",
+                "url": "https://www.geeksforgeeks.org/linear-algebra-gq/",
+                "platform": "GeeksforGeeks"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Calculus",
+          "subtopics": [
+            "Limits, continuity and differentiability",
+            "Maxima and minima",
+            "Mean value theorem",
+            "Integration"
+          ],
+          "resources": {
+            "videos": [
+              {
+                "title": "Calculus for GATE - Complete Course",
+                "url": "https://www.youtube.com/watch?v=WUvTyaaNkzM",
+                "channel": "Unacademy"
+              },
+              {
+                "title": "Maxima and Minima Problems",
+                "url": "https://www.youtube.com/watch?v=TZu8x8UW2Gg",
+                "channel": "Khan Academy"
+              }
+            ],
+            "practice": [
+              {
+                "title": "GATE Calculus Questions",
+                "url": "https://www.geeksforgeeks.org/engineering-mathematics-gq/",
+                "platform": "GeeksforGeeks"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Probability and Statistics",
+          "subtopics": [
+            "Random variables: Uniform, normal, exponential, poisson and binomial distributions",
+            "Mean, median, mode and standard deviation",
+            "Conditional probability and Bayes theorem"
+          ],
+          "resources": {
+            "videos": [
+              {
+                "title": "Probability Complete Course - GATE",
+                "url": "https://www.youtube.com/watch?v=3v9w79NhsfI",
+                "channel": "Gate Smashers"
+              },
+              {
+                "title": "Bayes Theorem Explained",
+                "url": "https://www.youtube.com/watch?v=HZGCoVF3YvM",
+                "channel": "3Blue1Brown"
+              }
+            ],
+            "practice": [
+              {
+                "title": "Probability GATE Previous Years",
+                "url": "https://www.geeksforgeeks.org/probability-gq/",
+                "platform": "GeeksforGeeks"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "category": "Digital Logic",
+      "icon": "Cpu",
+      "topics": [
+        {
+          "name": "Boolean Algebra",
+          "subtopics": [
+            "Combinational and sequential circuits",
+            "Minimization",
+            "Number representations and computer arithmetic (fixed and floating point)"
+          ],
+          "resources": {
+            "videos": [
+              {
+                "title": "Digital Logic Complete Course",
+                "url": "https://www.youtube.com/watch?v=M0mx8S05v60",
+                "channel": "Neso Academy"
+              },
+              {
+                "title": "K-Map Minimization Technique",
+                "url": "https://www.youtube.com/watch?v=RO5alU6PpSU",
+                "channel": "Neso Academy"
+              },
+              {
+                "title": "Sequential Circuits - Flip Flops",
+                "url": "https://www.youtube.com/watch?v=BN7E3B3P2-k",
+                "channel": "Neso Academy"
+              }
+            ],
+            "practice": [
+              {
+                "title": "Digital Logic GATE Questions",
+                "url": "https://www.geeksforgeeks.org/digital-logic-design-gq/",
+                "platform": "GeeksforGeeks"
+              },
+              {
+                "title": "Boolean Algebra Practice",
+                "url": "https://www.sanfoundry.com/1000-digital-electronics-questions-answers/",
+                "platform": "Sanfoundry"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "category": "Computer Organization and Architecture",
+      "icon": "HardDrive",
+      "topics": [
+        {
+          "name": "Machine Instructions and Addressing Modes",
+          "subtopics": [
+            "ALU, data-path and control unit",
+            "Instruction pipelining, pipeline hazards"
+          ],
+          "resources": {
+            "videos": [
+              {
+                "title": "COA Complete Course - GATE",
+                "url": "https://www.youtube.com/watch?v=L0X2qYKJz1k",
+                "channel": "Gate Smashers"
+              },
+              {
+                "title": "Instruction Pipelining Explained",
+                "url": "https://www.youtube.com/watch?v=6mZHjVgUgKM",
+                "channel": "Gate Smashers"
+              }
+            ],
+            "practice": [
+              {
+                "title": "COA GATE Previous Years",
+                "url": "https://www.geeksforgeeks.org/computer-organization-architecture-gq/",
+                "platform": "GeeksforGeeks"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Memory Hierarchy",
+          "subtopics": [
+            "Cache, main memory and secondary storage",
+            "I/O interface (interrupt and DMA mode)"
+          ],
+          "resources": {
+            "videos": [
+              {
+                "title": "Cache Memory Organization",
+                "url": "https://www.youtube.com/watch?v=6JpLD3PUAZk",
+                "channel": "Neso Academy"
+              },
+              {
+                "title": "Memory Hierarchy Complete",
+                "url": "https://www.youtube.com/watch?v=Vmb8xGD-LV8",
+                "channel": "Gate Smashers"
+              }
+            ],
+            "practice": [
+              {
+                "title": "Memory Hierarchy Questions",
+                "url": "https://www.geeksforgeeks.org/memory-hierarchy-design-gq/",
+                "platform": "GeeksforGeeks"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "category": "Programming and Data Structures",
+      "icon": "Code",
+      "topics": [
+        {
+          "name": "Programming in C",
+          "subtopics": [
+            "Recursion",
+            "Arrays, stacks, queues",
+            "Linked lists, trees, binary search trees, binary heaps, graphs"
+          ],
+          "resources": {
+            "videos": [
+              {
+                "title": "C Programming Complete Course",
+                "url": "https://www.youtube.com/watch?v=ZSPZob_1TOk",
+                "channel": "Gate Smashers"
+              },
+              {
+                "title": "Recursion in C - Complete Tutorial",
+                "url": "https://www.youtube.com/watch?v=kepBmgvWNDw",
+                "channel": "Neso Academy"
+              },
+              {
+                "title": "Data Structures Full Course",
+                "url": "https://www.youtube.com/watch?v=B31LgI4Y4DQ",
+                "channel": "freeCodeCamp"
+              }
+            ],
+            "practice": [
+              {
+                "title": "C Programming GATE Questions",
+                "url": "https://www.geeksforgeeks.org/c-programming-gq/",
+                "platform": "GeeksforGeeks"
+              },
+              {
+                "title": "Data Structures Practice Problems",
+                "url": "https://www.hackerrank.com/domains/data-structures",
+                "platform": "HackerRank"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "category": "Algorithms",
+      "icon": "Zap",
+      "topics": [
+        {
+          "name": "Searching and Sorting",
+          "subtopics": [
+            "Hashing",
+            "Asymptotic worst case time and space complexity",
+            "Algorithm design techniques: greedy, dynamic programming and divide-and-conquer"
+          ],
+          "resources": {
+            "videos": [
+              {
+                "title": "Algorithms Complete Course - GATE",
+                "url": "https://www.youtube.com/watch?v=0IAPZzGSbME",
+                "channel": "Abdul Bari"
+              },
+              {
+                "title": "Dynamic Programming Playlist",
+                "url": "https://www.youtube.com/playlist?list=PLDN4rrl48XKpZkf03iYFl-O29szjTrs_O",
+                "channel": "Abdul Bari"
+              },
+              {
+                "title": "Greedy Algorithms",
+                "url": "https://www.youtube.com/watch?v=HzeK7g8cD0Y",
+                "channel": "Abdul Bari"
+              }
+            ],
+            "practice": [
+              {
+                "title": "Algorithms GATE Previous Years",
+                "url": "https://www.geeksforgeeks.org/algorithms-gq/",
+                "platform": "GeeksforGeeks"
+              },
+              {
+                "title": "Algorithm Practice Problems",
+                "url": "https://leetcode.com/problemset/algorithms/",
+                "platform": "LeetCode"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Graph Algorithms",
+          "subtopics": [
+            "Graph traversals",
+            "Minimum spanning trees",
+            "Shortest paths"
+          ],
+          "resources": {
+            "videos": [
+              {
+                "title": "Graph Algorithms Complete",
+                "url": "https://www.youtube.com/watch?v=tWVWeAqZ0WU",
+                "channel": "freeCodeCamp"
+              },
+              {
+                "title": "Dijkstra's Algorithm",
+                "url": "https://www.youtube.com/watch?v=pVfj6mxhdMw",
+                "channel": "Abdul Bari"
+              }
+            ],
+            "practice": [
+              {
+                "title": "Graph Problems - GATE",
+                "url": "https://www.geeksforgeeks.org/graph-data-structure-and-algorithms/",
+                "platform": "GeeksforGeeks"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "category": "Theory of Computation",
+      "icon": "BookOpen",
+      "topics": [
+        {
+          "name": "Regular Expressions and Finite Automata",
+          "subtopics": [
+            "Context-free grammars and push-down automata",
+            "Regular and context-free languages, pumping lemma"
+          ],
+          "resources": {
+            "videos": [
+              {
+                "title": "Theory of Computation Complete Course",
+                "url": "https://www.youtube.com/watch?v=58N2N7zJGrQ",
+                "channel": "Neso Academy"
+              },
+              {
+                "title": "Finite Automata - DFA and NFA",
+                "url": "https://www.youtube.com/watch?v=40i4PKpM0cI",
+                "channel": "Neso Academy"
+              },
+              {
+                "title": "Context Free Grammar",
+                "url": "https://www.youtube.com/watch?v=Nlr5ycJRq5w",
+                "channel": "Neso Academy"
+              }
+            ],
+            "practice": [
+              {
+                "title": "TOC GATE Previous Years",
+                "url": "https://www.geeksforgeeks.org/theory-of-computation-gq/",
+                "platform": "GeeksforGeeks"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Turing Machines and Undecidability",
+          "subtopics": [
+            "Turing machines and undecidability"
+          ],
+          "resources": {
+            "videos": [
+              {
+                "title": "Turing Machine Explained",
+                "url": "https://www.youtube.com/watch?v=dNRDvLACg5Q",
+                "channel": "Neso Academy"
+              },
+              {
+                "title": "Decidability and Undecidability",
+                "url": "https://www.youtube.com/watch?v=HeQX2HjkcNo",
+                "channel": "Neso Academy"
+              }
+            ],
+            "practice": [
+              {
+                "title": "Turing Machine Problems",
+                "url": "https://www.geeksforgeeks.org/turing-machine-in-toc/",
+                "platform": "GeeksforGeeks"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "category": "Compiler Design",
+      "icon": "Settings",
+      "topics": [
+        {
+          "name": "Lexical Analysis",
+          "subtopics": [
+            "Parsing",
+            "Syntax-directed translation"
+          ],
+          "resources": {
+            "videos": [
+              {
+                "title": "Compiler Design Complete Course",
+                "url": "https://www.youtube.com/watch?v=Qkwj65l_96I",
+                "channel": "Gate Smashers"
+              },
+              {
+                "title": "Lexical Analysis Explained",
+                "url": "https://www.youtube.com/watch?v=8wVFH8ZTDP8",
+                "channel": "Neso Academy"
+              }
+            ],
+            "practice": [
+              {
+                "title": "Compiler Design GATE Questions",
+                "url": "https://www.geeksforgeeks.org/compiler-design-gq/",
+                "platform": "GeeksforGeeks"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Runtime Environments",
+          "subtopics": [
+            "Intermediate code generation",
+            "Local optimisation, Data flow analyses: constant propagation, liveness analysis, common subexpression elimination"
+          ],
+          "resources": {
+            "videos": [
+              {
+                "title": "Code Optimization Techniques",
+                "url": "https://www.youtube.com/watch?v=FnGCDLhaxKU",
+                "channel": "Gate Smashers"
+              },
+              {
+                "title": "Runtime Environment",
+                "url": "https://www.youtube.com/watch?v=1a8BV5fCGwM",
+                "channel": "Neso Academy"
+              }
+            ],
+            "practice": [
+              {
+                "title": "Code Generation Problems",
+                "url": "https://www.geeksforgeeks.org/code-generation-in-compiler-design/",
+                "platform": "GeeksforGeeks"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "category": "Operating System",
+      "icon": "Monitor",
+      "topics": [
+        {
+          "name": "System Calls and Processes",
+          "subtopics": [
+            "Threads",
+            "Inter-process communication",
+            "Concurrency and synchronization",
+            "Deadlock"
+          ],
+          "resources": {
+            "videos": [
+              {
+                "title": "Operating System Complete Course",
+                "url": "https://www.youtube.com/watch?v=vBURTt97EkA",
+                "channel": "Gate Smashers"
+              },
+              {
+                "title": "Process Synchronization",
+                "url": "https://www.youtube.com/watch?v=ph2awKa8r5Y",
+                "channel": "Neso Academy"
+              },
+              {
+                "title": "Deadlock in OS",
+                "url": "https://www.youtube.com/watch?v=UVo9mGARkhQ",
+                "channel": "Neso Academy"
+              }
+            ],
+            "practice": [
+              {
+                "title": "OS GATE Previous Years",
+                "url": "https://www.geeksforgeeks.org/operating-systems-gq/",
+                "platform": "GeeksforGeeks"
+              }
+            ]
+          }
+        },
+        {
+          "name": "CPU Scheduling",
+          "subtopics": [
+            "Memory management and virtual memory",
+            "File systems"
+          ],
+          "resources": {
+            "videos": [
+              {
+                "title": "CPU Scheduling Algorithms",
+                "url": "https://www.youtube.com/watch?v=EWkQl0n0w5M",
+                "channel": "Gate Smashers"
+              },
+              {
+                "title": "Memory Management in OS",
+                "url": "https://www.youtube.com/watch?v=qdkxXygc3rE",
+                "channel": "Gate Smashers"
+              },
+              {
+                "title": "File Systems Explained",
+                "url": "https://www.youtube.com/watch?v=KN8YgJnShPM",
+                "channel": "Neso Academy"
+              }
+            ],
+            "practice": [
+              {
+                "title": "CPU Scheduling Problems",
+                "url": "https://www.geeksforgeeks.org/cpu-scheduling-in-operating-systems/",
+                "platform": "GeeksforGeeks"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "category": "Databases",
+      "icon": "Database",
+      "topics": [
+        {
+          "name": "ER-model and Relational Model",
+          "subtopics": [
+            "Relational algebra",
+            "Tuple calculus",
+            "SQL"
+          ],
+          "resources": {
+            "videos": [
+              {
+                "title": "DBMS Complete Course - GATE",
+                "url": "https://www.youtube.com/watch?v=c5HAwKX-suM",
+                "channel": "Gate Smashers"
+              },
+              {
+                "title": "ER Model Explained",
+                "url": "https://www.youtube.com/watch?v=xsg9BDiwiJE",
+                "channel": "Gate Smashers"
+              },
+              {
+                "title": "Relational Algebra Complete",
+                "url": "https://www.youtube.com/watch?v=kxuLNTUJ6l0",
+                "channel": "Neso Academy"
+              }
+            ],
+            "practice": [
+              {
+                "title": "DBMS GATE Previous Years",
+                "url": "https://www.geeksforgeeks.org/dbms-gq/",
+                "platform": "GeeksforGeeks"
+              },
+              {
+                "title": "SQL Practice Problems",
+                "url": "https://www.hackerrank.com/domains/sql",
+                "platform": "HackerRank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Integrity Constraints and Normal Forms",
+          "subtopics": [
+            "File organization, indexing (e.g., B and B+ trees)",
+            "Transactions and concurrency control"
+          ],
+          "resources": {
+            "videos": [
+              {
+                "title": "Normalization in DBMS",
+                "url": "https://www.youtube.com/watch?v=xoTyrdT9SZI",
+                "channel": "Gate Smashers"
+              },
+              {
+                "title": "B and B+ Trees",
+                "url": "https://www.youtube.com/watch?v=aZjYr87r1b8",
+                "channel": "Abdul Bari"
+              },
+              {
+                "title": "Transactions in DBMS",
+                "url": "https://www.youtube.com/watch?v=P80Js_qClUE",
+                "channel": "Gate Smashers"
+              }
+            ],
+            "practice": [
+              {
+                "title": "Normalization Problems",
+                "url": "https://www.geeksforgeeks.org/normal-forms-in-dbms/",
+                "platform": "GeeksforGeeks"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "category": "Computer Networks",
+      "icon": "Network",
+      "topics": [
+        {
+          "name": "Concept of Layering",
+          "subtopics": [
+            "OSI and TCP/IP Protocol Stacks",
+            "Basics of packet, circuit and virtual circuit-switching"
+          ],
+          "resources": {
+            "videos": [
+              {
+                "title": "Computer Networks Complete Course",
+                "url": "https://www.youtube.com/watch?v=JFF2vJaN0Cw",
+                "channel": "Gate Smashers"
+              },
+              {
+                "title": "OSI Model Explained",
+                "url": "https://www.youtube.com/watch?v=vv4y_uOneC0",
+                "channel": "TechTerms"
+              }
+            ],
+            "practice": [
+              {
+                "title": "Computer Networks GATE Questions",
+                "url": "https://www.geeksforgeeks.org/computer-network-gq/",
+                "platform": "GeeksforGeeks"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Data Link Layer",
+          "subtopics": [
+            "Framing",
+            "Error detection",
+            "Medium Access Control",
+            "Ethernet bridging"
+          ],
+          "resources": {
+            "videos": [
+              {
+                "title": "Data Link Layer Complete",
+                "url": "https://www.youtube.com/watch?v=7bJiRRP2mGY",
+                "channel": "Neso Academy"
+              },
+              {
+                "title": "Error Detection and Correction",
+                "url": "https://www.youtube.com/watch?v=iwj54DSOSKs",
+                "channel": "Neso Academy"
+              }
+            ],
+            "practice": [
+              {
+                "title": "Data Link Layer Problems",
+                "url": "https://www.geeksforgeeks.org/data-link-layer/",
+                "platform": "GeeksforGeeks"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Routing Protocols",
+          "subtopics": [
+            "Shortest path, flooding, distance vector and link state routing",
+            "Fragmentation and IP addressing, IPv4, CIDR notation",
+            "Basics of IP support protocols (ARP, DHCP, ICMP)",
+            "Network Address Translation (NAT)"
+          ],
+          "resources": {
+            "videos": [
+              {
+                "title": "Routing Algorithms Complete",
+                "url": "https://www.youtube.com/watch?v=QQ6sxvDO0s8",
+                "channel": "Gate Smashers"
+              },
+              {
+                "title": "IP Addressing and Subnetting",
+                "url": "https://www.youtube.com/watch?v=ddM9AcreVqY",
+                "channel": "PowerCert"
+              }
+            ],
+            "practice": [
+              {
+                "title": "Network Layer Questions",
+                "url": "https://www.geeksforgeeks.org/network-layer-services-packetizing-routing-and-forwarding/",
+                "platform": "GeeksforGeeks"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Transport Layer",
+          "subtopics": [
+            "Flow control and congestion control",
+            "UDP, TCP, sockets",
+            "Application layer protocols (DNS, SMTP, HTTP, FTP, Email)"
+          ],
+          "resources": {
+            "videos": [
+              {
+                "title": "Transport Layer - TCP and UDP",
+                "url": "https://www.youtube.com/watch?v=Vdc8TCESIg8",
+                "channel": "Gate Smashers"
+              },
+              {
+                "title": "Application Layer Protocols",
+                "url": "https://www.youtube.com/watch?v=kCuyS7ihr_E",
+                "channel": "Neso Academy"
+              }
+            ],
+            "practice": [
+              {
+                "title": "Transport Layer Problems",
+                "url": "https://www.geeksforgeeks.org/transport-layer-responsibilities/",
+                "platform": "GeeksforGeeks"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

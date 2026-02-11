@@ -1,0 +1,9 @@
+{
+    "id": "gate-ae",
+    "name": "GATE Aerospace Engineering",
+    "stream": "Aerospace Engineering",
+    "year": 2027,
+    "icon": "Plane",
+    "description": "Graduate Aptitude Test in Engineering - Aerospace Engineering",
+    "sections": []
+}

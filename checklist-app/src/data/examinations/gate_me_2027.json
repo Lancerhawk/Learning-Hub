@@ -1,0 +1,9 @@
+{
+    "id": "gate-me",
+    "name": "GATE Mechanical Engineering",
+    "stream": "Mechanical Engineering",
+    "year": 2027,
+    "icon": "Cog",
+    "description": "Graduate Aptitude Test in Engineering - Mechanical Engineering",
+    "sections": []
+}

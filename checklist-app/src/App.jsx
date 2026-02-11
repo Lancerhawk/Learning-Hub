@@ -16,6 +16,8 @@ import ScrollToTop from './components/ScrollToTop';
 import ChangelogButton from './components/ChangelogButton';
 import EmailVerificationBanner from './components/EmailVerificationBanner';
 import { languagesData, dsaTopicsData } from './data/checklistData';
+import { examinationsData } from './data/examinationsData';
+import ExaminationsPage from './components/ExaminationsPage';
 import { playClickSound } from './utils/sounds';
 
 export default function App() {
@@ -52,6 +54,12 @@ export default function App() {
     const dsaProgress = localStorage.getItem('dsa_topics_progress');
     if (dsaProgress) loadedData.dsa = JSON.parse(dsaProgress);
 
+    // Load examinations progress
+    Object.keys(examinationsData).forEach(examId => {
+      const examProgress = localStorage.getItem(`${examId}_progress`);
+      if (examProgress) loadedData[examId] = JSON.parse(examProgress);
+    });
+
     setCheckedItems(loadedData);
 
     // Initialize all sections as expanded
@@ -66,6 +74,12 @@ export default function App() {
     });
     dsaTopicsData.forEach((_, idx) => {
       initialExpanded[`dsa-${idx}`] = true;
+    });
+    // Initialize examination sections as expanded
+    Object.values(examinationsData).forEach(exam => {
+      exam.sections.forEach((_, idx) => {
+        initialExpanded[`${exam.id}-${idx}`] = true;
+      });
     });
     setExpandedSections(initialExpanded);
   }, []);
@@ -265,17 +279,22 @@ export default function App() {
     };
   };
 
-  const resetProgress = (language) => {
-    if (language === 'dsa') {
+  const resetProgress = (identifier) => {
+    if (identifier === 'dsa') {
       localStorage.removeItem('dsa_topics_progress');
       setCheckedItems(prev => ({ ...prev, dsa: {} }));
+    } else if (identifier.startsWith('gate-') || examinationsData[identifier]) {
+      // Reset examination progress
+      localStorage.removeItem(`${identifier}_progress`);
+      setCheckedItems(prev => ({ ...prev, [identifier]: {} }));
     } else {
-      localStorage.removeItem(`${language}_dsa_progress`);
-      localStorage.removeItem(`${language}_dev_progress`);
+      // Reset language progress
+      localStorage.removeItem(`${identifier}_dsa_progress`);
+      localStorage.removeItem(`${identifier}_dev_progress`);
       setCheckedItems(prev => ({
         ...prev,
-        [`${language}_dsa`]: {},
-        [`${language}_dev`]: {}
+        [`${identifier}_dsa`]: {},
+        [`${identifier}_dev`]: {}
       }));
     }
   };
@@ -382,6 +401,33 @@ export default function App() {
                   />
                 }
               />
+
+              {/* Examination Routes */}
+              {Object.keys(examinationsData).map(examId => (
+                <Route
+                  key={examId}
+                  path={`/examinations/${examId}`}
+                  element={
+                    <ExaminationsPage
+                      examData={examinationsData[examId]}
+                      checkedItems={checkedItems[examId] || {}}
+                      expandedSections={expandedSections}
+                      expandedTopics={expandedTopics}
+                      toggleSection={toggleSection}
+                      toggleTopic={toggleTopic}
+                      toggleItem={toggleItem}
+                      toggleResourceItem={toggleResourceItem}
+                      calculateSectionProgress={calculateSectionProgress}
+                      getTopicResourceProgress={getTopicResourceProgress}
+                      confirmModal={confirmModal}
+                      setConfirmModal={setConfirmModal}
+                      confirmTopicCompletion={confirmTopicCompletion}
+                      resetProgress={resetProgress}
+                    />
+                  }
+                />
+              ))}
+
 
               <Route path="/reset-password" element={<ResetPasswordPage />} />
 
