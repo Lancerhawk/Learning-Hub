@@ -6,6 +6,7 @@ A comprehensive full-stack web application designed to help developers track the
 
 ### Core Features
 - **📊 Progress Tracking** - Track your learning progress across multiple programming languages and DSA topics
+- **🎓 Examination System** - Dedicated system for competitive exam preparation (GATE, etc.) with auto-check functionality
 - **📝 Custom Lists** - Create personalized learning checklists with sections, topics, and resources
 - **🌍 Public Lists** - Share your learning lists with the community and explore lists created by others
 - **⭐ Rating System** - Rate and review public lists to help others find quality content

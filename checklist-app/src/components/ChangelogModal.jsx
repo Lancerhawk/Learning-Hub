@@ -3,6 +3,24 @@ import { X, Package, Plus, Edit, Bug, Shield, FileText, Sparkles } from 'lucide-
 
 const changelogData = [
     {
+        version: 'v2.4.0',
+        date: '2026-02-11',
+        changes: {
+            added: [
+                'Dedicated Examination System: Completely rebuilt in separate files (useExaminationProgress.js hook, examinationProgressCalculator.js utility)',
+                'Auto-Check Parent Topics: Automatically checks parent when ALL resources (videos, practice, references) are completed',
+                'Auto-Uncheck Parent Topics: Automatically unchecks parent when ANY resource is unchecked',
+                'Improved Progress Tracking: Accurate calculation counting completed topics (not individual resources)'
+            ],
+            fixed: [
+                'Removed subtopic handling from checkbox logic (subtopics are not checkable in UI)',
+                'Fixed localStorage key usage for examination progress',
+                'Fixed examination routes and imports',
+                'Clean separation: Zero interference with DSA/language checklist logic'
+            ]
+        }
+    },
+    {
         version: 'v2.3.1',
         date: '2026-02-05',
         changes: {

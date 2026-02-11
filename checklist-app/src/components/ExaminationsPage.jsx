@@ -1,23 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Check, ChevronDown, ChevronRight, Play, Code, ExternalLink, RefreshCw, GraduationCap, BookOpen } from 'lucide-react';
 import TypingAnimation from './TypingAnimation';
+import { useExaminationProgress } from '../hooks/useExaminationProgress';
+import { calculateSectionProgress, getTopicResourceProgress } from '../utils/examinationProgressCalculator';
 
-export default function ExaminationsPage({
-    examData,
-    checkedItems,
-    expandedSections,
-    expandedTopics,
-    toggleSection,
-    toggleTopic,
-    toggleItem,
-    toggleResourceItem,
-    calculateSectionProgress,
-    getTopicResourceProgress,
-    confirmModal,
-    setConfirmModal,
-    confirmTopicCompletion,
-    resetProgress
-}) {
+export default function ExaminationsPage({ examData, resetProgress }) {
+    // Use dedicated examination hook
+    const {
+        checkedItems,
+        toggleResource,
+        toggleTopic,
+        confirmModal,
+        setConfirmModal,
+        confirmMarkAllResources
+    } = useExaminationProgress(examData.id, examData);
+
+    // Local state for UI expansion
+    const [expandedSections, setExpandedSections] = useState({});
+    const [expandedTopics, setExpandedTopics] = useState({});
+
+    const toggleSection = (sectionKey) => {
+        setExpandedSections(prev => ({ ...prev, [sectionKey]: !prev[sectionKey] }));
+    };
+
+    const toggleTopicExpansion = (topicKey) => {
+        setExpandedTopics(prev => ({ ...prev, [topicKey]: !prev[topicKey] }));
+    };
     if (!examData) {
         return (
             <div className="min-h-screen bg-slate-950 p-6 flex items-center justify-center">
@@ -154,7 +162,7 @@ export default function ExaminationsPage({
                                                 >
                                                     {hasResources && (
                                                         <div
-                                                            onClick={() => toggleTopic(topicKey)}
+                                                            onClick={() => toggleTopicExpansion(topicKey)}
                                                             className="flex-shrink-0 cursor-pointer"
                                                         >
                                                             <ChevronRight
@@ -166,7 +174,7 @@ export default function ExaminationsPage({
                                                     <div
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            toggleItem(topicName, examData.id, null, hasResources);
+                                                            toggleTopic(topicName, hasResources);
                                                         }}
                                                         className={`relative flex-shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-200 cursor-pointer ${isChecked
                                                             ? 'bg-green-500 border-green-500'
@@ -189,7 +197,7 @@ export default function ExaminationsPage({
                                                         </span>
                                                         {hasResources && (
                                                             <span className="text-xs font-mono text-green-600 font-bold ml-2">
-                                                                [{getTopicResourceProgress(topicName, examData.id)}%]
+                                                                [{getTopicResourceProgress(topicName, topic, examData.id)}%]
                                                             </span>
                                                         )}
                                                         {/* Subtopics */}
@@ -227,7 +235,7 @@ export default function ExaminationsPage({
                                                                                 return (
                                                                                     <div key={vIdx} className="flex items-center gap-2 p-2 bg-slate-900 rounded border border-slate-700 hover:border-green-700">
                                                                                         <div
-                                                                                            onClick={() => toggleResourceItem(topicName, 'videos', video.title, examData.id)}
+                                                                                            onClick={() => toggleResource(topicName, 'videos', video.title)}
                                                                                             className={`relative flex-shrink-0 w-4 h-4 rounded border flex items-center justify-center cursor-pointer ${isVideoChecked ? 'bg-green-500 border-green-500' : 'border-slate-600'
                                                                                                 }`}
                                                                                         >
@@ -264,7 +272,7 @@ export default function ExaminationsPage({
                                                                                 return (
                                                                                     <div key={pIdx} className="flex items-center gap-2 p-2 bg-slate-900 rounded border border-slate-700 hover:border-green-700">
                                                                                         <div
-                                                                                            onClick={() => toggleResourceItem(topicName, 'practice', problem.title, examData.id)}
+                                                                                            onClick={() => toggleResource(topicName, 'practice', problem.title)}
                                                                                             className={`relative flex-shrink-0 w-4 h-4 rounded border flex items-center justify-center cursor-pointer ${isProblemChecked ? 'bg-green-500 border-green-500' : 'border-slate-600'
                                                                                                 }`}
                                                                                         >
@@ -301,7 +309,7 @@ export default function ExaminationsPage({
                                                                                 return (
                                                                                     <div key={rIdx} className="flex items-center gap-2 p-2 bg-slate-900 rounded border border-slate-700 hover:border-green-700">
                                                                                         <div
-                                                                                            onClick={() => toggleResourceItem(topicName, 'references', ref.title, examData.id)}
+                                                                                            onClick={() => toggleResource(topicName, 'references', ref.title)}
                                                                                             className={`relative flex-shrink-0 w-4 h-4 rounded border flex items-center justify-center cursor-pointer ${isRefChecked ? 'bg-green-500 border-green-500' : 'border-slate-600'
                                                                                                 }`}
                                                                                         >
@@ -349,13 +357,13 @@ export default function ExaminationsPage({
                             </p>
                             <div className="space-y-3">
                                 <button
-                                    onClick={() => confirmTopicCompletion(true)}
+                                    onClick={() => confirmMarkAllResources(true)}
                                     className="w-full bg-green-500 text-slate-900 px-4 py-3 rounded font-mono font-bold hover:bg-green-400 transition-all"
                                 >
                                     ✓ Mark topic + all resources as done
                                 </button>
                                 <button
-                                    onClick={() => confirmTopicCompletion(false)}
+                                    onClick={() => confirmMarkAllResources(false)}
                                     className="w-full bg-slate-800 border border-green-500 text-green-500 px-4 py-3 rounded font-mono font-bold hover:bg-slate-700 transition-all"
                                 >
                                     ✓ Mark only topic as done

@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.0] - 2026-02-11
+
+### Added
+- **Dedicated Examination System**: Completely rebuilt examination checkbox and progress tracking in separate files
+  - New custom hook: `useExaminationProgress.js` for examination state management
+  - New utility: `examinationProgressCalculator.js` for accurate progress calculations
+- **Auto-Check Parent Topics**: Automatically checks parent topic when ALL resources (videos, practice, references) are completed
+- **Auto-Uncheck Parent Topics**: Automatically unchecks parent topic when ANY resource is unchecked
+- **Improved Progress Tracking**: Accurate calculation counting completed topics (not individual resources)
+
+### Fixed
+- Removed subtopic handling from checkbox logic (subtopics are not checkable in UI)
+- Fixed localStorage key usage for examination progress
+- Fixed examination routes and imports
+- Clean separation: Zero interference with DSA/language checklist logic
+
+---
+
 ## [2.3.1] - 2026-02-05
 
 ### Changed
