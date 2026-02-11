@@ -27,7 +27,6 @@ export default function App() {
   const [expandedTopics, setExpandedTopics] = useState({});
   const [confirmModal, setConfirmModal] = useState(null);
 
-  // Global click sound effect
   useEffect(() => {
     const handleGlobalClick = () => {
       playClickSound();
@@ -37,11 +36,9 @@ export default function App() {
     return () => document.removeEventListener('click', handleGlobalClick);
   }, []);
 
-  // Load from localStorage on mount
   useEffect(() => {
     const loadedData = {};
 
-    // Load each language's DSA and Dev progress
     Object.keys(languagesData).forEach(lang => {
       const dsaProgress = localStorage.getItem(`${lang}_dsa_progress`);
       const devProgress = localStorage.getItem(`${lang}_dev_progress`);
@@ -50,11 +47,9 @@ export default function App() {
       if (devProgress) loadedData[`${lang}_dev`] = JSON.parse(devProgress);
     });
 
-    // Load DSA topics progress
     const dsaProgress = localStorage.getItem('dsa_topics_progress');
     if (dsaProgress) loadedData.dsa = JSON.parse(dsaProgress);
 
-    // Load examinations progress
     Object.keys(examinationsData).forEach(examId => {
       const examProgress = localStorage.getItem(`${examId}_progress`);
       if (examProgress) loadedData[examId] = JSON.parse(examProgress);
@@ -62,7 +57,6 @@ export default function App() {
 
     setCheckedItems(loadedData);
 
-    // Initialize all sections as expanded
     const initialExpanded = {};
     Object.keys(languagesData).forEach(lang => {
       languagesData[lang].dsaMastery.forEach((_, idx) => {
@@ -75,7 +69,6 @@ export default function App() {
     dsaTopicsData.forEach((_, idx) => {
       initialExpanded[`dsa-${idx}`] = true;
     });
-    // Initialize examination sections as expanded
     Object.values(examinationsData).forEach(exam => {
       exam.sections.forEach((_, idx) => {
         initialExpanded[`${exam.id}-${idx}`] = true;
@@ -84,17 +77,13 @@ export default function App() {
     setExpandedSections(initialExpanded);
   }, []);
 
-  // Save to localStorage on change
   useEffect(() => {
     Object.keys(checkedItems).forEach(key => {
       if (key.includes('_')) {
-        // Language-specific progress
         localStorage.setItem(`${key}_progress`, JSON.stringify(checkedItems[key]));
       } else if (key === 'dsa') {
-        // DSA topics progress
         localStorage.setItem('dsa_topics_progress', JSON.stringify(checkedItems[key]));
       } else {
-        // Examination progress - save with both formats for compatibility
         localStorage.setItem(`${key}_progress`, JSON.stringify(checkedItems[key]));
         localStorage.setItem(`exam_progress_${key}`, JSON.stringify(checkedItems[key]));
       }
@@ -112,20 +101,16 @@ export default function App() {
   const toggleItem = (item, language, sectionType, hasResources = false) => {
     const storageKey = sectionType ? `${language}_${sectionType}` : language;
 
-    // Check if this is an examination (sectionType is null and language is an exam ID)
     const isExamination = sectionType === null && examinationsData[language];
 
     if (isExamination) {
-      // EXAMINATION LOGIC
       const examData = examinationsData[language];
 
-      // If item has resources and we're trying to check it, show confirmation
       if (hasResources && !checkedItems[storageKey]?.[item]) {
         setConfirmModal({ item, language, sectionType, isExamination, examData });
         return;
       }
 
-      // If unchecking a topic with resources, also uncheck all its subtopics and resources
       if (hasResources && checkedItems[storageKey]?.[item]) {
         const topic = examData.sections.flatMap(s => s.topics).find(t => t.name === item);
         if (topic) {
@@ -135,7 +120,6 @@ export default function App() {
 
 
 
-            // Uncheck all resources
             if (topic.resources) {
               if (topic.resources.videos) {
                 topic.resources.videos.forEach(v => delete newChecked[`${item}__videos__${v.title}`]);
@@ -154,7 +138,6 @@ export default function App() {
         }
       }
 
-      // Simple toggle for examination items without resources
       setCheckedItems(prev => ({
         ...prev,
         [storageKey]: {
@@ -165,18 +148,15 @@ export default function App() {
       return;
     }
 
-    // LANGUAGE CHECKLIST LOGIC (ORIGINAL - PRESERVED)
     const currentData = sectionType
       ? (sectionType === 'dsa' ? languagesData[language].dsaMastery : languagesData[language].devMastery)
       : dsaTopicsData;
 
-    // If item has resources and we're trying to check it, show confirmation
     if (hasResources && !checkedItems[storageKey]?.[item]) {
       setConfirmModal({ item, language, sectionType });
       return;
     }
 
-    // If unchecking a topic with resources, also uncheck all its resources
     if (hasResources && checkedItems[storageKey]?.[item]) {
       const topic = currentData.flatMap(s => s.items).find(t => typeof t === 'object' && t.name === item);
       if (topic && topic.resources) {
@@ -200,7 +180,6 @@ export default function App() {
       }
     }
 
-    // Default toggle
     setCheckedItems(prev => ({
       ...prev,
       [storageKey]: {
@@ -217,7 +196,6 @@ export default function App() {
     const storageKey = sectionType ? `${language}_${sectionType}` : language;
 
     if (isExamination) {
-      // EXAMINATION LOGIC
       if (markAllDone) {
         const topic = examData.sections.flatMap(s => s.topics).find(t => t.name === item);
         if (topic) {
@@ -225,7 +203,6 @@ export default function App() {
             const newChecked = { ...prev[storageKey], [item]: true };
 
 
-            // Mark all resources as done
             if (topic.resources) {
               if (topic.resources.videos) {
                 topic.resources.videos.forEach(v => {
@@ -248,7 +225,6 @@ export default function App() {
           });
         }
       } else {
-        // Mark only the topic as done
         setCheckedItems(prev => ({
           ...prev,
           [storageKey]: {
@@ -262,7 +238,6 @@ export default function App() {
       return;
     }
 
-    // LANGUAGE CHECKLIST LOGIC (ORIGINAL - PRESERVED)
     const currentData = sectionType
       ? (sectionType === 'dsa' ? languagesData[language].dsaMastery : languagesData[language].devMastery)
       : dsaTopicsData;
@@ -303,11 +278,9 @@ export default function App() {
     const storageKey = sectionType ? `${language}_${sectionType}` : language;
     const resourceKey = `${topicName}__${resourceType}__${resourceTitle}`;
 
-    // Check if this is an examination
     const isExamination = sectionType === null && examinationsData[language];
 
     if (isExamination) {
-      // EXAMINATION LOGIC
       const examData = examinationsData[language];
 
       console.log('=== TOGGLE RESOURCE ITEM ===');
@@ -326,13 +299,11 @@ export default function App() {
         console.log('Resource Key:', resourceKey);
         console.log('New value:', newChecked[resourceKey]);
 
-        // Check if all subtopics and resources are checked, then auto-check parent
         const topic = examData.sections.flatMap(s => s.topics).find(t => t.name === topicName);
         if (topic) {
           const allItems = [];
 
 
-          // Add all resources
           if (topic.resources) {
             if (topic.resources.videos) {
               topic.resources.videos.forEach(v => allItems.push(`${topicName}__videos__${v.title}`));
@@ -348,7 +319,6 @@ export default function App() {
           console.log('All resource keys:', allItems);
           console.log('Checked states:', allItems.map(key => ({ key, checked: !!newChecked[key] })));
 
-          // Check if all items are checked (only if there are resources to check)
           const allChecked = allItems.length > 0 && allItems.every(item => newChecked[item]);
           newChecked[topicName] = allChecked;
 
@@ -366,7 +336,6 @@ export default function App() {
       return;
     }
 
-    // LANGUAGE CHECKLIST LOGIC (ORIGINAL - PRESERVED)
     const currentData = sectionType
       ? (sectionType === 'dsa' ? languagesData[language].dsaMastery : languagesData[language].devMastery)
       : dsaTopicsData;
@@ -377,7 +346,6 @@ export default function App() {
         [resourceKey]: !prev[storageKey]?.[resourceKey]
       };
 
-      // Check if all resources are checked
       const topic = currentData.flatMap(s => s.items).find(t => typeof t === 'object' && t.name === topicName);
       if (topic && topic.resources) {
         const allResources = [
@@ -456,11 +424,9 @@ export default function App() {
       localStorage.removeItem('dsa_topics_progress');
       setCheckedItems(prev => ({ ...prev, dsa: {} }));
     } else if (identifier.startsWith('gate-') || examinationsData[identifier]) {
-      // Reset examination progress
       localStorage.removeItem(`${identifier}_progress`);
       setCheckedItems(prev => ({ ...prev, [identifier]: {} }));
     } else {
-      // Reset language progress
       localStorage.removeItem(`${identifier}_dsa_progress`);
       localStorage.removeItem(`${identifier}_dev_progress`);
       setCheckedItems(prev => ({
@@ -501,10 +467,8 @@ export default function App() {
             }
           `}</style>
 
-          {/* Sidebar */}
           <Sidebar isOpen={sidebarOpen} toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setSidebarOpen(true)}
             className="fixed top-4 left-4 z-30 lg:hidden bg-slate-900 border-2 border-green-500 p-2 rounded text-green-500 hover:bg-slate-800"
@@ -512,13 +476,10 @@ export default function App() {
             <Menu className="w-6 h-6" />
           </button>
 
-          {/* Email Verification Banner */}
           <EmailVerificationBanner />
 
-          {/* Changelog Button */}
           <ChangelogButton />
 
-          {/* Main Content */}
           <div className="flex-1 lg:ml-0">
             <Routes>
               <Route path="/" element={<HomePage calculateLanguageProgress={calculateLanguageProgress} checkedItems={checkedItems} />} />
@@ -574,7 +535,6 @@ export default function App() {
                 }
               />
 
-              {/* Examination Routes */}
               {getAllExams().map(exam => (
                 <Route
                   key={exam.id}

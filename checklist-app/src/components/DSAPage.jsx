@@ -28,7 +28,6 @@ export default function DSAPage({
 
     return (
         <div className="min-h-screen bg-slate-950 p-6">
-            {/* Hero */}
             <div className="max-w-5xl mx-auto mb-8">
                 <div className="bg-slate-900 border-2 border-green-500 rounded-lg p-8 shadow-2xl shadow-green-500/20">
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -54,7 +53,6 @@ export default function DSAPage({
                 </div>
             </div>
 
-            {/* Sections */}
             <div className="max-w-5xl mx-auto space-y-4">
                 {data.map((section, sectionIndex) => {
                     const sectionKey = `dsa-${sectionIndex}`;
@@ -63,7 +61,6 @@ export default function DSAPage({
 
                     return (
                         <div key={sectionIndex} className="bg-slate-900 border-2 border-slate-700 rounded-lg p-6 hover:border-green-600 transition-all">
-                            {/* Section Header */}
                             <div
                                 onClick={() => toggleSection(sectionKey)}
                                 className="flex items-center justify-between cursor-pointer group"
@@ -88,7 +85,6 @@ export default function DSAPage({
                                 </div>
                             </div>
 
-                            {/* Section Items */}
                             <div className={`mt-4 dropdown-content ${!isSectionExpanded ? 'dropdown-content-hidden' : ''}`}>
                                 <div className="dropdown-inner space-y-2">
                                     {section.items.map((item, itemIndex) => {
@@ -149,12 +145,10 @@ export default function DSAPage({
                                                     </div>
                                                 </div>
 
-                                                {/* Nested Resources */}
                                                 {!isSimpleItem && item.resources && (
                                                     <div className={`ml-8 mt-2 dropdown-content ${!isTopicExpanded ? 'dropdown-content-hidden' : ''}`}>
                                                         <div className="dropdown-inner">
                                                             <div className="space-y-3 p-3 bg-slate-900/50 rounded border border-slate-800">
-                                                                {/* Videos */}
                                                                 {item.resources.videos && item.resources.videos.length > 0 && (
                                                                     <div>
                                                                         <div className="flex items-center gap-2 mb-2">
@@ -190,7 +184,6 @@ export default function DSAPage({
                                                                     </div>
                                                                 )}
 
-                                                                {/* Practice */}
                                                                 {item.resources.practice && item.resources.practice.length > 0 && (
                                                                     <div>
                                                                         <div className="flex items-center gap-2 mb-2">
@@ -240,7 +233,6 @@ export default function DSAPage({
                 })}
             </div>
 
-            {/* Confirmation Modal */}
             {
                 confirmModal && (
                     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">

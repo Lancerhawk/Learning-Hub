@@ -53,7 +53,7 @@ export default function ExaminationsPage({ examData, resetProgress }) {
                             </p>
                             <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-6 mb-4">
                                 <p className="text-2xl font-bold text-yellow-400 font-mono mb-2">
-                                    🚧 COMING SOON 🚧
+                                    COMING SOON
                                 </p>
                                 <p className="text-green-400 font-mono text-sm">
                                     This examination content is currently being prepared.

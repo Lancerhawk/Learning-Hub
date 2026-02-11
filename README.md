@@ -1,30 +1,30 @@
-# 📚 Learning Hub
+# Learning's Hub
 
 A comprehensive full-stack web application designed to help developers track their progress in learning Data Structures & Algorithms (DSA) and programming languages. Features include custom list creation, public list sharing, progress tracking, and a community-driven learning platform.
 
-## ✨ Features
+## Features
 
 ### Core Features
-- **📊 Progress Tracking** - Track your learning progress across multiple programming languages and DSA topics
-- **📝 Custom Lists** - Create personalized learning checklists with sections, topics, and resources
-- **🌍 Public Lists** - Share your learning lists with the community and explore lists created by others
-- **⭐ Rating System** - Rate and review public lists to help others find quality content
-- **🔄 List Copying** - Fork public lists and customize them for your own learning journey
-- **📈 Version History** - Track lineage of copied lists back to their original creators
+- **Progress Tracking** - Track your learning progress across multiple programming languages and DSA topics
+- **Custom Lists** - Create personalized learning checklists with sections, topics, and resources
+- **Public Lists** - Share your learning lists with the community and explore lists created by others
+- **Rating System** - Rate and review public lists to help others find quality content
+- **List Copying** - Fork public lists and customize them for your own learning journey
+- **Version History** - Track lineage of copied lists back to their original creators
 
 ### User Features
-- **🔐 Authentication** - Secure user registration and login with JWT tokens
-- **🔑 Password Reset** - Email-based password recovery with SendGrid integration
-- **👤 User Profiles** - Track your contributions and learning progress
-- **🎯 Resource Management** - Add videos, practice problems, notes, and links to topics
+- **Authentication** - Secure user registration and login with JWT tokens
+- **Password Reset** - Email-based password recovery with SendGrid integration
+- **User Profiles** - Track your contributions and learning progress
+- **Resource Management** - Add videos, practice problems, notes, and links to topics
 
 ### Technical Features
-- **⚡ Rate Limiting** - IP-based rate limiting to prevent abuse
-- **🎨 Modern UI** - Terminal/hacker-themed design with smooth animations
-- **📱 Responsive Design** - Works seamlessly on desktop and mobile devices
-- **🔍 Search & Filter** - Find lists by title, sort by rating, copies, or date
+- **Rate Limiting** - IP-based rate limiting to prevent abuse
+- **Modern UI** - Terminal/hacker-themed design with smooth animations
+- **Responsive Design** - Works seamlessly on desktop and mobile devices
+- **Search & Filter** - Find lists by title, sort by rating, copies, or date
 
-## 🏗️ Architecture
+## Architecture
 
 ### System Architecture Diagram
 
@@ -194,7 +194,7 @@ erDiagram
     }
 ```
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -285,7 +285,7 @@ npm run reset-db
 npm run init-db
 ```
 
-## 📖 API Documentation
+## API Documentation
 
 ### Authentication Endpoints
 
@@ -323,7 +323,7 @@ npm run init-db
 | POST | `/api/public-lists/:id/rate` | Rate a public list |
 | GET | `/api/public-lists/:id/lineage` | Get list version history |
 
-## 🔒 Security Features
+## Security Features
 
 - **JWT Authentication** - Secure token-based authentication
 - **Password Hashing** - Bcrypt with salt rounds
@@ -356,11 +356,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-## 👨‍💻 Author
+## Author
 
 **Arin Jain**
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Terminal/hacker theme inspired by classic command-line interfaces
 - Icons provided by Lucide React

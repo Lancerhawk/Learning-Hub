@@ -1,11 +1,7 @@
 import { useState, useEffect } from 'react';
 
-/**
- * Custom hook for managing examination progress and checkbox state
- * Handles auto-check logic and localStorage persistence
- */
+
 export const useExaminationProgress = (examId, examData) => {
-    // Load initial state from localStorage
     const [checkedItems, setCheckedItems] = useState(() => {
         const saved = localStorage.getItem(examId);
         return saved ? JSON.parse(saved) : {};
@@ -13,16 +9,10 @@ export const useExaminationProgress = (examId, examData) => {
 
     const [confirmModal, setConfirmModal] = useState(null);
 
-    // Save to localStorage whenever state changes
     useEffect(() => {
         localStorage.setItem(examId, JSON.stringify(checkedItems));
     }, [examId, checkedItems]);
 
-    /**
-     * Toggle a resource item (video, practice, reference)
-     * Auto-checks parent topic if all resources are checked
-     * Auto-unchecks parent topic if any resource is unchecked
-     */
     const toggleResource = (topicName, resourceType, resourceTitle) => {
         const resourceKey = `${topicName}__${resourceType}__${resourceTitle}`;
 
@@ -32,13 +22,11 @@ export const useExaminationProgress = (examId, examData) => {
                 [resourceKey]: !prev[resourceKey]
             };
 
-            // Find the topic to check all its resources
             const topic = examData.sections
                 .flatMap(s => s.topics)
                 .find(t => t.name === topicName);
 
             if (topic && topic.resources) {
-                // Collect all resource keys for this topic
                 const allResourceKeys = [];
 
                 if (topic.resources.videos) {
@@ -57,11 +45,9 @@ export const useExaminationProgress = (examId, examData) => {
                     });
                 }
 
-                // Check if ALL resources are checked
                 const allChecked = allResourceKeys.length > 0 &&
                     allResourceKeys.every(key => newChecked[key]);
 
-                // Auto-check/uncheck parent topic
                 newChecked[topicName] = allChecked;
             }
 
@@ -69,18 +55,13 @@ export const useExaminationProgress = (examId, examData) => {
         });
     };
 
-    /**
-     * Toggle a topic checkbox
-     * Shows confirmation modal if topic has resources
-     */
+
     const toggleTopic = (topicName, hasResources) => {
-        // If topic has resources and is being checked, show confirmation
         if (hasResources && !checkedItems[topicName]) {
             setConfirmModal({ topicName });
             return;
         }
 
-        // If unchecking, uncheck topic and all its resources
         if (hasResources && checkedItems[topicName]) {
             const topic = examData.sections
                 .flatMap(s => s.topics)
@@ -91,7 +72,6 @@ export const useExaminationProgress = (examId, examData) => {
                     const newChecked = { ...prev };
                     newChecked[topicName] = false;
 
-                    // Uncheck all resources
                     if (topic.resources.videos) {
                         topic.resources.videos.forEach(v => {
                             delete newChecked[`${topicName}__videos__${v.title}`];
@@ -114,16 +94,12 @@ export const useExaminationProgress = (examId, examData) => {
             return;
         }
 
-        // Simple toggle for topics without resources
         setCheckedItems(prev => ({
             ...prev,
             [topicName]: !prev[topicName]
         }));
     };
 
-    /**
-     * Confirm marking all resources as done
-     */
     const confirmMarkAllResources = (markAll) => {
         if (!confirmModal) return;
 
@@ -136,7 +112,6 @@ export const useExaminationProgress = (examId, examData) => {
             setCheckedItems(prev => {
                 const newChecked = { ...prev, [topicName]: true };
 
-                // Mark all resources as checked
                 if (topic.resources.videos) {
                     topic.resources.videos.forEach(v => {
                         newChecked[`${topicName}__videos__${v.title}`] = true;
@@ -156,7 +131,6 @@ export const useExaminationProgress = (examId, examData) => {
                 return newChecked;
             });
         } else {
-            // Mark only the topic
             setCheckedItems(prev => ({
                 ...prev,
                 [topicName]: true

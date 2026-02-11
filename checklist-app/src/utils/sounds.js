@@ -1,30 +1,25 @@
-// Terminal click sound utility
 let audioContext = null;
 let clickBuffer = null;
 
-// Initialize audio context and create click sound
 const initAudio = async () => {
     if (!audioContext) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
-        // Create a short, sharp click sound (like a mechanical keyboard)
         const sampleRate = audioContext.sampleRate;
-        const duration = 0.05; // 50ms
+        const duration = 0.05;
         const buffer = audioContext.createBuffer(1, sampleRate * duration, sampleRate);
         const data = buffer.getChannelData(0);
 
-        // Generate a quick click sound with decay
         for (let i = 0; i < buffer.length; i++) {
             const t = i / sampleRate;
-            const envelope = Math.exp(-t * 50); // Quick decay
-            data[i] = (Math.random() * 2 - 1) * envelope * 0.3; // White noise with envelope
+            const envelope = Math.exp(-t * 50);
+            data[i] = (Math.random() * 2 - 1) * envelope * 0.3;
         }
 
         clickBuffer = buffer;
     }
 };
 
-// Play click sound
 export const playClickSound = async () => {
     try {
         await initAudio();
@@ -34,7 +29,7 @@ export const playClickSound = async () => {
             const gainNode = audioContext.createGain();
 
             source.buffer = clickBuffer;
-            gainNode.gain.value = 0.2; // Volume
+            gainNode.gain.value = 0.2;
 
             source.connect(gainNode);
             gainNode.connect(audioContext.destination);
@@ -46,7 +41,6 @@ export const playClickSound = async () => {
     }
 };
 
-// Play a different sound for checkbox toggle (slightly higher pitch)
 export const playToggleSound = async () => {
     try {
         await initAudio();
@@ -56,7 +50,7 @@ export const playToggleSound = async () => {
             const gainNode = audioContext.createGain();
 
             oscillator.type = 'sine';
-            oscillator.frequency.setValueAtTime(800, audioContext.currentTime); // Higher pitch
+            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
 
             gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
             gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);

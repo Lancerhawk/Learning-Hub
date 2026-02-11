@@ -214,7 +214,6 @@ export default function ChangelogModal({ isOpen, onClose }) {
     return (
         <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
             <div className="bg-slate-900 border-2 border-green-500 rounded-lg w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl shadow-green-500/30">
-                {/* Header */}
                 <div className="flex items-center justify-between p-6 border-b-2 border-green-700">
                     <div className="flex items-center gap-3">
                         <Sparkles className="w-6 h-6 text-green-500" />
@@ -230,7 +229,6 @@ export default function ChangelogModal({ isOpen, onClose }) {
                     </button>
                 </div>
 
-                {/* Content */}
                 <div className="overflow-y-auto p-6 flex-1 custom-scrollbar">
                     <div className="space-y-8">
                         {changelogData.map((release, idx) => (
@@ -238,7 +236,6 @@ export default function ChangelogModal({ isOpen, onClose }) {
                                 key={release.version}
                                 className="border-2 border-green-700 rounded-lg p-5 bg-slate-800/50 hover:border-green-500 transition-all"
                             >
-                                {/* Version Header */}
                                 <div className="flex items-center justify-between mb-4 pb-3 border-b border-green-700/50">
                                     <div className="flex items-center gap-3">
                                         <Package className="w-5 h-5 text-green-500" />
@@ -256,7 +253,6 @@ export default function ChangelogModal({ isOpen, onClose }) {
                                     </span>
                                 </div>
 
-                                {/* Changes */}
                                 <div className="space-y-4">
                                     {Object.entries(release.changes).map(([category, items]) => (
                                         <div key={category}>
@@ -285,7 +281,6 @@ export default function ChangelogModal({ isOpen, onClose }) {
                     </div>
                 </div>
 
-                {/* Footer */}
                 <div className="p-4 border-t-2 border-green-700 bg-slate-800/50">
                     <p className="text-xs text-slate-500 font-mono text-center">
                         Following Semantic Versioning (SemVer) • Major.Minor.Patch

@@ -1,25 +1,14 @@
-/**
- * Utility functions for calculating examination progress
- */
 
-/**
- * Calculate progress for a specific examination
- * @param {string} examId - The examination ID (e.g., "gate-cs-2027")
- * @param {object} examData - The examination data structure
- * @returns {object} { completed, total, percentage }
- */
 export const calculateExamProgress = (examId, examData) => {
     if (!examData || !examData.sections) {
         return { completed: 0, total: 0, percentage: 0 };
     }
 
-    // Count total topics
     let totalTopics = 0;
     examData.sections.forEach(section => {
         totalTopics += section.topics.length;
     });
 
-    // Get checked items from localStorage
     const savedData = localStorage.getItem(examId);
     if (!savedData) {
         return { completed: 0, total: totalTopics, percentage: 0 };
@@ -29,7 +18,6 @@ export const calculateExamProgress = (examId, examData) => {
         const checkedItems = JSON.parse(savedData);
         let completedTopics = 0;
 
-        // Count completed topics (parent topics only, not individual resources)
         examData.sections.forEach(section => {
             section.topics.forEach(topic => {
                 if (checkedItems[topic.name] === true) {
@@ -53,12 +41,6 @@ export const calculateExamProgress = (examId, examData) => {
     }
 };
 
-/**
- * Calculate section progress
- * @param {array} topics - Array of topics in the section
- * @param {string} examId - The examination ID
- * @returns {number} Percentage of completed topics in the section
- */
 export const calculateSectionProgress = (topics, examId) => {
     if (!topics || topics.length === 0) return 0;
 
@@ -75,13 +57,6 @@ export const calculateSectionProgress = (topics, examId) => {
     }
 };
 
-/**
- * Get resource progress for a specific topic
- * @param {string} topicName - Name of the topic
- * @param {object} topic - Topic data with resources
- * @param {string} examId - The examination ID
- * @returns {number} Percentage of completed resources
- */
 export const getTopicResourceProgress = (topicName, topic, examId) => {
     if (!topic || !topic.resources) return 0;
 
@@ -92,7 +67,6 @@ export const getTopicResourceProgress = (topicName, topic, examId) => {
         const checkedItems = JSON.parse(savedData);
         const allResourceKeys = [];
 
-        // Collect all resource keys
         if (topic.resources.videos) {
             topic.resources.videos.forEach(v => {
                 allResourceKeys.push(`${topicName}__videos__${v.title}`);

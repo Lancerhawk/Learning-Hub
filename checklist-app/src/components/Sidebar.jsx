@@ -23,34 +23,28 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     const [languagesExpanded, setLanguagesExpanded] = useState(true);
     const [examinationsSectionExpanded, setExaminationsSectionExpanded] = useState(true);
     const [overlayExpanded, setOverlayExpanded] = useState(false);
-    const [activeCategory, setActiveCategory] = useState(null); // Track which category's overlay is shown
+    const [activeCategory, setActiveCategory] = useState(null);
     const [overlayPosition, setOverlayPosition] = useState({ top: 0, left: 0 });
-    const hoverTimerRef = useRef(null); // Timer for hover delay
+    const hoverTimerRef = useRef(null);
 
     const examinations = getAllExams();
 
-    // Function to calculate overlay position from a button element
     const calculateOverlayPosition = (buttonElement) => {
         const rect = buttonElement.getBoundingClientRect();
         const viewportHeight = window.innerHeight;
         const viewportWidth = window.innerWidth;
-        const overlayHeight = 300; // Approximate height
-        const overlayWidth = 250; // Min width from CSS
+        const overlayHeight = 300;
+        const overlayWidth = 250;
 
-        // Simple positioning: align with button, but ensure it fits in viewport
         let top = rect.top;
 
-        // If overlay would go below viewport, shift it up
         if (top + overlayHeight > viewportHeight) {
             top = Math.max(10, viewportHeight - overlayHeight - 10);
         }
 
-        // Calculate left position - handle mobile screens
         let left = rect.right + 8;
         if (left + overlayWidth > viewportWidth) {
-            // Position to the left of the button instead
             left = Math.max(10, rect.left - overlayWidth - 8);
-            // If still doesn't fit, center it
             if (left < 10) {
                 left = Math.max(10, (viewportWidth - overlayWidth) / 2);
             }
@@ -59,9 +53,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         setOverlayPosition({ top, left });
     };
 
-    // Handle mouse enter with immediate show
     const handleCategoryMouseEnter = (e, category) => {
-        // Clear any pending close timer
         if (hoverTimerRef.current) {
             clearTimeout(hoverTimerRef.current);
             hoverTimerRef.current = null;
@@ -71,24 +63,19 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         setOverlayExpanded(true);
     };
 
-    // Handle mouse leave with delay
     const handleCategoryMouseLeave = () => {
-        // Don't auto-close on mobile/tablet devices
-        // Check if it's a touch-primary device (mobile/tablet) vs touch-capable desktop
         const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
             (window.matchMedia && window.matchMedia("(max-width: 1024px)").matches);
 
         if (isMobileDevice) {
-            return; // On mobile, only close via click or close button
+            return;
         }
-        // Add a small delay before closing to allow cursor to reach overlay
         hoverTimerRef.current = setTimeout(() => {
             setOverlayExpanded(false);
             setActiveCategory(null);
-        }, 150); // 150ms delay
+        }, 150);
     };
 
-    // Handle overlay mouse enter - cancel close timer
     const handleOverlayMouseEnter = () => {
         if (hoverTimerRef.current) {
             clearTimeout(hoverTimerRef.current);
@@ -97,14 +84,12 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         setOverlayExpanded(true);
     };
 
-    // Handle overlay mouse leave - close with delay
     const handleOverlayMouseLeave = () => {
-        // Don't auto-close on mobile/tablet devices
         const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
             (window.matchMedia && window.matchMedia("(max-width: 1024px)").matches);
 
         if (isMobileDevice) {
-            return; // On mobile, only close via click or close button
+            return;
         }
         hoverTimerRef.current = setTimeout(() => {
             setOverlayExpanded(false);
@@ -119,7 +104,6 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
 
     return (
         <>
-            {/* Mobile Overlay */}
             {isOpen && (
                 <div
                     className="fixed inset-0 bg-black/80 z-40 lg:hidden"
@@ -127,12 +111,10 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                 />
             )}
 
-            {/* Sidebar */}
             <aside
                 className={`fixed lg:sticky top-0 left-0 h-screen bg-slate-900 border-r-2 border-green-500 z-50 transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
                     } w-72 flex flex-col`}
             >
-                {/* Header */}
                 <div className="p-4 border-b-2 border-green-500 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <img src="/logo.svg" alt="LEARN.HUB" className="w-6 h-6" />
@@ -146,7 +128,6 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                     </button>
                 </div>
 
-                {/* User Section */}
                 {isAuthenticated ? (
                     <div className="p-4 border-b-2 border-green-700 bg-slate-800/50">
                         <div className="flex items-center gap-2 mb-2">
@@ -188,9 +169,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                     </div>
                 )}
 
-                {/* Navigation */}
                 <nav className="flex-1 overflow-y-auto p-4 space-y-4">
-                    {/* General Section */}
                     <div className="border-2 border-green-700 rounded-lg p-3 bg-slate-800/30">
                         <div className="text-xs font-mono text-green-500 px-2 mb-3 font-bold border-b border-green-700 pb-2">
                             &gt; [GENERAL]
@@ -260,7 +239,6 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                         </div>
                     </div>
 
-                    {/* Algorithms Section */}
                     <div className="border-2 border-green-700 rounded-lg p-3 bg-slate-800/30">
                         <div className="text-xs font-mono text-green-500 px-2 mb-3 font-bold border-b border-green-700 pb-2">
                             &gt; [ALGORITHMS]
@@ -280,7 +258,6 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                         </NavLink>
                     </div>
 
-                    {/* Examinations Section - Collapsible */}
                     <div className="border-2 border-green-700 rounded-lg p-3 bg-slate-800/30">
                         <button
                             onClick={() => {
@@ -297,10 +274,9 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
 
                         <div className={`overflow-hidden transition-all duration-300 ease-in-out ${examinationsSectionExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
                             <div className="space-y-0">
-                                {/* Group exams by category (e.g., GATE) */}
                                 {Object.entries(
                                     examinations.reduce((acc, exam) => {
-                                        const category = exam.name.split(' ')[0]; // Extract "GATE" from "GATE Computer Science"
+                                        const category = exam.name.split(' ')[0];
                                         if (!acc[category]) acc[category] = [];
                                         acc[category].push(exam);
                                         return acc;
@@ -312,7 +288,6 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                                     return (
                                         <div key={category}>
                                             {hasMultipleExams ? (
-                                                // Multiple exams - show overlay on hover
                                                 <div
                                                     onMouseEnter={(e) => handleCategoryMouseEnter(e, category)}
                                                     onMouseLeave={handleCategoryMouseLeave}
@@ -332,7 +307,6 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                                                     )}
                                                 </div>
                                             ) : (
-                                                // Single exam - navigate directly
                                                 <NavLink
                                                     to={`/examinations/${exams[0].id}`}
                                                     onClick={playClickSound}
@@ -359,7 +333,6 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                         </div>
                     </div>
 
-                    {/* Languages Section - Collapsible */}
                     <div className="border-2 border-green-700 rounded-lg p-3 bg-slate-800/30">
                         <button
                             onClick={() => {
@@ -401,7 +374,6 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                     </div>
                 </nav>
 
-                {/* Footer */}
                 <div className="p-4 border-t-2 border-green-500">
                     <div className="text-xs font-mono text-green-600">
                         <div className="flex items-center gap-2">
@@ -412,7 +384,6 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                 </div>
             </aside>
 
-            {/* Modals */}
             {showLogin && (
                 <LoginModal
                     onClose={() => setShowLogin(false)}
@@ -433,15 +404,12 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                 />
             )}
 
-            {/* Examinations Overlay - Rendered outside sidebar */}
             {overlayExpanded && activeCategory && (() => {
-                // Filter exams for the active category
                 const filteredExams = examinations.filter(exam => {
                     const examCategory = exam.name.split(' ')[0];
                     return examCategory === activeCategory;
                 });
 
-                // Only render overlay if there are exams to show
                 if (filteredExams.length === 0) return null;
 
                 return (
