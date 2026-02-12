@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Code, Terminal, BookOpen, Menu, X, LogIn, UserPlus, LogOut, User, Lock, GraduationCap } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
@@ -437,7 +437,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                                         <NavLink
                                             key={exam.id}
                                             to={`/examinations/${exam.id}`}
-                                            onClick={(e) => {
+                                            onClick={() => {
                                                 playClickSound();
                                                 setOverlayExpanded(false);
                                             }}

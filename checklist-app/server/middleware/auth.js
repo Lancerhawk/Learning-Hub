@@ -56,7 +56,7 @@ const optionalAuth = (req, res, next) => {
                 email: decoded.email
             };
         }
-    } catch (error) {
+    } catch {
         // Ignore errors for optional auth
     }
     next();

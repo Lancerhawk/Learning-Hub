@@ -66,7 +66,8 @@ app.use('/api/builtin-progress', builtinProgressRoutes);
 
 
 // Error handling middleware
-app.use((err, req, res, next) => {
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, _next) => {
     console.error('Error:', err);
     res.status(err.status || 500).json({
         error: {

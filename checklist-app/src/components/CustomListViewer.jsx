@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Check, ChevronDown, ChevronRight, Play, Code, ExternalLink, RefreshCw, BookOpen, ArrowLeft, Edit, History, Star } from 'lucide-react';
 import { customListsAPI, progressAPI, publicListsAPI } from '../utils/api';
@@ -21,12 +21,7 @@ export default function CustomListViewer({ isPublicView = false }) {
     const [userRating, setUserRating] = useState(null);
     const [hoverRating, setHoverRating] = useState(0);
 
-    useEffect(() => {
-        loadList();
-        loadProgress();
-    }, [id]);
-
-    const loadList = async () => {
+    const loadList = useCallback(async () => {
         try {
             setLoading(true);
             // Use public-lists API if viewing from explore, otherwise use custom-lists API
@@ -52,16 +47,21 @@ export default function CustomListViewer({ isPublicView = false }) {
         } finally {
             setLoading(false);
         }
-    };
+    }, [id, isPublicView]);
 
-    const loadProgress = async () => {
+    const loadProgress = useCallback(async () => {
         try {
             const data = await progressAPI.getListProgress(id);
             setProgress(data);
         } catch (err) {
             console.error('Failed to load progress:', err);
         }
-    };
+    }, [id]);
+
+    useEffect(() => {
+        loadList();
+        loadProgress();
+    }, [loadList, loadProgress]);
 
     const isItemCompleted = (topicId, resourceId = null) => {
         return progress.some(

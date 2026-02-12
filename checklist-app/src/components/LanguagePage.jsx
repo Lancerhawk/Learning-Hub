@@ -19,6 +19,9 @@ export default function LanguagePage({
     confirmTopicCompletion,
     resetProgress
 }) {
+    // State for progress view toggle
+    const [progressView, setProgressView] = useState('overall'); // 'dsa', 'dev', or 'overall'
+
     if (!data) {
         return (
             <div className="min-h-screen bg-slate-950 p-6 flex items-center justify-center">
@@ -29,11 +32,10 @@ export default function LanguagePage({
 
     const { name, icon, dsaMastery, devMastery } = data;
 
-    // State for progress view toggle
-    const [progressView, setProgressView] = useState('overall'); // 'dsa', 'dev', or 'overall'
+    // Calculate progress for each section
 
     // Calculate progress for each section
-    const calculateOverallSectionProgress = (sections, sectionType) => {
+    const calculateOverallSectionProgress = (sections) => {
         const allItems = sections.flatMap(s => s.items);
         if (allItems.length === 0) return 0;
         const completed = allItems.filter(item => {
@@ -248,7 +250,7 @@ export default function LanguagePage({
                             <img src={icon} alt={name} className="w-12 h-12 md:w-16 md:h-16" />
                             <div>
                                 <h1 className="text-xl md:text-3xl font-bold text-green-500 font-mono">
-                                    <TypingAnimation text={name} speed={100} />
+                                    <TypingAnimation key={name} text={name} speed={100} />
                                 </h1>
                                 <p className="text-green-400 font-mono text-xs md:text-sm mt-1">
                                     $ master {name.toLowerCase()}

@@ -19,7 +19,7 @@ import { languagesData, dsaTopicsData } from './data/checklistData';
 import { examinationsData, getAllExams } from './data/examinationsData';
 import ExaminationsPage from './components/ExaminationsPage';
 import { playClickSound } from './utils/sounds';
-import { loadProgress, loadAllProgress, saveAllProgress, migrateLocalStorageToDb } from './utils/progressSync';
+import { loadAllProgress, saveAllProgress, migrateLocalStorageToDb } from './utils/progressSync';
 
 function AppContent() {
   const { user } = useAuth();
@@ -27,7 +27,7 @@ function AppContent() {
   const isVerified = user?.emailVerified === true; // Check if email is verified
   const canUseDatabase = isAuthenticated && isVerified; // Only verified users can use database
   const previousAuthRef = useRef(isAuthenticated);
-  const hasMigratedRef = useRef(false); // Track if migration has been done
+  // const hasMigratedRef = useRef(false); // Unused
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [checkedItems, setCheckedItems] = useState({});
@@ -148,7 +148,7 @@ function AppContent() {
                 hasLocalStorageData = true;
                 break;
               }
-            } catch (e) {
+            } catch {
               // Skip invalid JSON
             }
           }
@@ -205,7 +205,7 @@ function AppContent() {
     }, 500); // Debounce 500ms
 
     return () => clearTimeout(timeoutId);
-  }, [checkedItems, isLoadingProgress]); // Removed isAuthenticated from deps to prevent re-save on auth change
+  }, [checkedItems, isLoadingProgress, canUseDatabase, user?.id]);
 
   const toggleSection = (sectionKey) => {
     setExpandedSections(prev => ({ ...prev, [sectionKey]: !prev[sectionKey] }));
@@ -538,14 +538,17 @@ function AppContent() {
 
   const handleResetProgress = async (identifier) => {
     if (identifier === 'dsa') {
-      await saveProgress('dsa_topics', 'dsa', {}, isAuthenticated);
+      await saveAllProgress({ ...checkedItems, dsa: {} }, canUseDatabase, user?.id);
       setCheckedItems(prev => ({ ...prev, dsa: {} }));
     } else if (identifier.startsWith('gate-') || examinationsData[identifier]) {
-      await saveProgress('examination', identifier, {}, isAuthenticated);
+      await saveAllProgress({ ...checkedItems, [identifier]: {} }, canUseDatabase, user?.id);
       setCheckedItems(prev => ({ ...prev, [identifier]: {} }));
     } else {
-      await saveProgress('language_dsa', identifier, {}, isAuthenticated);
-      await saveProgress('language_dev', identifier, {}, isAuthenticated);
+      await saveAllProgress({
+        ...checkedItems,
+        [`${identifier}_dsa`]: {},
+        [`${identifier}_dev`]: {}
+      }, canUseDatabase, user?.id);
       setCheckedItems(prev => ({
         ...prev,
         [`${identifier}_dsa`]: {},

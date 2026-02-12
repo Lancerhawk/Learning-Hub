@@ -109,7 +109,7 @@ export default function EmailVerificationModal({ email, onVerified, onClose }) {
                 setOtp(['', '', '', '', '', '']);
                 inputRefs.current[0]?.focus();
             }
-        } catch (err) {
+        } catch {
             setError('Network error. Please try again.');
         } finally {
             setLoading(false);
@@ -141,7 +141,7 @@ export default function EmailVerificationModal({ email, onVerified, onClose }) {
             } else {
                 setError(data.error || 'Failed to resend OTP');
             }
-        } catch (err) {
+        } catch {
             setError('Network error. Please try again.');
         } finally {
             setLoading(false);

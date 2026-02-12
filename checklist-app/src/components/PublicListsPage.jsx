@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Star, Copy, Users, TrendingUp, Clock, X, CheckCircle, AlertCircle, History, ChevronLeft, ChevronRight } from 'lucide-react';
 import API from '../utils/api';
@@ -18,16 +18,7 @@ export default function PublicListsPage() {
     const [totalPages, setTotalPages] = useState(1);
     const listsPerPage = 9;
 
-    useEffect(() => {
-        fetchPublicLists();
-    }, [sortBy, searchQuery, currentPage]);
-
-    // Reset to page 1 when search or sort changes
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [sortBy, searchQuery]);
-
-    const fetchPublicLists = async () => {
+    const fetchPublicLists = useCallback(async () => {
         try {
             setLoading(true);
             const params = {
@@ -44,7 +35,16 @@ export default function PublicListsPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [sortBy, searchQuery, currentPage]);
+
+    useEffect(() => {
+        fetchPublicLists();
+    }, [fetchPublicLists]);
+
+    // Reset to page 1 when search or sort changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [sortBy, searchQuery]);
 
     const handleCopy = async (listId) => {
         try {
@@ -72,7 +72,7 @@ export default function PublicListsPage() {
         try {
             const data = await API.publicLists.getLineage(listId);
             setLineageModal(data.lineage);
-        } catch (error) {
+        } catch { // Removed unused error
             setModal({
                 type: 'error',
                 title: 'Error',

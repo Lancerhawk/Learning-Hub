@@ -6,10 +6,11 @@ export default function TypingAnimation({ text, speed = 100, className = '' }) {
     const [showCursor, setShowCursor] = useState(true);
 
     // Reset animation when text changes
-    useEffect(() => {
-        setDisplayedText('');
-        setCurrentIndex(0);
-    }, [text]);
+    // Reset animation when text changes
+    // useEffect(() => {
+    //     setDisplayedText('');
+    //     setCurrentIndex(0);
+    // }, [text]);
 
     // Typing effect
     useEffect(() => {

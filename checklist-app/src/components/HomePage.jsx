@@ -64,7 +64,6 @@ export default function HomePage({ calculateLanguageProgress, checkedItems }) {
 
         const languageStats = languages.map(lang => {
             const progress = calculateLanguageProgress ? calculateLanguageProgress(lang.id) : { dsa: 0, dev: 0, overall: 0 };
-            const overall = Math.round((progress.dsa + progress.dev) / 2);
 
             return {
                 ...lang,

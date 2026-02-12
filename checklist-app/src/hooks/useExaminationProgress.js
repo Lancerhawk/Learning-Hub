@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
 
 export const useExaminationProgress = (examId, examData, checkedItems, setCheckedItems) => {
-    const { user } = useAuth();
-    const isAuthenticated = !!user;
+    // const { user } = useAuth(); // Unused
+    // const isAuthenticated = !!user; // Unused
     const [confirmModal, setConfirmModal] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading] = useState(false); // setIsLoading unused
 
     // NOTE: Progress loading and saving is now handled by App.jsx centrally
     // This hook only manages UI interactions (toggle, confirm modals, etc.)

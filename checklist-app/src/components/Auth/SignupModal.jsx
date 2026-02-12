@@ -122,7 +122,7 @@ export default function SignupModal({ onClose, onSwitchToLogin }) {
         }
     };
 
-    const handleVerified = (token, user) => {
+    const handleVerified = (token) => {
         // Store token in localStorage
         localStorage.setItem('auth_token', token);
         // The EmailVerificationModal will trigger a page reload or we manually set context

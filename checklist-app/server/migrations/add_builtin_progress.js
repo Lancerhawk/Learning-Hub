@@ -4,7 +4,7 @@ async function addBuiltinProgressTable() {
     try {
         console.log('🔄 Checking/Creating builtin_progress table...\n');
 
-        const createTableSQL = `
+        await query(`
             CREATE TABLE IF NOT EXISTS builtin_progress (
                 id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
                 user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -21,9 +21,7 @@ async function addBuiltinProgressTable() {
             CREATE INDEX IF NOT EXISTS idx_builtin_progress_user ON builtin_progress(user_id);
             CREATE INDEX IF NOT EXISTS idx_builtin_progress_checklist ON builtin_progress(checklist_type, checklist_id);
             CREATE INDEX IF NOT EXISTS idx_builtin_progress_user_checklist ON builtin_progress(user_id, checklist_type, checklist_id);
-        `;
-
-        await query(createTableSQL);
+        `);
 
         // Add trigger if it doesn't exist (simulated by dropping and recreating or handling error)
         try {

@@ -1,7 +1,7 @@
 import express from 'express';
 import pool from '../db.js';
 import { authMiddleware, optionalAuth } from '../middleware/auth.js';
-import { validateUUIDs } from '../middleware/validateUUID.js';
+
 
 const router = express.Router();
 

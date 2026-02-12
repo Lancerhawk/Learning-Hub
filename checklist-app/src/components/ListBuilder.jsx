@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
     Save,
@@ -67,13 +67,7 @@ export default function ListBuilder() {
     const topicRefs = useRef({});
     const resourceRefs = useRef({});
 
-    useEffect(() => {
-        if (isEditMode) {
-            loadList();
-        }
-    }, [id]);
-
-    const loadList = async () => {
+    const loadList = useCallback(async () => {
         try {
             setLoading(true);
             const data = await customListsAPI.getById(id);
@@ -101,7 +95,13 @@ export default function ListBuilder() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [id, navigate]);
+
+    useEffect(() => {
+        if (isEditMode) {
+            loadList();
+        }
+    }, [id, isEditMode, loadList]);
 
     const validateForm = () => {
         const newErrors = {};
@@ -145,12 +145,12 @@ export default function ListBuilder() {
         try {
             new URL(string);
             return true;
-        } catch (_) {
+        } catch {
             return false;
         }
     };
 
-    const scrollToFirstError = () => {
+    const scrollToFirstError = useCallback(() => {
         const errorKeys = Object.keys(errors);
         if (errorKeys.length === 0) return;
 
@@ -175,13 +175,13 @@ export default function ListBuilder() {
             resourceRefs.current[`${sIdx}_${tIdx}_${rIdx}`]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
             resourceRefs.current[`${sIdx}_${tIdx}_${rIdx}`]?.focus();
         }
-    };
+    }, [errors]);
 
     useEffect(() => {
         if (Object.keys(errors).length > 0) {
             scrollToFirstError();
         }
-    }, [errors]);
+    }, [errors, scrollToFirstError]);
 
     const handleSave = async () => {
         if (!validateForm()) {
