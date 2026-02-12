@@ -1,0 +1,38 @@
+name: Learning Hub CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: 'checklist-app/package-lock.json'
+
+    - name: Install Dependencies
+      working-directory: ./checklist-app
+      run: npm ci
+
+    - name: Lint
+      working-directory: ./checklist-app
+      run: npm run lint
+
+    - name: Build
+      working-directory: ./checklist-app
+      run: npm run build

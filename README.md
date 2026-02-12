@@ -1,6 +1,19 @@
-# DSA Learning Checklist App
+# Learning's Hub
 
-A comprehensive full-stack web application designed to help developers track their progress in learning Data Structures & Algorithms (DSA) and programming languages. Features include custom list creation, public list sharing, progress tracking, and a community-driven learning platform.
+> **Master Data Structures, Algorithms, and Development Skills with Intelligent Tracking.**
+
+A comprehensive, community-driven platform designed to streamline your learning journey. Whether you're preparing for competitive exams like GATE, mastering a new programming language, or building your own custom learning paths, Learning's Hub keeps you on track.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
+## 📚 Documentation
+
+- [**Project Structure**](./PROJECT_STRUCTURE.md) - Overview of frontend/backend architecture
+- [**Contributing Guidelines**](./CONTRIBUTING.md) - How to get started with contributions
+- [**Branching Strategy**](./BRANCHING_STRATEGY.md) - Git flow and strict branching rules
+- [**Code of Conduct**](./CODE_OF_CONDUCT.md) - Community standards
+- [**Commit Convention**](./COMMIT_CONVENTION.md) - Conventional commits specification
 
 ## Features
 
@@ -98,6 +111,37 @@ graph TB
     style B fill:#0f172a,stroke:#22c55e,color:#22c55e
     style D fill:#1e293b,stroke:#22c55e,color:#22c55e
     style E fill:#334155,stroke:#22c55e,color:#22c55e
+```
+
+### Data Synchronization Flow (Batch)
+
+The application uses an optimized batch synchronization strategy to minimize server load and ensure data consistency.
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant F as Frontend
+    participant A as API (Batch Endpoint)
+    participant D as Database
+
+    U->>F: Clicks Checkbox
+    F->>F: Optimistic Update (LocalStorage)
+    F-->>U: Immediate UI Feedback
+    
+    Note over F: Debounce (500ms) or Page Navigation
+    
+    F->>A: POST /builtin-progress/batch-all
+    Note right of F: Payload: { checklists: [...] }
+    
+    A->>A: Rate Limit Check (20 req/min)
+    A->>D: BEGIN Transaction
+    A->>D: Fetch Current User Progress
+    A->>A: Calculate Diffs (Insert/Delete)
+    A->>D: Batch Insert/Delete Operations
+    A->>D: COMMIT Transaction
+    
+    A-->>F: 200 OK (Success)
+    F->>F: Update Last Synced Timestamp
 ```
 
 ### Technology Stack
