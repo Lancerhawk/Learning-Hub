@@ -17,6 +17,9 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Trust proxy (required for rate limiting behind load balancers/proxies like Nginx/AWS ALB)
+app.set('trust proxy', 1);
+
 // HTTPS enforcement for production
 if (process.env.NODE_ENV === 'production') {
     app.use((req, res, next) => {
