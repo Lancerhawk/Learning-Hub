@@ -4,16 +4,16 @@ import TypingAnimation from './TypingAnimation';
 import { useExaminationProgress } from '../hooks/useExaminationProgress';
 import { calculateSectionProgress, getTopicResourceProgress } from '../utils/examinationProgressCalculator';
 
-export default function ExaminationsPage({ examData, resetProgress }) {
-    // Use dedicated examination hook
+export default function ExaminationsPage({ examData, resetProgress, checkedItems, setCheckedItems }) {
+    // Use dedicated examination hook with centralized state
     const {
-        checkedItems,
+        checkedItems: examCheckedItems,
         toggleResource,
         toggleTopic,
         confirmModal,
         setConfirmModal,
         confirmMarkAllResources
-    } = useExaminationProgress(examData.id, examData);
+    } = useExaminationProgress(examData.id, examData, checkedItems, setCheckedItems);
 
     // Local state for UI expansion
     const [expandedSections, setExpandedSections] = useState({});
@@ -109,7 +109,7 @@ export default function ExaminationsPage({ examData, resetProgress }) {
                 {examData.sections.map((section, sectionIndex) => {
                     const sectionKey = `${examData.id}-${sectionIndex}`;
                     const isSectionExpanded = expandedSections[sectionKey];
-                    const progress = calculateSectionProgress(section.topics, examData.id);
+                    const progress = calculateSectionProgress(section.topics, examCheckedItems);
 
                     return (
                         <div key={sectionIndex} className="bg-slate-900 border-2 border-slate-700 rounded-lg p-6 hover:border-green-600 transition-all">
@@ -145,7 +145,7 @@ export default function ExaminationsPage({ examData, resetProgress }) {
                                         const topicName = topic.name;
                                         const topicKey = `${sectionKey}-${topicIndex}`;
                                         const isTopicExpanded = expandedTopics[topicKey];
-                                        const isChecked = !!checkedItems[topicName];
+                                        const isChecked = !!examCheckedItems[topicName];
                                         const hasResources = topic.resources && (
                                             (topic.resources.videos && topic.resources.videos.length > 0) ||
                                             (topic.resources.practice && topic.resources.practice.length > 0) ||
@@ -197,7 +197,7 @@ export default function ExaminationsPage({ examData, resetProgress }) {
                                                         </span>
                                                         {hasResources && (
                                                             <span className="text-xs font-mono text-green-600 font-bold ml-2">
-                                                                [{getTopicResourceProgress(topicName, topic, examData.id)}%]
+                                                                [{getTopicResourceProgress(topicName, topic, examCheckedItems)}%]
                                                             </span>
                                                         )}
                                                         {/* Subtopics */}
@@ -231,7 +231,7 @@ export default function ExaminationsPage({ examData, resetProgress }) {
                                                                         <div className="space-y-1">
                                                                             {topic.resources.videos.map((video, vIdx) => {
                                                                                 const videoKey = `${topicName}__videos__${video.title}`;
-                                                                                const isVideoChecked = !!checkedItems[videoKey];
+                                                                                const isVideoChecked = !!examCheckedItems[videoKey];
                                                                                 return (
                                                                                     <div key={vIdx} className="flex items-center gap-2 p-2 bg-slate-900 rounded border border-slate-700 hover:border-green-700">
                                                                                         <div
@@ -268,7 +268,7 @@ export default function ExaminationsPage({ examData, resetProgress }) {
                                                                         <div className="space-y-1">
                                                                             {topic.resources.practice.map((problem, pIdx) => {
                                                                                 const problemKey = `${topicName}__practice__${problem.title}`;
-                                                                                const isProblemChecked = !!checkedItems[problemKey];
+                                                                                const isProblemChecked = !!examCheckedItems[problemKey];
                                                                                 return (
                                                                                     <div key={pIdx} className="flex items-center gap-2 p-2 bg-slate-900 rounded border border-slate-700 hover:border-green-700">
                                                                                         <div
@@ -305,7 +305,7 @@ export default function ExaminationsPage({ examData, resetProgress }) {
                                                                         <div className="space-y-1">
                                                                             {topic.resources.references.map((ref, rIdx) => {
                                                                                 const refKey = `${topicName}__references__${ref.title}`;
-                                                                                const isRefChecked = !!checkedItems[refKey];
+                                                                                const isRefChecked = !!examCheckedItems[refKey];
                                                                                 return (
                                                                                     <div key={rIdx} className="flex items-center gap-2 p-2 bg-slate-900 rounded border border-slate-700 hover:border-green-700">
                                                                                         <div

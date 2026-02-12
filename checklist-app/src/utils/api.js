@@ -167,6 +167,31 @@ export const publicListsAPI = {
     getLineage: (id) => fetchAPI(`/public-lists/${id}/lineage`),
 };
 
+export const builtinProgressAPI = {
+    // Load ALL progress in a single request (OPTIMIZED)
+    loadAll: () => fetchAPI('/builtin-progress/load-all'),
+
+    // Get progress for a specific checklist
+    get: (type, id) => fetchAPI(`/builtin-progress/${type}/${id}`),
+
+    // Update a single checklist
+    batchUpdate: (data) => fetchAPI('/builtin-progress/batch', {
+        method: 'POST',
+        body: JSON.stringify(data),
+    }),
+
+    // Update ALL checklists in one request (OPTIMIZED)
+    batchUpdateAll: (checklists) => fetchAPI('/builtin-progress/batch-all', {
+        method: 'POST',
+        body: JSON.stringify({ checklists }),
+    }),
+
+    // Reset progress for a checklist
+    reset: (type, id) => fetchAPI(`/builtin-progress/${type}/${id}`, {
+        method: 'DELETE',
+    }),
+};
+
 export default {
     customLists: customListsAPI,
     sections: sectionsAPI,
@@ -174,4 +199,5 @@ export default {
     resources: resourcesAPI,
     progress: progressAPI,
     publicLists: publicListsAPI,
+    builtinProgress: builtinProgressAPI,
 };

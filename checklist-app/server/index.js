@@ -1,14 +1,15 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import listsRouter from './routes/lists.js';
-import sectionsRouter from './routes/sections.js';
-import topicsRouter from './routes/topics.js';
-import resourcesRouter from './routes/resources.js';
-import progressRouter from './routes/progress.js';
-import authRouter from './routes/auth.js';
-import publicListsRouter from './routes/public-lists.js';
-import passwordResetRouter from './routes/password-reset.js';
+import listsRoutes from './routes/lists.js';
+import sectionsRoutes from './routes/sections.js';
+import topicsRoutes from './routes/topics.js';
+import resourcesRoutes from './routes/resources.js';
+import progressRoutes from './routes/progress.js';
+import authRoutes from './routes/auth.js';
+import publicListsRoutes from './routes/public-lists.js';
+import passwordResetRoutes from './routes/password-reset.js';
+import builtinProgressRoutes from './routes/builtin-progress.js';
 
 
 dotenv.config();
@@ -50,14 +51,15 @@ app.get('/api/health', (req, res) => {
 });
 
 // API Routes
-app.use('/api/auth', authRouter);
-app.use('/api/password', passwordResetRouter);
-app.use('/api/public-lists', publicListsRouter);
-app.use('/api/custom-lists', listsRouter);
-app.use('/api/sections', sectionsRouter);
-app.use('/api/topics', topicsRouter);
-app.use('/api/resources', resourcesRouter);
-app.use('/api/progress', progressRouter);
+app.use('/api/auth', authRoutes);
+app.use('/api/password', passwordResetRoutes);
+app.use('/api/public-lists', publicListsRoutes);
+app.use('/api/custom-lists', listsRoutes);
+app.use('/api/sections', sectionsRoutes);
+app.use('/api/topics', topicsRoutes);
+app.use('/api/resources', resourcesRoutes);
+app.use('/api/progress', progressRoutes);
+app.use('/api/builtin-progress', builtinProgressRoutes);
 
 
 // Error handling middleware

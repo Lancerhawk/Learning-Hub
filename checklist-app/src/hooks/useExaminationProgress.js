@@ -1,25 +1,25 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 
-
-export const useExaminationProgress = (examId, examData) => {
-    const [checkedItems, setCheckedItems] = useState(() => {
-        const saved = localStorage.getItem(examId);
-        return saved ? JSON.parse(saved) : {};
-    });
-
+export const useExaminationProgress = (examId, examData, checkedItems, setCheckedItems) => {
+    const { user } = useAuth();
+    const isAuthenticated = !!user;
     const [confirmModal, setConfirmModal] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => {
-        localStorage.setItem(examId, JSON.stringify(checkedItems));
-    }, [examId, checkedItems]);
+    // NOTE: Progress loading and saving is now handled by App.jsx centrally
+    // This hook only manages UI interactions (toggle, confirm modals, etc.)
 
     const toggleResource = (topicName, resourceType, resourceTitle) => {
         const resourceKey = `${topicName}__${resourceType}__${resourceTitle}`;
 
         setCheckedItems(prev => {
-            const newChecked = {
-                ...prev,
-                [resourceKey]: !prev[resourceKey]
+            // Get current exam progress
+            const examProgress = prev[examId] || {};
+
+            const newExamProgress = {
+                ...examProgress,
+                [resourceKey]: !examProgress[resourceKey]
             };
 
             const topic = examData.sections
@@ -46,49 +46,58 @@ export const useExaminationProgress = (examId, examData) => {
                 }
 
                 const allChecked = allResourceKeys.length > 0 &&
-                    allResourceKeys.every(key => newChecked[key]);
+                    allResourceKeys.every(key => newExamProgress[key]);
 
-                newChecked[topicName] = allChecked;
+                newExamProgress[topicName] = allChecked;
             }
 
-            return newChecked;
+            return {
+                ...prev,
+                [examId]: newExamProgress
+            };
         });
     };
 
 
     const toggleTopic = (topicName, hasResources) => {
-        if (hasResources && !checkedItems[topicName]) {
+        const examProgress = checkedItems[examId] || {};
+
+        if (hasResources && !examProgress[topicName]) {
             setConfirmModal({ topicName });
             return;
         }
 
-        if (hasResources && checkedItems[topicName]) {
+        if (hasResources && examProgress[topicName]) {
             const topic = examData.sections
                 .flatMap(s => s.topics)
                 .find(t => t.name === topicName);
 
             if (topic && topic.resources) {
                 setCheckedItems(prev => {
-                    const newChecked = { ...prev };
-                    newChecked[topicName] = false;
+                    const currentExamProgress = prev[examId] || {};
+                    const newExamProgress = { ...currentExamProgress };
+                    newExamProgress[topicName] = false;
 
                     if (topic.resources.videos) {
                         topic.resources.videos.forEach(v => {
-                            delete newChecked[`${topicName}__videos__${v.title}`];
+                            delete newExamProgress[`${topicName}__videos__${v.title}`];
                         });
                     }
                     if (topic.resources.practice) {
                         topic.resources.practice.forEach(p => {
-                            delete newChecked[`${topicName}__practice__${p.title}`];
+                            delete newExamProgress[`${topicName}__practice__${p.title}`];
                         });
                     }
                     if (topic.resources.references) {
                         topic.resources.references.forEach(r => {
-                            delete newChecked[`${topicName}__references__${r.title}`];
+                            delete newExamProgress[`${topicName}__references__${r.title}`];
                         });
                     }
 
-                    return newChecked;
+                    return {
+                        ...prev,
+                        [examId]: newExamProgress
+                    };
                 });
             }
             return;
@@ -96,7 +105,10 @@ export const useExaminationProgress = (examId, examData) => {
 
         setCheckedItems(prev => ({
             ...prev,
-            [topicName]: !prev[topicName]
+            [examId]: {
+                ...(prev[examId] || {}),
+                [topicName]: !(prev[examId] || {})[topicName]
+            }
         }));
     };
 
@@ -110,30 +122,37 @@ export const useExaminationProgress = (examId, examData) => {
 
         if (markAll && topic && topic.resources) {
             setCheckedItems(prev => {
-                const newChecked = { ...prev, [topicName]: true };
+                const currentExamProgress = prev[examId] || {};
+                const newExamProgress = { ...currentExamProgress, [topicName]: true };
 
                 if (topic.resources.videos) {
                     topic.resources.videos.forEach(v => {
-                        newChecked[`${topicName}__videos__${v.title}`] = true;
+                        newExamProgress[`${topicName}__videos__${v.title}`] = true;
                     });
                 }
                 if (topic.resources.practice) {
                     topic.resources.practice.forEach(p => {
-                        newChecked[`${topicName}__practice__${p.title}`] = true;
+                        newExamProgress[`${topicName}__practice__${p.title}`] = true;
                     });
                 }
                 if (topic.resources.references) {
                     topic.resources.references.forEach(r => {
-                        newChecked[`${topicName}__references__${r.title}`] = true;
+                        newExamProgress[`${topicName}__references__${r.title}`] = true;
                     });
                 }
 
-                return newChecked;
+                return {
+                    ...prev,
+                    [examId]: newExamProgress
+                };
             });
         } else {
             setCheckedItems(prev => ({
                 ...prev,
-                [topicName]: true
+                [examId]: {
+                    ...(prev[examId] || {}),
+                    [topicName]: true
+                }
             }));
         }
 
@@ -141,11 +160,12 @@ export const useExaminationProgress = (examId, examData) => {
     };
 
     return {
-        checkedItems,
+        checkedItems: checkedItems[examId] || {},
         toggleResource,
         toggleTopic,
         confirmModal,
         setConfirmModal,
-        confirmMarkAllResources
+        confirmMarkAllResources,
+        isLoading
     };
 };

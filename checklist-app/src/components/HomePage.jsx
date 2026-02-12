@@ -423,7 +423,8 @@ export default function HomePage({ calculateLanguageProgress, checkedItems }) {
                                                 const exam = availableExams.find(e => e.id === examId);
                                                 if (!exam) return null;
 
-                                                const progress = calculateExamProgress(examId, exam);
+                                                const examProgress = checkedItems[examId] || {};
+                                                const progress = calculateExamProgress(examId, exam, examProgress);
 
                                                 return (
                                                     <Link

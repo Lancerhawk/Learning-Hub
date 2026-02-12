@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Menu } from 'lucide-react';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Sidebar from './components/Sidebar';
 import HomePage from './components/HomePage';
@@ -19,13 +19,22 @@ import { languagesData, dsaTopicsData } from './data/checklistData';
 import { examinationsData, getAllExams } from './data/examinationsData';
 import ExaminationsPage from './components/ExaminationsPage';
 import { playClickSound } from './utils/sounds';
+import { loadProgress, loadAllProgress, saveAllProgress, migrateLocalStorageToDb } from './utils/progressSync';
 
-export default function App() {
+function AppContent() {
+  const { user } = useAuth();
+  const isAuthenticated = !!user;
+  const isVerified = user?.emailVerified === true; // Check if email is verified
+  const canUseDatabase = isAuthenticated && isVerified; // Only verified users can use database
+  const previousAuthRef = useRef(isAuthenticated);
+  const hasMigratedRef = useRef(false); // Track if migration has been done
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [checkedItems, setCheckedItems] = useState({});
   const [expandedSections, setExpandedSections] = useState({});
   const [expandedTopics, setExpandedTopics] = useState({});
   const [confirmModal, setConfirmModal] = useState(null);
+  const [isLoadingProgress, setIsLoadingProgress] = useState(true);
 
   useEffect(() => {
     const handleGlobalClick = () => {
@@ -36,27 +45,8 @@ export default function App() {
     return () => document.removeEventListener('click', handleGlobalClick);
   }, []);
 
+  // Initialize expanded sections once on mount
   useEffect(() => {
-    const loadedData = {};
-
-    Object.keys(languagesData).forEach(lang => {
-      const dsaProgress = localStorage.getItem(`${lang}_dsa_progress`);
-      const devProgress = localStorage.getItem(`${lang}_dev_progress`);
-
-      if (dsaProgress) loadedData[`${lang}_dsa`] = JSON.parse(dsaProgress);
-      if (devProgress) loadedData[`${lang}_dev`] = JSON.parse(devProgress);
-    });
-
-    const dsaProgress = localStorage.getItem('dsa_topics_progress');
-    if (dsaProgress) loadedData.dsa = JSON.parse(dsaProgress);
-
-    Object.keys(examinationsData).forEach(examId => {
-      const examProgress = localStorage.getItem(`${examId}_progress`);
-      if (examProgress) loadedData[examId] = JSON.parse(examProgress);
-    });
-
-    setCheckedItems(loadedData);
-
     const initialExpanded = {};
     Object.keys(languagesData).forEach(lang => {
       languagesData[lang].dsaMastery.forEach((_, idx) => {
@@ -75,20 +65,147 @@ export default function App() {
       });
     });
     setExpandedSections(initialExpanded);
-  }, []);
+  }, []); // Only run once on mount
 
+  // Load all progress on mount or auth change (OPTIMIZED - single request!)
   useEffect(() => {
-    Object.keys(checkedItems).forEach(key => {
-      if (key.includes('_')) {
-        localStorage.setItem(`${key}_progress`, JSON.stringify(checkedItems[key]));
-      } else if (key === 'dsa') {
-        localStorage.setItem('dsa_topics_progress', JSON.stringify(checkedItems[key]));
-      } else {
-        localStorage.setItem(`${key}_progress`, JSON.stringify(checkedItems[key]));
-        localStorage.setItem(`exam_progress_${key}`, JSON.stringify(checkedItems[key]));
+    const loadAll = async () => {
+      setIsLoadingProgress(true);
+
+      try {
+        // Load ALL progress in a single request (17 requests → 1 request!)
+        const allProgress = await loadAllProgress(canUseDatabase);
+
+        // Convert from API format to app format
+        const loadedData = {};
+
+        // Languages
+        Object.keys(languagesData).forEach(lang => {
+          loadedData[`${lang}_dsa`] = allProgress.language_dsa?.[lang] || {};
+          loadedData[`${lang}_dev`] = allProgress.language_dev?.[lang] || {};
+        });
+
+        // DSA Topics
+        loadedData.dsa = allProgress.dsa_topics?.dsa || {};
+
+        // Examinations
+        Object.keys(examinationsData).forEach(examId => {
+          loadedData[examId] = allProgress.examination?.[examId] || {};
+        });
+
+        setCheckedItems(loadedData);
+      } catch (error) {
+        console.error('Failed to load progress:', error);
+      } finally {
+        setIsLoadingProgress(false);
       }
-    });
-  }, [checkedItems]);
+    };
+
+    loadAll();
+  }, [canUseDatabase]); // Re-load when database access changes (login/verification)
+
+  // Migrate localStorage to database on login
+  // Runs whenever user logs in AND has localStorage data to migrate
+  useEffect(() => {
+    const wasAuthenticated = previousAuthRef.current;
+
+    if (canUseDatabase && !wasAuthenticated) {
+      // User just logged in AND is verified - check if there's localStorage data to migrate
+      console.log('🔍 Checking for localStorage data to migrate...');
+
+      // IMPORTANT: Check ownership to prevent cross-user contamination
+      const progressOwnerId = localStorage.getItem('progress_owner_id');
+
+      if (progressOwnerId && progressOwnerId !== user?.id) {
+        // Data belongs to different user - clear it, don't migrate!
+        console.log(`🚫 Found progress from different user (${progressOwnerId}). Clearing...`);
+
+        const keysToRemove = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key && key.endsWith('_progress')) {
+            keysToRemove.push(key);
+          }
+        }
+        keysToRemove.forEach(key => localStorage.removeItem(key));
+        localStorage.removeItem('progress_owner_id');
+
+        console.log(`🧹 Cleared ${keysToRemove.length} items to prevent cross-user contamination`);
+        previousAuthRef.current = isAuthenticated;
+        return; // Don't migrate
+      }
+
+      // Check if there's any progress in localStorage
+      let hasLocalStorageData = false;
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.endsWith('_progress')) {
+          const data = localStorage.getItem(key);
+          if (data) {
+            try {
+              const parsed = JSON.parse(data);
+              if (Object.keys(parsed).length > 0) {
+                hasLocalStorageData = true;
+                break;
+              }
+            } catch (e) {
+              // Skip invalid JSON
+            }
+          }
+        }
+      }
+
+      if (hasLocalStorageData) {
+        console.log('🔄 Found localStorage data - migrating to database...');
+
+        migrateLocalStorageToDb().then(async () => {
+          console.log('✅ Migration complete! Reloading progress from database...');
+
+          // IMPORTANT: Reload progress from database after migration
+          setIsLoadingProgress(true);
+          try {
+            const allProgress = await loadAllProgress(canUseDatabase);
+
+            const loadedData = {};
+            Object.keys(languagesData).forEach(lang => {
+              loadedData[`${lang}_dsa`] = allProgress.language_dsa?.[lang] || {};
+              loadedData[`${lang}_dev`] = allProgress.language_dev?.[lang] || {};
+            });
+            loadedData.dsa = allProgress.dsa_topics?.dsa || {};
+            Object.keys(examinationsData).forEach(examId => {
+              loadedData[examId] = allProgress.examination?.[examId] || {};
+            });
+
+            setCheckedItems(loadedData);
+            console.log('✅ Progress reloaded from database after migration!');
+          } catch (error) {
+            console.error('Failed to reload progress after migration:', error);
+          } finally {
+            setIsLoadingProgress(false);
+          }
+        }).catch(error => {
+          console.error('❌ Migration failed:', error);
+        });
+      } else {
+        console.log('ℹ️ No localStorage data to migrate');
+      }
+    }
+
+    previousAuthRef.current = isAuthenticated;
+  }, [canUseDatabase, isAuthenticated, user?.id]);
+
+  // Save progress whenever checkedItems changes (debounced)
+  useEffect(() => {
+    if (isLoadingProgress) return; // Don't save during initial load
+    if (Object.keys(checkedItems).length === 0) return; // Don't save empty state
+
+    const timeoutId = setTimeout(() => {
+      // OPTIMIZED: Save all checklists in ONE request instead of 17+
+      saveAllProgress(checkedItems, canUseDatabase, user?.id);
+    }, 500); // Debounce 500ms
+
+    return () => clearTimeout(timeoutId);
+  }, [checkedItems, isLoadingProgress]); // Removed isAuthenticated from deps to prevent re-save on auth change
 
   const toggleSection = (sectionKey) => {
     setExpandedSections(prev => ({ ...prev, [sectionKey]: !prev[sectionKey] }));
@@ -419,16 +536,16 @@ export default function App() {
     };
   };
 
-  const resetProgress = (identifier) => {
+  const handleResetProgress = async (identifier) => {
     if (identifier === 'dsa') {
-      localStorage.removeItem('dsa_topics_progress');
+      await saveProgress('dsa_topics', 'dsa', {}, isAuthenticated);
       setCheckedItems(prev => ({ ...prev, dsa: {} }));
     } else if (identifier.startsWith('gate-') || examinationsData[identifier]) {
-      localStorage.removeItem(`${identifier}_progress`);
+      await saveProgress('examination', identifier, {}, isAuthenticated);
       setCheckedItems(prev => ({ ...prev, [identifier]: {} }));
     } else {
-      localStorage.removeItem(`${identifier}_dsa_progress`);
-      localStorage.removeItem(`${identifier}_dev_progress`);
+      await saveProgress('language_dsa', identifier, {}, isAuthenticated);
+      await saveProgress('language_dev', identifier, {}, isAuthenticated);
       setCheckedItems(prev => ({
         ...prev,
         [`${identifier}_dsa`]: {},
@@ -507,7 +624,7 @@ export default function App() {
                       confirmModal={confirmModal}
                       setConfirmModal={setConfirmModal}
                       confirmTopicCompletion={confirmTopicCompletion}
-                      resetProgress={resetProgress}
+                      resetProgress={handleResetProgress}
                     />
                   }
                 />
@@ -530,7 +647,7 @@ export default function App() {
                     confirmModal={confirmModal}
                     setConfirmModal={setConfirmModal}
                     confirmTopicCompletion={confirmTopicCompletion}
-                    resetProgress={resetProgress}
+                    resetProgress={handleResetProgress}
                   />
                 }
               />
@@ -542,7 +659,9 @@ export default function App() {
                   element={
                     <ExaminationsPage
                       examData={exam}
-                      resetProgress={resetProgress}
+                      resetProgress={handleResetProgress}
+                      checkedItems={checkedItems}
+                      setCheckedItems={setCheckedItems}
                     />
                   }
                 />
@@ -562,6 +681,14 @@ export default function App() {
           </div>
         </div>
       </BrowserRouter>
+    </AuthProvider>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
     </AuthProvider>
   );
 }

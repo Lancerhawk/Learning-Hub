@@ -101,3 +101,45 @@ export const generalLimiter = rateLimit({
         });
     }
 });
+
+/**
+ * Rate limiter for progress save (batch-all)
+ * Limits: 20 requests per 1 minute per IP
+ * Prevents spam saving
+ */
+export const progressSaveLimiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 20, // Limit each IP to 20 save requests per minute
+    message: {
+        error: 'Too many save requests. Please wait 1 minute before saving again.'
+    },
+    standardHeaders: true,
+    legacyHeaders: false,
+    handler: (req, res) => {
+        res.status(429).json({
+            error: 'Too many save requests. Please wait 1 minute before saving again.',
+            retryAfter: '1 minute'
+        });
+    }
+});
+
+/**
+ * Rate limiter for progress load (load-all)
+ * Limits: 20 requests per 1 minute per IP
+ * Prevents spam loading
+ */
+export const progressLoadLimiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 20, // Limit each IP to 20 load requests per minute
+    message: {
+        error: 'Too many load requests. Please wait 1 minute before loading again.'
+    },
+    standardHeaders: true,
+    legacyHeaders: false,
+    handler: (req, res) => {
+        res.status(429).json({
+            error: 'Too many load requests. Please wait 1 minute before loading again.',
+            retryAfter: '1 minute'
+        });
+    }
+});
