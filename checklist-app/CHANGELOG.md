@@ -4,7 +4,41 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [2.5.0] - 2026-02-12
+
+### Added
+- **Progress Rate Limiting**: Implemented endpoint-specific rate limiting for progress save and load operations
+  - Load endpoint: 20 requests per minute per IP
+  - Save endpoint: 20 requests per minute per IP
+  - Clear error messages with retry-after information
+- **User ID Ownership Tracking**: Progress data now includes user ID to prevent cross-user contamination
+  - Stores `progress_owner_id` in localStorage when saving progress
+  - Validates ownership before migration to prevent User A's data migrating to User B's account
+
+### Fixed
+- **Migration Race Condition**: Fixed critical issue where progress would disappear after login and page reload
+  - Migration now completes before loading progress from database
+  - Removed one-time migration flag to support logout/login cycles
+  - Added ownership check to migrate only user's own data or guest data
+- **Cross-User Data Contamination**: Prevented localStorage data from one user being migrated to another user's account
+  - Clears other users' data when detected during login
+  - Only migrates data that belongs to current user or is guest data
+
+### Changed
+- **Batch Progress Loading**: Optimized from 17 GET requests to 1 single batch request (94% reduction)
+- **Batch Progress Saving**: Optimized from 17+ POST requests to 1 single batch request (94% reduction)
+- **Migration Logic**: Now checks for actual localStorage data on every login instead of using one-time flag
+
+### Performance
+- Reduced API calls by 94% for both loading and saving operations
+- Faster page load times with single database query
+- Improved database performance with batch operations
+
+---
+
 ## [2.4.0] - 2026-02-11
+
 
 ### Added
 - **Dedicated Examination System**: Completely rebuilt examination checkbox and progress tracking in separate files

@@ -1,31 +1,33 @@
-# 📚 DSA Learning Checklist App
+# DSA Learning Checklist App
 
 A comprehensive full-stack web application designed to help developers track their progress in learning Data Structures & Algorithms (DSA) and programming languages. Features include custom list creation, public list sharing, progress tracking, and a community-driven learning platform.
 
-## ✨ Features
+## Features
 
 ### Core Features
-- **📊 Progress Tracking** - Track your learning progress across multiple programming languages and DSA topics
-- **🎓 Examination System** - Dedicated system for competitive exam preparation (GATE, etc.) with auto-check functionality
-- **📝 Custom Lists** - Create personalized learning checklists with sections, topics, and resources
-- **🌍 Public Lists** - Share your learning lists with the community and explore lists created by others
-- **⭐ Rating System** - Rate and review public lists to help others find quality content
-- **🔄 List Copying** - Fork public lists and customize them for your own learning journey
-- **📈 Version History** - Track lineage of copied lists back to their original creators
+- **Progress Tracking** - Track your learning progress across multiple programming languages and DSA topics with intelligent data synchronization
+- **Examination System** - Dedicated system for competitive exam preparation (GATE, etc.) with auto-check functionality
+- **Custom Lists** - Create personalized learning checklists with sections, topics, and resources
+- **Public Lists** - Share your learning lists with the community and explore lists created by others
+- **Rating System** - Rate and review public lists to help others find quality content
+- **List Copying** - Fork public lists and customize them for your own learning journey
+- **Version History** - Track lineage of copied lists back to their original creators
 
 ### User Features
-- **🔐 Authentication** - Secure user registration and login with JWT tokens
-- **🔑 Password Reset** - Email-based password recovery with SendGrid integration
-- **👤 User Profiles** - Track your contributions and learning progress
-- **🎯 Resource Management** - Add videos, practice problems, notes, and links to topics
+- **Authentication** - Secure user registration and login with JWT tokens and email verification
+- **Password Reset** - Email-based password recovery with SendGrid integration
+- **User Profiles** - Track your contributions and learning progress
+- **Resource Management** - Add videos, practice problems, notes, and links to topics
 
 ### Technical Features
-- **⚡ Rate Limiting** - IP-based rate limiting to prevent abuse
-- **🎨 Modern UI** - Terminal/hacker-themed design with smooth animations
-- **📱 Responsive Design** - Works seamlessly on desktop and mobile devices
-- **🔍 Search & Filter** - Find lists by title, sort by rating, copies, or date
+- **Rate Limiting** - IP-based rate limiting to prevent abuse (20 requests/minute for progress endpoints)
+- **Batch Operations** - Optimized API calls with 94% reduction in requests (17 requests to 1)
+- **Data Ownership Tracking** - Prevents cross-user data contamination with user ID validation
+- **Modern UI** - Terminal/hacker-themed design with smooth animations
+- **Responsive Design** - Works seamlessly on desktop and mobile devices
+- **Search & Filter** - Find lists by title, sort by rating, copies, or date
 
-## 🏗️ Architecture
+## Architecture
 
 ### System Architecture Diagram
 
@@ -84,9 +86,9 @@ graph TB
         E[SendGrid<br/>Email Service]
     end
 
-    A <-->|HTTP/JSON| B
-    B <-->|SQL Queries| D
-    C2 -->|Send Emails| E
+    A <--> |HTTP/JSON| B
+    B <--> |SQL Queries| D
+    C2 --> |Send Emails| E
 
     style A fill:#22c55e,stroke:#16a34a,color:#000
     style B fill:#0f172a,stroke:#22c55e,color:#22c55e
@@ -119,6 +121,7 @@ erDiagram
     USERS ||--o{ CUSTOM_LISTS : creates
     USERS ||--o{ LIST_RATINGS : rates
     USERS ||--o{ CUSTOM_PROGRESS : tracks
+    USERS ||--o{ BUILTIN_PROGRESS : tracks
     CUSTOM_LISTS ||--o{ CUSTOM_SECTIONS : contains
     CUSTOM_LISTS ||--o{ LIST_RATINGS : receives
     CUSTOM_LISTS ||--o{ CUSTOM_LISTS : copies
@@ -131,6 +134,7 @@ erDiagram
         string username UK
         string email UK
         string password_hash
+        boolean email_verified
         string reset_token
         timestamp reset_token_expires
         timestamp created_at
@@ -150,52 +154,18 @@ erDiagram
         timestamp created_at
     }
 
-    CUSTOM_SECTIONS {
-        uuid id PK
-        uuid list_id FK
-        string title
-        string icon
-        int order_index
-    }
-
-    CUSTOM_TOPICS {
-        uuid id PK
-        uuid section_id FK
-        uuid parent_topic_id FK
-        string title
-        int order_index
-    }
-
-    CUSTOM_RESOURCES {
-        uuid id PK
-        uuid topic_id FK
-        string type
-        string title
-        string url
-        string platform
-        int order_index
-    }
-
-    CUSTOM_PROGRESS {
+    BUILTIN_PROGRESS {
         uuid id PK
         uuid user_id FK
-        uuid list_id FK
-        uuid topic_id FK
-        uuid resource_id FK
+        string checklist_type
+        string checklist_id
+        string item_key
         boolean completed
         timestamp completed_at
     }
-
-    LIST_RATINGS {
-        uuid id PK
-        uuid list_id FK
-        uuid user_id FK
-        int rating
-        timestamp created_at
-    }
 ```
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -276,7 +246,7 @@ erDiagram
 
 ### Database Management
 
-**Reset Database** (⚠️ Deletes all data):
+**Reset Database** (Warning: Deletes all data):
 ```bash
 npm run reset-db
 ```
@@ -286,23 +256,32 @@ npm run reset-db
 npm run init-db
 ```
 
-## 📖 API Documentation
+## API Documentation
 
 ### Authentication Endpoints
 
 | Method | Endpoint | Description | Rate Limit |
 |--------|----------|-------------|------------|
-| POST | `/api/auth/signup` | Register new user | 5 req/15min |
-| POST | `/api/auth/login` | Login user | 5 req/15min |
+| POST | `/api/auth/signup` | Register new user | 10 req/10min |
+| POST | `/api/auth/login` | Login user | 10 req/10min |
 | GET | `/api/auth/me` | Get current user | - |
+| POST | `/api/auth/resend-otp` | Resend verification OTP | 5 req/10min |
 
 ### Password Reset Endpoints
 
 | Method | Endpoint | Description | Rate Limit |
 |--------|----------|-------------|------------|
-| POST | `/api/password/forgot-password` | Request password reset | 3 req/30min |
+| POST | `/api/password/forgot-password` | Request password reset | 5 req/10min |
 | POST | `/api/password/reset-password` | Reset password with token | - |
 | GET | `/api/password/verify-reset-token/:token` | Verify reset token | - |
+
+### Progress Tracking Endpoints
+
+| Method | Endpoint | Description | Rate Limit |
+|--------|----------|-------------|------------|
+| GET | `/api/builtin-progress/load-all` | Load all progress (batch) | 20 req/min |
+| POST | `/api/builtin-progress/batch-all` | Save all progress (batch) | 20 req/min |
+| GET | `/api/builtin-progress/:type/:id` | Get specific checklist progress | - |
 
 ### Custom Lists Endpoints
 
@@ -324,16 +303,24 @@ npm run init-db
 | POST | `/api/public-lists/:id/rate` | Rate a public list |
 | GET | `/api/public-lists/:id/lineage` | Get list version history |
 
-## 🔒 Security Features
+## Security Features
 
-- **JWT Authentication** - Secure token-based authentication
+- **JWT Authentication** - Secure token-based authentication with email verification
 - **Password Hashing** - Bcrypt with salt rounds
-- **Rate Limiting** - IP-based request throttling
+- **Rate Limiting** - IP-based request throttling with endpoint-specific limits
 - **SQL Injection Protection** - Parameterized queries
 - **CORS** - Configured cross-origin resource sharing
 - **Environment Variables** - Sensitive data protection
+- **Data Ownership Validation** - Prevents cross-user data contamination
 
-## 📝 License
+## Performance Optimizations
+
+- **Batch Operations** - Reduced API calls by 94% (17 requests to 1)
+- **Single Database Query** - Optimized progress loading with grouped queries
+- **Debounced Saves** - 500ms debounce to prevent excessive save operations
+- **Efficient Migration** - Smart data migration with ownership validation
+
+## License
 
 MIT License
 
@@ -357,22 +344,23 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-## 👨‍💻 Author
+## Author
 
 **Arin Jain**
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Terminal/hacker theme inspired by classic command-line interfaces
 - Icons provided by Lucide React
 - Email service powered by SendGrid
 
-## 📚 Additional Documentation
+## Additional Documentation
 
 - [Database Setup Guide](server/DATABASE_SETUP.md)
 - [Forgot Password Feature](FORGOT_PASSWORD_FEATURE.md)
 - [Rate Limiting Documentation](RATE_LIMITING.md)
+- [Changelog](CHANGELOG.md)
 
 ---
 
-Made with ❤️ by Arin Jain
+Made with dedication by Arin Jain

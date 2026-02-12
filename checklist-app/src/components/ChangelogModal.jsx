@@ -3,6 +3,33 @@ import { X, Package, Plus, Edit, Bug, Shield, FileText, Sparkles } from 'lucide-
 
 const changelogData = [
     {
+        version: 'v2.5.0',
+        date: '2026-02-12',
+        changes: {
+            added: [
+                'Progress Rate Limiting: Endpoint-specific rate limiting (20 requests/minute per IP) for save and load operations',
+                'User ID Ownership Tracking: Progress data includes user ID to prevent cross-user contamination',
+                'Ownership Validation: Checks data ownership before migration to prevent User A\'s data migrating to User B'
+            ],
+            fixed: [
+                'Migration Race Condition: Fixed critical issue where progress disappeared after login and page reload',
+                'Cross-User Data Contamination: Prevented localStorage data from one user being migrated to another user\'s account',
+                'Migration now completes before loading progress from database',
+                'Removed one-time migration flag to support logout/login cycles'
+            ],
+            changed: [
+                'Batch Progress Loading: Optimized from 17 GET requests to 1 single batch request (94% reduction)',
+                'Batch Progress Saving: Optimized from 17+ POST requests to 1 single batch request (94% reduction)',
+                'Migration Logic: Now checks for actual localStorage data on every login instead of using one-time flag'
+            ],
+            performance: [
+                'Reduced API calls by 94% for both loading and saving operations',
+                'Faster page load times with single database query',
+                'Improved database performance with batch operations'
+            ]
+        }
+    },
+    {
         version: 'v2.4.0',
         date: '2026-02-11',
         changes: {
@@ -186,6 +213,8 @@ const getCategoryIcon = (category) => {
             return <Shield className="w-4 h-4" />;
         case 'security':
             return <Shield className="w-4 h-4" />;
+        case 'performance':
+            return <Sparkles className="w-4 h-4" />;
         default:
             return <FileText className="w-4 h-4" />;
     }
@@ -203,6 +232,8 @@ const getCategoryColor = (category) => {
             return 'text-purple-400 border-purple-500';
         case 'security':
             return 'text-red-400 border-red-500';
+        case 'performance':
+            return 'text-cyan-400 border-cyan-500';
         default:
             return 'text-slate-400 border-slate-500';
     }
