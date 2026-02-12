@@ -159,8 +159,10 @@ router.post('/batch', async (req, res, next) => {
 router.post('/batch-all', progressSaveLimiter, async (req, res, next) => {
     try {
         const { checklists } = req.body;
+        console.log(`[Batch-All] User ${req.user.id} saving ${checklists?.length || 0} checklists`);
 
         if (!checklists || !Array.isArray(checklists)) {
+            console.warn('[Batch-All] Invalid checklists payload:', req.body);
             return res.status(400).json({
                 error: { message: 'checklists array is required', status: 400 }
             });
@@ -174,11 +176,16 @@ router.post('/batch-all', progressSaveLimiter, async (req, res, next) => {
         for (const checklist of checklists) {
             const { type, id, items } = checklist;
 
+            // Console log for debugging EC2 issues
+            console.log(`[Batch-All] Processing ${type}/${id} with ${Object.keys(items || {}).length} items`);
+
             if (!type || !id || !items || typeof items !== 'object') {
+                console.warn(`[Batch-All] Skipping invalid checklist: ${JSON.stringify(checklist)}`);
                 continue; // Skip invalid checklists
             }
 
             if (!validTypes.includes(type)) {
+                console.warn(`[Batch-All] Invalid type: ${type}`);
                 continue; // Skip invalid types
             }
 
@@ -199,6 +206,8 @@ router.post('/batch-all', progressSaveLimiter, async (req, res, next) => {
 
             // Items to delete (unchecked but in DB)
             const toDelete = Array.from(currentItems).filter(key => !items[key]);
+
+            console.log(`[Batch-All] ${type}/${id}: Inserting ${toInsert.length}, Deleting ${toDelete.length}`);
 
             // Insert new checked items
             for (const itemKey of toInsert) {
@@ -225,6 +234,8 @@ router.post('/batch-all', progressSaveLimiter, async (req, res, next) => {
                 totalDeleted += deleteResult.rowCount;
             }
         }
+
+        console.log(`[Batch-All] Complete. Inserted: ${totalInserted}, Deleted: ${totalDeleted}`);
 
         res.json({
             message: 'All progress updated successfully',

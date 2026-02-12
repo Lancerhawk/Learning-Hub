@@ -1,7 +1,7 @@
 {
   "name": "learning-hub",
   "private": true,
-  "version": "2.5.0",
+  "version": "2.4.0",
   "description": "A comprehensive learning hub for DSA, programming languages, and custom learning paths with progress tracking, community lists, and authentication",
   "author": "Lancerhawk",
   "license": "MIT",
@@ -11,7 +11,6 @@
     "server": "node server/index.js",
     "dev:all": "concurrently \"npm run dev\" \"npm run server\"",
     "init-db": "node server/init-db.js",
-    "migrate:db": "node server/init-db.js",
     "reset-db": "node server/reset-db.js",
     "build": "vite build",
     "lint": "eslint .",

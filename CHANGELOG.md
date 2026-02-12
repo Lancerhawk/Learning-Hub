@@ -5,35 +5,59 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+
 ## [2.5.0] - 2026-02-12
 
 ### Added
-- **Progress Rate Limiting**: Implemented endpoint-specific rate limiting for progress save and load operations
+- **Builtin Progress Table**: New dedicated database table for built-in checklists (languages, DSA topics, examinations)
+  - Separate from custom list progress tracking
+  - Optimized schema: `user_id`, `checklist_type`, `checklist_id`, `item_key`, `completed`, `completed_at`
+  - Supports multiple checklist types: `language_dsa`, `language_dev`, `dsa_topics`, `examination`
+- **Batch Progress API Endpoints**: Single-request operations for all progress data
+  - `GET /api/builtin-progress/load-all` - Load all user progress in one request
+  - `POST /api/builtin-progress/batch-all` - Save all progress in one request
+  - Reduced API calls from 17 individual requests to 1 batch request (94% reduction)
+- **Progress Rate Limiting**: Endpoint-specific rate limiting for progress operations
   - Load endpoint: 20 requests per minute per IP
   - Save endpoint: 20 requests per minute per IP
-  - Clear error messages with retry-after information
-- **User ID Ownership Tracking**: Progress data now includes user ID to prevent cross-user contamination
+  - Clear error messages with retry-after information (HTTP 429)
+  - Prevents API abuse and ensures fair usage
+- **User ID Ownership Tracking**: Progress data includes user ID to prevent cross-user contamination
   - Stores `progress_owner_id` in localStorage when saving progress
   - Validates ownership before migration to prevent User A's data migrating to User B's account
+  - Automatically clears other users' data when detected during login
 
 ### Fixed
 - **Migration Race Condition**: Fixed critical issue where progress would disappear after login and page reload
   - Migration now completes before loading progress from database
   - Removed one-time migration flag to support logout/login cycles
   - Added ownership check to migrate only user's own data or guest data
+  - Progress loads correctly after migration completes
 - **Cross-User Data Contamination**: Prevented localStorage data from one user being migrated to another user's account
   - Clears other users' data when detected during login
   - Only migrates data that belongs to current user or is guest data
+  - Ensures data integrity across user sessions
 
 ### Changed
-- **Batch Progress Loading**: Optimized from 17 GET requests to 1 single batch request (94% reduction)
-- **Batch Progress Saving**: Optimized from 17+ POST requests to 1 single batch request (94% reduction)
+- **Batch Progress Loading**: Optimized from 17 GET requests to 1 single batch request
+  - Groups all progress by checklist type and ID
+  - Single database query with proper indexing
+  - 94% reduction in network requests
+- **Batch Progress Saving**: Optimized from 17+ POST requests to 1 single batch request
+  - Atomic transactions ensure data consistency
+  - Delete and re-insert strategy for clean state
+  - Handles multiple checklist types in one operation
 - **Migration Logic**: Now checks for actual localStorage data on every login instead of using one-time flag
+  - Supports multiple login/logout cycles
+  - Validates data ownership before migration
+  - Clears stale data from other users
 
 ### Performance
-- Reduced API calls by 94% for both loading and saving operations
-- Faster page load times with single database query
-- Improved database performance with batch operations
+- **94% API Call Reduction**: From 17 requests to 1 for both loading and saving
+- **Faster Page Load**: Single database query instead of multiple sequential queries
+- **Improved Database Performance**: Batch operations with proper indexing and transactions
+- **Reduced Network Latency**: One round-trip instead of 17 for progress operations
+
 
 ---
 

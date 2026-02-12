@@ -7,25 +7,30 @@ const changelogData = [
         date: '2026-02-12',
         changes: {
             added: [
-                'Progress Rate Limiting: Endpoint-specific rate limiting (20 requests/minute per IP) for save and load operations',
-                'User ID Ownership Tracking: Progress data includes user ID to prevent cross-user contamination',
-                'Ownership Validation: Checks data ownership before migration to prevent User A\'s data migrating to User B'
+                'Builtin Progress Table: New dedicated database table for built-in checklists (languages, DSA topics, examinations)',
+                'Batch Progress API Endpoints: Single-request operations - GET /api/builtin-progress/load-all and POST /api/builtin-progress/batch-all',
+                'Progress Rate Limiting: 20 requests/minute per IP for save and load operations with HTTP 429 error handling',
+                'User ID Ownership Tracking: Stores progress_owner_id in localStorage to prevent cross-user data contamination',
+                'Automatic Data Cleanup: Clears other users\' data when detected during login'
             ],
             fixed: [
                 'Migration Race Condition: Fixed critical issue where progress disappeared after login and page reload',
-                'Cross-User Data Contamination: Prevented localStorage data from one user being migrated to another user\'s account',
+                'Cross-User Data Contamination: Prevented localStorage data from one user migrating to another user\'s account',
                 'Migration now completes before loading progress from database',
-                'Removed one-time migration flag to support logout/login cycles'
+                'Removed one-time migration flag to support logout/login cycles',
+                'Added ownership check to migrate only user\'s own data or guest data'
             ],
             changed: [
                 'Batch Progress Loading: Optimized from 17 GET requests to 1 single batch request (94% reduction)',
                 'Batch Progress Saving: Optimized from 17+ POST requests to 1 single batch request (94% reduction)',
-                'Migration Logic: Now checks for actual localStorage data on every login instead of using one-time flag'
+                'Migration Logic: Now checks for actual localStorage data on every login instead of using one-time flag',
+                'Database Operations: Atomic transactions with delete and re-insert strategy for clean state'
             ],
             performance: [
-                'Reduced API calls by 94% for both loading and saving operations',
-                'Faster page load times with single database query',
-                'Improved database performance with batch operations'
+                '94% API Call Reduction: From 17 requests to 1 for both loading and saving',
+                'Faster Page Load: Single database query instead of multiple sequential queries',
+                'Improved Database Performance: Batch operations with proper indexing and transactions',
+                'Reduced Network Latency: One round-trip instead of 17 for progress operations'
             ]
         }
     },
