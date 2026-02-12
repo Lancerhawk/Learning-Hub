@@ -82,10 +82,10 @@ app.use((req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
-    console.log(`\n✓ Server running on http://localhost:${PORT}`);
-    console.log(`✓ API available at http://localhost:${PORT}/api`);
-    console.log(`✓ Health check: http://localhost:${PORT}/api/health\n`);
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(`\n✓ Server running on port ${PORT}`);
+    console.log(`✓ API available at /api`);
+    console.log(`✓ Health check: /api/health\n`);
 });
 
 export default app;
