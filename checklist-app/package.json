@@ -1,7 +1,7 @@
 {
   "name": "learning-hub",
   "private": true,
-  "version": "2.4.0",
+  "version": "2.5.1",
   "description": "A comprehensive learning hub for DSA, programming languages, and custom learning paths with progress tracking, community lists, and authentication",
   "author": "Lancerhawk",
   "license": "MIT",

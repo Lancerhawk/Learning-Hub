@@ -3,6 +3,39 @@ import { X, Package, Plus, Edit, Bug, Shield, FileText, Sparkles } from 'lucide-
 
 const changelogData = [
     {
+        version: 'v2.5.1',
+        date: '2026-02-13',
+        changes: {
+            added: [
+                'Signup-Only Migration: Progress migration now happens once during signup instead of on every login',
+                'Multi-Device Sync: Database is now the single source of truth - perfect sync across all devices',
+                'Migration Endpoint: New /api/auth/migrate-signup-progress API for signup-time migration',
+                'Database Migration Script: npm run migrate:user command (uses Node.js + .env connection)',
+                'Migration Flag: Added has_migrated_localstorage column to users table',
+                'Logout Cleanup: Automatic localStorage clearing on logout to prevent cross-user data'
+            ],
+            fixed: [
+                'Multi-Device Sync: Same account now shows identical progress on all devices',
+                'Cross-User Contamination: Logout properly clears all localStorage data',
+                'Repeated Migrations: Migration only happens once during signup, not on every login',
+                'Performance: Removed unnecessary migration checks on login (faster page loads)'
+            ],
+            changed: [
+                'Migration Logic: Moved from login flow (App.jsx) to signup flow (SignupModal.jsx)',
+                'Code Cleanup: Removed 90+ lines of migration code from App.jsx',
+                'Removed progress_owner_id tracking (no longer needed)',
+                'Removed migrateLocalStorageToDb() function from progressSync.js',
+                'Exported parseStorageKey() for reuse in SignupModal'
+            ],
+            removed: [
+                'Login Migration: No more migration checks on every login',
+                'previousAuthRef tracking from App.jsx',
+                'userId parameter from saveAllProgress() (unused)',
+                'Complex cross-user contamination checks (handled by logout cleanup)'
+            ]
+        }
+    },
+    {
         version: 'v2.5.0',
         date: '2026-02-12',
         changes: {
