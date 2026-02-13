@@ -122,13 +122,116 @@ export default function SignupModal({ onClose, onSwitchToLogin }) {
         }
     };
 
-    const handleVerified = (token) => {
+    const handleVerified = async (token) => {
         // Store token in localStorage
         localStorage.setItem('auth_token', token);
-        // The EmailVerificationModal will trigger a page reload or we manually set context
-        // For now, just reload to let the auth check happen
+
+        // Check if there's localStorage progress to migrate
+        const hasLocalProgress = checkForLocalStorageProgress();
+
+        if (hasLocalProgress) {
+            try {
+                console.log('🔄 Migrating localStorage progress to new account...');
+
+                // Collect all localStorage progress
+                const checklists = collectLocalStorageProgress();
+
+                // Send to migration endpoint
+                const { authAPI } = await import('../../utils/api.js');
+                await authAPI.migrateSignupProgress(checklists);
+
+                console.log('✅ Signup progress migrated to database');
+
+                // Clear localStorage after successful migration
+                clearProgressFromLocalStorage();
+            } catch (error) {
+                console.error('Failed to migrate signup progress:', error);
+                // Don't block signup if migration fails
+            }
+        }
+
+        // Reload page to initialize with database
         window.location.reload();
     };
+
+    // Helper: Check if localStorage has any progress
+    const checkForLocalStorageProgress = () => {
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.endsWith('_progress')) {
+                const data = localStorage.getItem(key);
+                if (data) {
+                    try {
+                        const parsed = JSON.parse(data);
+                        if (Object.keys(parsed).length > 0) {
+                            return true;
+                        }
+                    } catch {
+                        // Ignore invalid JSON
+                    }
+                }
+            }
+        }
+        return false;
+    };
+
+    // Helper: Collect all progress from localStorage
+    const collectLocalStorageProgress = () => {
+        const checklists = [];
+
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.endsWith('_progress')) {
+                const storageKey = key.replace('_progress', '');
+                const data = localStorage.getItem(key);
+
+                if (data) {
+                    try {
+                        const items = JSON.parse(data);
+                        if (Object.keys(items).length > 0) {
+                            // Parse storage key inline to avoid require()
+                            let type, id;
+                            if (storageKey === 'dsa') {
+                                type = 'dsa_topics';
+                                id = 'dsa';
+                            } else if (storageKey.includes('_dsa')) {
+                                type = 'language_dsa';
+                                id = storageKey.replace('_dsa', '');
+                            } else if (storageKey.includes('_dev')) {
+                                type = 'language_dev';
+                                id = storageKey.replace('_dev', '');
+                            } else {
+                                type = 'examination';
+                                id = storageKey;
+                            }
+                            checklists.push({ type, id, items });
+                        }
+                    } catch {
+                        // Ignore invalid JSON
+                    }
+                }
+            }
+        }
+
+        return checklists;
+    };
+
+    // Helper: Clear all progress from localStorage
+    const clearProgressFromLocalStorage = () => {
+        const keysToRemove = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.endsWith('_progress')) {
+                keysToRemove.push(key);
+            }
+        }
+        keysToRemove.forEach(key => localStorage.removeItem(key));
+        localStorage.removeItem('progress_owner_id');
+
+        console.log(`🧹 Cleared ${keysToRemove.length} progress items from localStorage`);
+    };
+
+
 
     return (
         <>

@@ -136,8 +136,22 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
         localStorage.removeItem('auth_token');
-        setToken(null);
+
+        // Clear ALL progress from localStorage
+        const keysToRemove = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.endsWith('_progress')) {
+                keysToRemove.push(key);
+            }
+        }
+        keysToRemove.forEach(key => localStorage.removeItem(key));
+        localStorage.removeItem('progress_owner_id');
+
+        console.log('🧹 Cleared localStorage on logout');
+
         setUser(null);
+        window.location.href = '/';
     };
 
     const updateUserVerificationStatus = (verified = true) => {

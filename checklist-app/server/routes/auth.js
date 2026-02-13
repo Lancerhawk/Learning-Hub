@@ -248,6 +248,100 @@ router.post('/resend-otp', otpLimiter, [
     }
 });
 
+// POST /api/auth/migrate-signup-progress
+// Called immediately after email verification for NEW users to migrate localStorage
+router.post('/migrate-signup-progress', authMiddleware, async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        // Check if already migrated
+        const userCheck = await pool.query(
+            'SELECT has_migrated_localstorage FROM users WHERE id = $1',
+            [userId]
+        );
+
+        if (userCheck.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        if (userCheck.rows[0].has_migrated_localstorage) {
+            return res.status(400).json({
+                error: 'Progress already migrated'
+            });
+        }
+
+        // Receive localStorage data from frontend
+        const { checklists } = req.body; // Array of {type, id, items}
+
+        if (!checklists || !Array.isArray(checklists) || checklists.length === 0) {
+            // No data to migrate, just mark as migrated
+            await pool.query(
+                'UPDATE users SET has_migrated_localstorage = TRUE WHERE id = $1',
+                [userId]
+            );
+            return res.json({
+                message: 'No progress to migrate',
+                migratedCount: 0
+            });
+        }
+
+        console.log(`[Migration] User ${userId} migrating ${checklists.length} checklists from localStorage`);
+
+        // Validate and process each checklist
+        const validTypes = ['language_dsa', 'language_dev', 'dsa_topics', 'examination'];
+        let totalInserted = 0;
+
+        for (const checklist of checklists) {
+            const { type, id, items } = checklist;
+
+            if (!type || !id || !items || typeof items !== 'object') {
+                console.warn(`[Migration] Skipping invalid checklist: ${JSON.stringify(checklist)}`);
+                continue;
+            }
+
+            if (!validTypes.includes(type)) {
+                console.warn(`[Migration] Invalid type: ${type}`);
+                continue;
+            }
+
+            // Insert each item
+            const itemKeys = Object.keys(items).filter(key => items[key] === true);
+
+            for (const itemKey of itemKeys) {
+                try {
+                    await pool.query(
+                        `INSERT INTO builtin_progress (user_id, checklist_type, checklist_id, item_key, completed, completed_at)
+                         VALUES ($1::uuid, $2, $3, $4, TRUE, NOW())
+                         ON CONFLICT (user_id, checklist_type, checklist_id, item_key) 
+                         DO UPDATE SET completed = TRUE, completed_at = NOW()`,
+                        [userId, type, id, itemKey]
+                    );
+                    totalInserted++;
+                } catch (insertError) {
+                    console.error(`[Migration] Failed to insert ${type}/${id}/${itemKey}:`, insertError);
+                }
+            }
+        }
+
+        // Mark as migrated
+        await pool.query(
+            'UPDATE users SET has_migrated_localstorage = TRUE WHERE id = $1',
+            [userId]
+        );
+
+        console.log(`[Migration] Successfully migrated ${totalInserted} items for user ${userId}`);
+
+        res.json({
+            message: 'Progress migrated successfully',
+            migratedCount: totalInserted
+        });
+    } catch (error) {
+        console.error('Migration error:', error);
+        res.status(500).json({ error: 'Failed to migrate progress' });
+    }
+});
+
+
 // POST /api/auth/login
 router.post('/login', authLimiter, loginValidation, async (req, res) => {
     try {

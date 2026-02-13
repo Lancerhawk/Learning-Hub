@@ -8,7 +8,7 @@ import { builtinProgressAPI } from './api.js';
  *   "dsa" => { type: "dsa_topics", id: "dsa" }
  *   "gate-cse" => { type: "examination", id: "gate-cse" }
  */
-function parseStorageKey(key) {
+export function parseStorageKey(key) {
     if (key === 'dsa') {
         return { type: 'dsa_topics', id: 'dsa' };
     }
@@ -158,17 +158,12 @@ export async function saveProgress(type, id, items, isAuthenticated) {
  * Save ALL progress in one batch request (OPTIMIZED)
  * Collects all checklists and sends in single request
  */
-export async function saveAllProgress(allCheckedItems, isAuthenticated, userId = null) {
+export async function saveAllProgress(allCheckedItems, isAuthenticated) {
     // ALWAYS save to localStorage first for immediate UI feedback
     Object.keys(allCheckedItems).forEach(key => {
         const storageKey = `${key}_progress`;
         localStorage.setItem(storageKey, JSON.stringify(allCheckedItems[key]));
     });
-
-    // Store user ID to track ownership (prevents cross-user migration)
-    if (userId) {
-        localStorage.setItem('progress_owner_id', userId);
-    }
 
     // If authenticated, also save to database in ONE request
     if (isAuthenticated) {
@@ -210,46 +205,6 @@ export async function resetProgress(type, id, isAuthenticated) {
     // Always clear localStorage as well
     const key = getLocalStorageKey(type, id);
     localStorage.removeItem(`${key}_progress`);
-}
-
-/**
- * Migrate all localStorage progress to database (called on login)
- * Uses batch update to send all checklists in ONE request
- */
-export async function migrateLocalStorageToDb() {
-    try {
-        const checklists = [];
-
-        // Find all progress keys in localStorage
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            if (key && key.endsWith('_progress')) {
-                const storageKey = key.replace('_progress', '');
-                const { type, id } = parseStorageKey(storageKey);
-                const stored = localStorage.getItem(key);
-
-                if (stored) {
-                    const items = JSON.parse(stored);
-                    if (Object.keys(items).length > 0) {
-                        console.log(`Found ${storageKey} with ${Object.keys(items).length} items to migrate`);
-                        checklists.push({ type, id, items });
-                    }
-                }
-            }
-        }
-
-        // Send all checklists in ONE batch request (OPTIMIZED)
-        if (checklists.length > 0) {
-            console.log(`Migrating ${checklists.length} checklists to database...`);
-            await builtinProgressAPI.batchUpdateAll(checklists);
-            console.log('✓ Successfully migrated localStorage to database');
-        } else {
-            console.log('No progress to migrate');
-        }
-    } catch (error) {
-        console.error('Failed to migrate localStorage to database:', error);
-        throw error; // Re-throw to let caller handle it
-    }
 }
 
 /**

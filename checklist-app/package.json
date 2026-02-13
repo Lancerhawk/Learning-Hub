@@ -12,6 +12,8 @@
     "dev:all": "concurrently \"npm run dev\" \"npm run server\"",
     "init-db": "node server/init-db.js",
     "reset-db": "node server/reset-db.js",
+    "migrate:db": "node server/migrate.js",
+    "migrate:user": "node server/migrate-user.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"

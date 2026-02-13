@@ -167,6 +167,13 @@ export const publicListsAPI = {
     getLineage: (id) => fetchAPI(`/public-lists/${id}/lineage`),
 };
 
+export const authAPI = {
+    migrateSignupProgress: (checklists) => fetchAPI('/auth/migrate-signup-progress', {
+        method: 'POST',
+        body: JSON.stringify({ checklists }),
+    }),
+};
+
 export const builtinProgressAPI = {
     // Load ALL progress in a single request (OPTIMIZED)
     loadAll: () => fetchAPI('/builtin-progress/load-all'),
@@ -193,6 +200,7 @@ export const builtinProgressAPI = {
 };
 
 export default {
+    auth: authAPI,
     customLists: customListsAPI,
     sections: sectionsAPI,
     topics: topicsAPI,

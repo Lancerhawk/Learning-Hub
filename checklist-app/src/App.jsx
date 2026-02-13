@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Menu } from 'lucide-react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
@@ -19,14 +19,13 @@ import { languagesData, dsaTopicsData } from './data/checklistData';
 import { examinationsData, getAllExams } from './data/examinationsData';
 import ExaminationsPage from './components/ExaminationsPage';
 import { playClickSound } from './utils/sounds';
-import { loadAllProgress, saveAllProgress, migrateLocalStorageToDb } from './utils/progressSync';
+import { loadAllProgress, saveAllProgress } from './utils/progressSync';
 
 function AppContent() {
   const { user } = useAuth();
   const isAuthenticated = !!user;
   const isVerified = user?.emailVerified === true; // Check if email is verified
   const canUseDatabase = isAuthenticated && isVerified; // Only verified users can use database
-  const previousAuthRef = useRef(isAuthenticated);
   // const hasMigratedRef = useRef(false); // Unused
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -103,96 +102,6 @@ function AppContent() {
 
     loadAll();
   }, [canUseDatabase]); // Re-load when database access changes (login/verification)
-
-  // Migrate localStorage to database on login
-  // Runs whenever user logs in AND has localStorage data to migrate
-  useEffect(() => {
-    const wasAuthenticated = previousAuthRef.current;
-
-    if (canUseDatabase && !wasAuthenticated) {
-      // User just logged in AND is verified - check if there's localStorage data to migrate
-      console.log('🔍 Checking for localStorage data to migrate...');
-
-      // IMPORTANT: Check ownership to prevent cross-user contamination
-      const progressOwnerId = localStorage.getItem('progress_owner_id');
-
-      if (progressOwnerId && progressOwnerId !== user?.id) {
-        // Data belongs to different user - clear it, don't migrate!
-        console.log(`🚫 Found progress from different user (${progressOwnerId}). Clearing...`);
-
-        const keysToRemove = [];
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          if (key && key.endsWith('_progress')) {
-            keysToRemove.push(key);
-          }
-        }
-        keysToRemove.forEach(key => localStorage.removeItem(key));
-        localStorage.removeItem('progress_owner_id');
-
-        console.log(`🧹 Cleared ${keysToRemove.length} items to prevent cross-user contamination`);
-        previousAuthRef.current = isAuthenticated;
-        return; // Don't migrate
-      }
-
-      // Check if there's any progress in localStorage
-      let hasLocalStorageData = false;
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && key.endsWith('_progress')) {
-          const data = localStorage.getItem(key);
-          if (data) {
-            try {
-              const parsed = JSON.parse(data);
-              if (Object.keys(parsed).length > 0) {
-                hasLocalStorageData = true;
-                break;
-              }
-            } catch {
-              // Skip invalid JSON
-            }
-          }
-        }
-      }
-
-      if (hasLocalStorageData) {
-        console.log('🔄 Found localStorage data - migrating to database...');
-
-        migrateLocalStorageToDb().then(async () => {
-          console.log('✅ Migration complete! Reloading progress from database...');
-
-          // IMPORTANT: Reload progress from database after migration
-          setIsLoadingProgress(true);
-          try {
-            const allProgress = await loadAllProgress(canUseDatabase);
-
-            const loadedData = {};
-            Object.keys(languagesData).forEach(lang => {
-              loadedData[`${lang}_dsa`] = allProgress.language_dsa?.[lang] || {};
-              loadedData[`${lang}_dev`] = allProgress.language_dev?.[lang] || {};
-            });
-            loadedData.dsa = allProgress.dsa_topics?.dsa || {};
-            Object.keys(examinationsData).forEach(examId => {
-              loadedData[examId] = allProgress.examination?.[examId] || {};
-            });
-
-            setCheckedItems(loadedData);
-            console.log('✅ Progress reloaded from database after migration!');
-          } catch (error) {
-            console.error('Failed to reload progress after migration:', error);
-          } finally {
-            setIsLoadingProgress(false);
-          }
-        }).catch(error => {
-          console.error('❌ Migration failed:', error);
-        });
-      } else {
-        console.log('ℹ️ No localStorage data to migrate');
-      }
-    }
-
-    previousAuthRef.current = isAuthenticated;
-  }, [canUseDatabase, isAuthenticated, user?.id]);
 
   // Save progress whenever checkedItems changes (debounced)
   useEffect(() => {
