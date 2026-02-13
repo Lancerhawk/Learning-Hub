@@ -1,10 +1,59 @@
-# Learning Hub - Changelog
+# Learning's Hub - Changelog
 
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.1] - 2026-02-13
 
+### Added
+- **Signup-Only Migration System**: Progress migration now occurs once during account creation instead of on every login
+  - New API endpoint `/api/auth/migrate-signup-progress` for handling signup-time migration
+  - Migration helpers in `SignupModal.jsx` for collecting and migrating localStorage data
+  - Database migration script `npm run migrate:user` (uses Node.js + .env connection)
+- **Migration Tracking**: Added `has_migrated_localstorage` boolean column to `users` table
+  - Prevents duplicate migrations for the same user
+  - Existing users automatically marked as migrated during database migration
+- **Logout Cleanup**: Automatic localStorage clearing on logout
+  - Removes all `*_progress` keys from localStorage
+  - Removes `progress_owner_id` tracking key
+  - Prevents cross-user data contamination on shared devices
+
+### Fixed
+- **Multi-Device Sync**: Database is now the single source of truth for authenticated users
+  - Same account shows identical progress across all devices
+  - Changes on one device appear on all devices after refresh
+  - Eliminated localStorage inconsistencies between devices
+- **Cross-User Data Contamination**: Logout properly clears all progress data from localStorage
+  - No more stale data when different users log in on same device
+  - Clean state for each new user session
+- **Repeated Migrations**: Migration only happens once during signup verification
+  - Removed unnecessary migration checks on every login
+  - Eliminated migration-related performance overhead
+- **Performance**: Faster login experience with no migration checks
+  - Removed 90+ lines of migration logic from login flow
+  - Direct database loading for authenticated users
+
+### Changed
+- **Migration Architecture**: Moved migration logic from login flow to signup flow
+  - Removed migration `useEffect` from `App.jsx` (90+ lines)
+  - Added migration logic to `SignupModal.jsx` `handleVerified()` function
+  - Migration now triggered by email verification, not login
+- **Code Cleanup**: Removed obsolete migration-related code
+  - Removed `migrateLocalStorageToDb()` function from `progressSync.js`
+  - Removed `progress_owner_id` tracking from `saveAllProgress()`
+  - Removed `previousAuthRef` tracking from `App.jsx`
+  - Removed `userId` parameter from `saveAllProgress()` (unused)
+- **Function Exports**: Exported `parseStorageKey()` from `progressSync.js` for reuse in `SignupModal.jsx`
+- **Logout Behavior**: Updated `logout()` in `AuthContext.jsx` to clear all progress from localStorage
+
+### Removed
+- **Login Migration Logic**: No more migration checks during login process
+  - Removed complex cross-user contamination checks (handled by logout cleanup)
+  - Removed ownership validation logic (no longer needed)
+  - Removed migration completion tracking
+
+---
 
 ## [2.5.0] - 2026-02-12
 

@@ -15,10 +15,22 @@ A comprehensive, community-driven platform designed to streamline your learning 
 - [**Code of Conduct**](./CODE_OF_CONDUCT.md) - Community standards
 - [**Commit Convention**](./COMMIT_CONVENTION.md) - Conventional commits specification
 
+## ✨ What's New in v2.5.1
+
+### Multi-Device Sync Perfected
+- **Seamless Sync Across Devices** - Your progress now syncs perfectly across all devices using the database as the single source of truth
+- **Smarter Migration** - Progress migration happens once during signup, not on every login
+- **Cleaner Logout** - localStorage automatically cleared on logout to prevent cross-user data
+- **Better Performance** - Faster login with no unnecessary migration checks
+
+[See full changelog](./CHANGELOG.md#251---2026-02-13)
+
+---
+
 ## Features
 
 ### Core Features
-- **Progress Tracking** - Track your learning progress across multiple programming languages and DSA topics with intelligent data synchronization
+- **Progress Tracking** - Track your learning progress across multiple programming languages and DSA topics with intelligent multi-device synchronization
 - **Examination System** - Dedicated system for competitive exam preparation (GATE, etc.) with auto-check functionality
 - **Custom Lists** - Create personalized learning checklists with sections, topics, and resources
 - **Public Lists** - Share your learning lists with the community and explore lists created by others
@@ -33,9 +45,9 @@ A comprehensive, community-driven platform designed to streamline your learning 
 - **Resource Management** - Add videos, practice problems, notes, and links to topics
 
 ### Technical Features
+- **Multi-Device Sync** - Database-backed progress synchronization across all devices (v2.5.1)
 - **Rate Limiting** - IP-based rate limiting to prevent abuse (20 requests/minute for progress endpoints)
 - **Batch Operations** - Optimized API calls with 94% reduction in requests (17 requests to 1)
-- **Data Ownership Tracking** - Prevents cross-user data contamination with user ID validation
 - **Modern UI** - Terminal/hacker-themed design with smooth animations
 - **Responsive Design** - Works seamlessly on desktop and mobile devices
 - **Search & Filter** - Find lists by title, sort by rating, copies, or date
