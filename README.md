@@ -14,6 +14,7 @@ A comprehensive, community-driven platform designed to streamline your learning 
 - [**Branching Strategy**](./BRANCHING_STRATEGY.md) - Git flow and strict branching rules
 - [**Code of Conduct**](./CODE_OF_CONDUCT.md) - Community standards
 - [**Commit Convention**](./COMMIT_CONVENTION.md) - Conventional commits specification
+- [**Security Policy**](./SECURITY.md) - How to report vulnerabilities
 
 ## ✨ What's New in v2.5.1
 
