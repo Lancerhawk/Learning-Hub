@@ -258,7 +258,7 @@ export default function LanguagePage({
                             </div>
                         </div>
                         <button
-                            onClick={() => resetProgress(language)}
+                            onClick={() => resetProgress(language, `${name} — All Progress`)}
                             className="flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 border border-red-500 text-red-500 rounded font-mono text-sm hover:bg-red-500 hover:text-white transition-all w-full md:w-auto"
                         >
                             <RefreshCw className="w-4 h-4" />

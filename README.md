@@ -16,15 +16,15 @@ A comprehensive, community-driven platform designed to streamline your learning 
 - [**Commit Convention**](./COMMIT_CONVENTION.md) - Conventional commits specification
 - [**Security Policy**](./SECURITY.md) - How to report vulnerabilities
 
-## ✨ What's New in v2.5.1
+## ✨ What's New in v2.5.2
 
-### Multi-Device Sync Perfected
-- **Seamless Sync Across Devices** - Your progress now syncs perfectly across all devices using the database as the single source of truth
-- **Smarter Migration** - Progress migration happens once during signup, not on every login
-- **Cleaner Logout** - localStorage automatically cleared on logout to prevent cross-user data
-- **Better Performance** - Faster login with no unnecessary migration checks
+### Secure Reset Functionality
+- **Safe Mode Reset** - Introduced a prominent confirmation modal for all progress resets to prevent accidental data loss.
+- **Contextual Warnings** - Clear descriptions of exactly which part of your learning journey is about to be cleared.
+- **Improved Reliability** - Reset function now explicitly communicates with the backend for guaranteed synchronization.
+- **Guest Support** - Robust localStorage clearing for users working without an account.
 
-[See full changelog](./CHANGELOG.md#251---2026-02-13)
+[See full changelog](./CHANGELOG.md#252---2026-02-20)
 
 ---
 

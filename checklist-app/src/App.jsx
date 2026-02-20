@@ -20,6 +20,8 @@ import { examinationsData, getAllExams } from './data/examinationsData';
 import ExaminationsPage from './components/ExaminationsPage';
 import { playClickSound } from './utils/sounds';
 import { loadAllProgress, saveAllProgress } from './utils/progressSync';
+import { builtinProgressAPI } from './utils/api';
+import ConfirmResetModal from './components/ConfirmResetModal';
 
 function AppContent() {
   const { user } = useAuth();
@@ -34,6 +36,7 @@ function AppContent() {
   const [expandedTopics, setExpandedTopics] = useState({});
   const [confirmModal, setConfirmModal] = useState(null);
   const [isLoadingProgress, setIsLoadingProgress] = useState(true);
+  const [resetModal, setResetModal] = useState(null); // { identifier, label }
 
   useEffect(() => {
     const handleGlobalClick = () => {
@@ -445,23 +448,50 @@ function AppContent() {
     };
   };
 
-  const handleResetProgress = async (identifier) => {
+  // Opens the confirmation modal — called by page RESET buttons
+  const handleResetProgress = (identifier, label) => {
+    setResetModal({ identifier, label });
+  };
+
+  // Actually performs the reset after user confirms
+  const executeReset = async () => {
+    if (!resetModal) return;
+    const { identifier } = resetModal;
+    setResetModal(null);
+
     if (identifier === 'dsa') {
-      await saveAllProgress({ ...checkedItems, dsa: {} }, canUseDatabase, user?.id);
+      // Clear localStorage
+      localStorage.removeItem('dsa_progress');
+      // Delete from DB
+      if (canUseDatabase) {
+        try { await builtinProgressAPI.reset('dsa_topics', 'dsa'); } catch (e) { console.error('Reset DB error:', e); }
+      }
       setCheckedItems(prev => ({ ...prev, dsa: {} }));
-    } else if (identifier.startsWith('gate-') || examinationsData[identifier]) {
-      await saveAllProgress({ ...checkedItems, [identifier]: {} }, canUseDatabase, user?.id);
+
+    } else if (examinationsData[identifier] || identifier.startsWith('gate-')) {
+      // Examination
+      localStorage.removeItem(`${identifier}_progress`);
+      if (canUseDatabase) {
+        try { await builtinProgressAPI.reset('examination', identifier); } catch (e) { console.error('Reset DB error:', e); }
+      }
       setCheckedItems(prev => ({ ...prev, [identifier]: {} }));
+
     } else {
-      await saveAllProgress({
-        ...checkedItems,
-        [`${identifier}_dsa`]: {},
-        [`${identifier}_dev`]: {}
-      }, canUseDatabase, user?.id);
+      // Language page — two checklists: _dsa and _dev
+      localStorage.removeItem(`${identifier}_dsa_progress`);
+      localStorage.removeItem(`${identifier}_dev_progress`);
+      if (canUseDatabase) {
+        try {
+          await Promise.all([
+            builtinProgressAPI.reset('language_dsa', identifier),
+            builtinProgressAPI.reset('language_dev', identifier),
+          ]);
+        } catch (e) { console.error('Reset DB error:', e); }
+      }
       setCheckedItems(prev => ({
         ...prev,
         [`${identifier}_dsa`]: {},
-        [`${identifier}_dev`]: {}
+        [`${identifier}_dev`]: {},
       }));
     }
   };
@@ -495,6 +525,13 @@ function AppContent() {
               overflow: hidden;
             }
           `}</style>
+
+          <ConfirmResetModal
+            isOpen={!!resetModal}
+            title={resetModal?.label || ''}
+            onConfirm={executeReset}
+            onCancel={() => setResetModal(null)}
+          />
 
           <Sidebar isOpen={sidebarOpen} toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 

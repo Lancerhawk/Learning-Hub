@@ -3,6 +3,21 @@ import { X, Package, Plus, Edit, Bug, Shield, FileText, Sparkles } from 'lucide-
 
 const changelogData = [
     {
+        version: 'v2.5.2',
+        date: '2026-02-20',
+        changes: {
+            added: [
+                'Secure Reset Confirmation: New modal dialogue that prevents accidental data deletion',
+                'Contextual Warning: Modal now shows exactly what is being deleted (e.g., "DSA Topics")'
+            ],
+            fixed: [
+                'Reset Button Bug: Fixed issue where progress wouldn\'t clear from database due to empty list filtering',
+                'API Integration: Wired reset button directly to builtinProgressAPI.reset()',
+                'Guest Reliability: Improved localStorage clearing logic for unauthenticated users'
+            ]
+        }
+    },
+    {
         version: 'v2.5.1',
         date: '2026-02-13',
         changes: {
